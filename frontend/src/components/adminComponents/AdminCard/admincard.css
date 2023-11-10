@@ -1,0 +1,55 @@
+.card-container {
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+  flex-wrap: wrap;
+   padding: 0 10px; /* Add padding to both sides of the container */
+   padding-top: 4%;
+}
+.w-full{
+    margin-left: 7%;
+}
+.card-item {
+  flex: 1;
+  margin: 0 20px; /* Adjust the margin as needed for spacing */
+  
+}
+.mobile{
+  color: rgb(2, 47, 88);
+}
+.title{
+font-size: 20px;
+text-transform: uppercase;
+color: rgb(0, 0, 0),
+
+ 
+}
+.subTitle{
+color: blueviolet;
+}
+
+.small-card {
+  width: calc(33.33% - px); /* Adjust the width and margin as needed */
+  
+ 
+  margin: 0 10px 60px 10px;
+ 
+ 
+}
+.heading{
+    align-items: center;
+    font-size: large;
+    padding-left: 9rem;
+}
+
+/* Adjust the breakpoint to your desired screen size */
+@media (max-width: 768px) {
+  .card-container {
+    flex-direction: column; /* Stack cards vertically */
+  }
+}
+
+
+
+.btnagree{
+  background-color: #4CAF50
+}
