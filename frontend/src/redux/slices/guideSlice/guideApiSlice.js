@@ -41,11 +41,18 @@ export const guideSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    guideGetData: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/getGuideData`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   
    
   }),
 });
 
 export const {
-  useGuideRegisterMutation,useGuideLoginMutation,useGuideLogoutMutation,useGuideAddLanguageMutation,useGuideAddPriceMutation
+  useGuideRegisterMutation,useGuideLoginMutation,useGuideLogoutMutation,useGuideAddLanguageMutation,useGuideAddPriceMutation,useGuideGetDataMutation
 } = guideSlice

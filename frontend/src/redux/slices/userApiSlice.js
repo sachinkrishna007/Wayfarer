@@ -31,11 +31,17 @@ export const userSlice = userApiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSingleGuide: builder.mutation({
+      query: (params) => ({
+        url: `${USERS_URL}/getSingleGuide?id=${params.guideId}`,
+        method: "GET",
+      }),
+    }),
 
     logout: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/logout`,
-        method: "POST",
+        method: "GET",
       }),
     }),
   }),
@@ -46,6 +52,7 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useGoogleRegisterMutation,
-  useGetGuideDataMutation
+  useGetGuideDataMutation,
+  useGetSingleGuideMutation
   
 } = userSlice;

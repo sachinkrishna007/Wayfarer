@@ -1,35 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
 .card-container {
   display: flex;
   justify-content: space-between; /* Adjust as needed */
   flex-wrap: wrap;
-   padding: 0 10px; /* Add padding to both sides of the container */
+   padding: 0 10px ; /* Add padding to both sides of the container */
    padding-top: 4%;
+   
+
 }
 .w-full{
     margin-left: 7%;
 }
 .card-item {
   flex: 1;
-  margin: 0 20px; /* Adjust the margin as needed for spacing */
+  margin: 0 200px; /* Adjust the margin as needed for spacing */
+  
   
 }
-.mobile{
-  color: rgb(2, 47, 88);
+.mobileop{
+  font-family: 'Poppins', sans-serif;
+  color: rgb(61, 34, 211);
+margin-top: -5%;
+ 
 }
 .title{
 font-size: 20px;
 text-transform: uppercase;
-color: rgb(0, 0, 0),
+color: rgb(0, 0, 0);
+font-family: 'Poppins', sans-serif;
 
  
 }
-.subTitle{
-color: blueviolet;
+.subtitle{
+color: rgb(255, 0, 0);
+font-family: 'Poppins', sans-serif;
+margin-top: -3rem;
+
 }
 
 .small-card {
-  width: calc(33.33% - px); /* Adjust the width and margin as needed */
-  
+  width: calc(30.33% - 1px); /* Adjust the width and margin as needed */
+  padding: 20px 40px;
+
+  height: 500px;
  
   margin: 0 10px 60px 10px;
    transition: transform 0.9s ease;
@@ -39,13 +52,25 @@ color: blueviolet;
     align-items: center;
     font-size: large;
     padding-left: 9rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Adjust the breakpoint to your desired screen size */
-@media (max-width: 768px) {
+@media (max-width: 950px) {
   .card-container {
     flex-direction: column; /* Stack cards vertically */
   }
+.small-card {
+  width: calc(80.33% - 1px); /* Adjust the width and margin as needed */
+  padding: 20px 40px;
+
+  height: 600px;
+ 
+  margin: 0 10px 60px 10px;
+   transition: transform 0.9s ease;
+ 
+}
+
 }
 
 
@@ -53,4 +78,28 @@ color: blueviolet;
   transform: scale(1.1); /* Adjust the scale factor as needed */
   /* You can also add other styles like box-shadow to make it more prominent */
   box-shadow: 0 4px 8px rgba(88, 68, 68, 0.2);
+}
+
+.cardBtn{
+  background-color:#387F8E;
+  
+  align-items: center;
+}
+
+.guideHeading{
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding: 4%;
+    color: #387F8E;
+}
+
+.guidebtn{
+  border-radius: 20px;
+  background-color: #387F8E;
+  margin-top: 20px;
+}
+
+.searchguide{
+padding-left: 5%;
+
 }

@@ -4,6 +4,8 @@ import NavBar from '../../../components/userComponents/navBar/navBar'
 import { toast } from "react-toastify";
 import { useGetGuideDataMutation } from '../../../redux/slices/userApiSlice';
 import Loader from '../../../components/userComponents/loading';
+import Footer from '../../../components/userComponents/footer/footer';
+import './guideListing.css'
 const GuideListing = () => {
     const [guideData, setGuideData] = useState([]);
  const [guideDataFromAPI, { isLoading }] = useGetGuideDataMutation()
@@ -33,12 +35,9 @@ console.log('llll',guideArray);
   return (
     <div>
       <NavBar></NavBar>
-      <h1
-        style={{ paddingLeft: "35rem", paddingTop: "2rem", paddingBottom:'3rem', color: "#387F8E", fontSize:'200%', alignItems:'center' }}
-      >
-        GUIDE LIST
-      </h1>
+    
       {isLoading ? <Loader /> : <GuideList guide={guideData} />}
+      <Footer></Footer>
     </div>
   );
 }

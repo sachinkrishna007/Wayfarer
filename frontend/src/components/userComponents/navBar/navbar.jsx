@@ -1,116 +1,10 @@
-// import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
-// import { LinkContainer } from "react-router-bootstrap";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../redux/slices/userAuthSlice";
 import { useLogoutMutation } from "../../../redux/slices/userApiSlice";
-// import Button from "react-bootstrap/Button";
+
 import "./navbar.css";
-
-// const Navbars = () => {
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
-//   const { userInfo } = useSelector((state) => state.auth);
-//   console.log(userInfo);
-//   const [logoutApiCall] = useLogoutMutation();
-//   const logoutHandler = async () => {
-//     try {
-//       await logoutApiCall().unwrap();
-//       dispatch(logout());
-//       navigate("/");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   return (
-//     <header>
-//       <Navbar bg="light" variant="light" expand="lg" collapseOnSelect>
-//         <Container>
-//           <LinkContainer to="/">
-//             <Navbar.Brand>
-//               <img
-//                 style={{ height: "50px", width: "auto", transform: "scale(2)" }}
-//                 src="/wayfarerlogo.png"
-//                 alt=""
-//               />
-//             </Navbar.Brand>
-//           </LinkContainer>
-//           <Navbar.Toggle aria-controls="basic-navbar-nav" />{" "}
-//           {/* Navbar.Toggle for responsiveness */}
-//           <Navbar.Collapse   id="basic-navbar-nav">
-//             <Nav className="ms-auto">
-//               {userInfo ? (
-//                 <>
-//                   <LinkContainer to="/login" style={{ margin: "10px" }}>
-//                     <Nav.Link className="bold-text">Home</Nav.Link>
-//                   </LinkContainer>
-//                   <LinkContainer to="/login" style={{ margin: "10px" }}>
-//                     <Nav.Link>Guides</Nav.Link>
-//                   </LinkContainer>
-//                   <LinkContainer to="/login" style={{ margin: "10px" }}>
-//                     <Nav.Link>Bookings</Nav.Link>
-//                   </LinkContainer>
-//                   <LinkContainer to="/login" style={{ margin: "10px" }}>
-//                     <Nav.Link>
-//                       <span style={{ padding: " 10px" }}>Profile</span>
-
-//                       <img
-//                         src={userInfo.profileImageName}
-//                         alt="Bookings"
-//                         className="menu-icon"
-//                         style={{
-//                           width: "auto", // Adjust the width to your desired size
-//                           height: "25px",
-//                           borderRadius: "100%", // Adjust the height to your desired size
-//                         }}
-//                       />
-//                     </Nav.Link>
-//                   </LinkContainer>
-//                   <Button
-//                     variant="outline-info"
-//                     size="sm"
-//                     onClick={logoutHandler}
-                    
-//                     className="logout"
-//                   >
-//                     Logout
-//                   </Button>
-       
-//                   {/* <NavDropdown title={userInfo.firstname} id="username">
-//                     <LinkContainer to="/profile">
-//                       <NavDropdown.Item>Profile</NavDropdown.Item>
-//                     </LinkContainer>
-//                     <NavDropdown.Item onClick={logoutHandler}>
-//                       Logout
-//                     </NavDropdown.Item>
-//                   </NavDropdown> */}
-//                 </>
-//               ) : (
-//                 <>
-//                   <LinkContainer to="/login">
-//                     <Nav.Link>Sign In</Nav.Link>
-//                   </LinkContainer>
-//                   <LinkContainer to="/register">
-//                     <Nav.Link>Sign Up</Nav.Link>
-//                   </LinkContainer>
-//                 </>
-//               )}
-//             </Nav>
-//           </Navbar.Collapse>
-//         </Container>
-//       </Navbar>
-//     </header>
-//   );
-// };
-
-// export default Navbars;
-
-
-
-
- 
-
 
 
 
@@ -155,7 +49,7 @@ export default function NavBar() {
   const loggedInUserItems = [
     {
       label:  (<Link
-          to="/homet"
+          to="/home"
           style={{ textDecoration: "none", color: "inherit" }}
         >
           Home
@@ -221,7 +115,7 @@ export default function NavBar() {
     {
       label: (
         <Link
-          to="/"
+          to="/login"
           style={{ textDecoration: "none", color: "inherit" }}
         >
           Sign in
@@ -255,8 +149,9 @@ export default function NavBar() {
   return (
 
     
-    <div className="card">
+    <div className="card navbar-container">
       <Menubar model={items} start={start}  style={menubarStyle} />
+      
     </div>
   );
 }

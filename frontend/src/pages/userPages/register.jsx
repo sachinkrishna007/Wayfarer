@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Loader from "../../components/userComponents/loading";
 
+
 import {
   MDBBtn,
   MDBCard,
@@ -39,7 +40,7 @@ const Register = () => {
   const [googelLogin] = useGoogleRegisterMutation();
   useEffect(() => {
     if (userInfo) {
-      navigate("/home");
+      navigate("/");
     }
   }, [navigate, userInfo]);
   const submitHandler = async (e) => {
@@ -65,7 +66,7 @@ const Register = () => {
           password,
         }).unwrap();
         dispatch(setCredentials({ ...res }));
-        navigate("/home");
+        navigate("/");
       } catch (err) {}
     }
   };
@@ -92,22 +93,23 @@ const Register = () => {
       const res = await googelLogin(userData).unwrap();
       console.log(res);
       dispatch(setCredentials({ ...res }));
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       
     }
   };
   return (
-    <div style={{ display: "flex"}}>
+    <div style={{ display: "flex" }}>
+     
       {/* Left Side (Form and Logo) */}
-      <div style={{ flex: 1,}}>
+      <div style={{ flex: 1 }}>
         <div style={{ maxWidth: "450px", margin: "auto" }}>
           {/* Your logo */}
           <div style={{ paddingLeft: "120px" }}>
             <img
               src="/wayfarerlogo.png"
               alt="Logo"
-              style={{ width: "200px", height: "200px", }}
+              style={{ width: "200px", height: "200px" }}
             />
           </div>
 
@@ -268,10 +270,10 @@ const Register = () => {
           </MDBCard>
         </div>
       </div>
-{isLoading && <Loader></Loader>}
+      {isLoading && <Loader></Loader>}
       <div style={{ flex: 1, textAlign: "center" }}>
         <img
-          src="/signup.jpeg"
+          src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?q=80&w=1375&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="New Image"
           style={{ width: "550px", height: "550px", margin: "40px" }}
         />

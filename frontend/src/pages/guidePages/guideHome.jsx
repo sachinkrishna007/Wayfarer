@@ -1,7 +1,7 @@
-import React from "react";
+import  { useEffect,useState } from "react";
 import NavBar from "../../components/guideComponents/navbar/GuideNavbar";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useSelector, } from "react-redux";
+import { useGuideGetDataMutation } from "../../redux/slices/guideSlice/guideApiSlice";
 import {
   MDBCol,
   MDBContainer,
@@ -11,21 +11,43 @@ import {
   MDBCardBody,
   MDBCardImage,
   MDBBtn,
-  MDBBreadcrumb,
-  MDBBreadcrumbItem,
-  MDBProgress,
-  MDBProgressBar,
+ 
   MDBIcon,
   MDBListGroup,
   MDBListGroupItem,
 } from "mdb-react-ui-kit";
 
+import { toast } from "react-toastify"
 export default function GuideHome() {
-    
- const { guideInfo } = useSelector((state) => state.guideAuth);
- const languageList = guideInfo.data.Language.map((language, index) => (
-   <li key={index}>{language}</li>
- ));
+  const [guideData, setGuideData] = useState([]);
+  const { guideInfo } = useSelector((state) => state.guideAuth);
+  const [guideDataFromAPI, ] = useGuideGetDataMutation();
+
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const responseFromApiCall = await guideDataFromAPI({
+          guideId: guideInfo.data.email,
+        });
+
+        const guideArray = responseFromApiCall.data.guideData;
+        console.log("llll", guideArray);
+
+        setGuideData(guideArray[0]);
+        
+      };
+      
+      fetchData();
+     
+    } catch (error) {
+      toast.error(error);
+      
+      console.error("Error fetching users:", error);
+    }
+  },[],guideData);
+ const languages = guideData.Language > 0 ? guideData[0].Language : [];
+
   return (
     <>
       <NavBar />
@@ -172,46 +194,44 @@ export default function GuideHome() {
                 <MDBCard className="mb-4 mb-md-0">
                   <MDBCardBody>
                     <MDBCardText className="mb-4">
-                      <span className="text-primary font-italic me-1">
-                       
-                      </span>
+                      <span className="text-primary font-italic me-1"></span>
                       <MDBBtn
                         color="primary"
                         style={{ backgroundColor: "#387F8E" }}
                         size="sm"
                         className="mx-2"
                       >
-                         Added Languages
+                        Added Languages
                       </MDBBtn>
                     </MDBCardText>
-                    <ul >{languageList ? languageList:"please complete the profile"}</ul>
+                    {guideData.Language}
+                    
+                   
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>
 
               {/* Activities */}
-            
 
               {/* Current Price per Day */}
               <MDBCol md="6">
                 <MDBCard className="mb-4 mb-md-0">
                   <MDBCardBody>
                     <MDBCardText className="mb-4">
-                      <span className="text-primary font-italic me-1">
-                     
-                      </span>{" "}
-                     
+                      <span className="text-primary font-italic me-1"></span>{" "}
                       <MDBBtn
                         color="primary"
                         style={{ backgroundColor: "#387F8E" }}
                         size="sm"
                         className="mx-2"
                       >
-                   Guide Charge per  Day
+                        Guide Charge per Day
                       </MDBBtn>
                     </MDBCardText>
-                    <MDBCardText style={{ fontSize: "2rem", paddingLeft:'20px' }}>
-                     {guideInfo.data.price?guideInfo.data.price:"Update your profile"}
+                    <MDBCardText
+                      style={{ fontSize: "2rem", paddingLeft: "20px" }}
+                    >
+                      ${guideData ? guideData.price : "Update your profile"}
                     </MDBCardText>
                   </MDBCardBody>
                 </MDBCard>

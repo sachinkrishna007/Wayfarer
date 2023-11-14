@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import {
   MDBCard,
   MDBCardBody,
   MDBCardFooter,
-  MDBContainer,
+
   MDBIcon,
   MDBInput,
   MDBValidation,
@@ -25,12 +25,12 @@ const GuideLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [guideLogin, { isLoading }] = useGuideLoginMutation();
+  const [guideLogin, ] = useGuideLoginMutation();
   const { guideInfo } = useSelector((state) => state.guideAuth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [imageIndex, setImageIndex] = useState(0);
+  const [imageIndex] = useState(0);
   const images = ["/login.avif"];
   useEffect(() => {
     const interval = setInterval(() => {}, 1000);
@@ -168,7 +168,7 @@ const GuideLogin = () => {
             <MDBCardFooter className="mb-2">
               <Link to="/guideRegister">
                 <p style={{ color: "black" }}>
-                  Don't have an account?
+                  Don&apos;t have an account?
                   <span style={{ color: "#387F8E" }}> Sign Up </span>
                 </p>
               </Link>

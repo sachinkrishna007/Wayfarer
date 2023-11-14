@@ -99,7 +99,7 @@ export default function AdminCard({ guide }) {
             role="region"
           >
             <div>
-              <strong className="mobile">Mobile:</strong> {guide.mobile}
+              <strong className="mobilead">Mobile:</strong> {guide.mobile}
             </div>
             <Button
               label="View ID Card"

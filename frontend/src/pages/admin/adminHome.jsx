@@ -33,6 +33,7 @@ const AdminHome = () => {
   return (
     <div>
       <AdminSidebar></AdminSidebar>
+      <h1>Guide Requests</h1>
       {isLoading ? <Loader /> : <AdminCard guide={guideData} />}
     </div>
   );

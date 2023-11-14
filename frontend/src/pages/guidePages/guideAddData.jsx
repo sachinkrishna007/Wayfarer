@@ -1,43 +1,43 @@
-import React from "react";
+
 import {
   MDBBtn,
   MDBCard,
   MDBCardBody,
-  MDBCardText,
+  
   MDBCardTitle,
   MDBCol,
   MDBContainer,
   MDBInput,
   MDBRow,
-  MDBSpinner,
+ 
 } from "mdb-react-ui-kit";
 import { useState } from "react";
 import { useGuideAddLanguageMutation } from "../../redux/slices/guideSlice/guideApiSlice";
 import { useGuideAddPriceMutation } from "../../redux/slices/guideSlice/guideApiSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/userComponents/loading";
 import NavBar from "../../components/guideComponents/navbar/GuideNavbar";
-import { setCredentials } from "../../redux/slices/guideSlice/guideAuthSlice";
+
 
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const guideAddData = () => {
+const GuideAddData = () => {
   const { guideInfo } = useSelector((state) => state.guideAuth);
   const [price, setPrice] = useState("");
   const [Language, setLanguage] = useState("");
-  const [guideId, setGuideId] = useState("");
+  
   const [addLanguage, { isLoading }] = useGuideAddLanguageMutation();
   const [addPrice, { isPriceLoading }] = useGuideAddPriceMutation();
   const navigate = useNavigate()
-const dispatch = useDispatch();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 try {  const responseFromApiCall = await addLanguage({
   guideId: guideInfo.data.email,
   Lan: Language,
 });
-if (responseFromApiCall.success) {
+if (responseFromApiCall) {
   toast.success("Language added Successfully.");
   navigate('/guideHome')
 
@@ -168,4 +168,4 @@ if (responseFromApiCall) {
   );
 };
 
-export default guideAddData;
+export default GuideAddData;

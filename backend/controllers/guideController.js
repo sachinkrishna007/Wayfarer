@@ -112,11 +112,11 @@ const guideAddLanguage = asyncHandler(async (req, res) => {
   }
 });
 const guideAddPrice = asyncHandler(async (req, res) => {
-  console.log("here");
+
   const { price, guideId } = req.body;
-  console.log(req.body);
+
   const guide = await Guide.findOne({ email: guideId });
-  console.log(guide);
+
   if (!guide) {
     return res.status(404).json({ success: false, message: "Guide not found" });
   }
@@ -133,4 +133,19 @@ const guideAddPrice = asyncHandler(async (req, res) => {
      .json({ success: true, message: "Language added successfully", guide });
 });
 
-export { registerGuide, authGuide, guideLogout, guideAddLanguage ,guideAddPrice};
+const getGuideData = asyncHandler(async (req, res) => {
+  console.log('reached here');
+  const {guideId} = req.body
+console.log('bod',req.body);
+  const guideData = await Guide.find({email:guideId});
+
+  if (guideData) {
+    res.status(200).json({ guideData });
+  } else {
+    res.status(404);
+
+    throw new Error(" data fetch failed.");
+  }
+});
+
+export { registerGuide, authGuide, guideLogout, guideAddLanguage ,guideAddPrice,getGuideData};
