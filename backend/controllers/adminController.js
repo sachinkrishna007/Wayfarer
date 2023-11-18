@@ -141,7 +141,7 @@ const UnBlockGuide = asyncHandler(async (req, res) => {
 });
 
 const listGuide = asyncHandler(async (req, res) => {
-  const guideData = await Guide.find({ isAuthorized: true });
+  const guideData = await Guide.find({});
   if (guideData) {
     res.status(200).json({ guideData });
   } else {

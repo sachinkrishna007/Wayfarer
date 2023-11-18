@@ -25,5 +25,5 @@ router.post("/block-user",protect, BlockUser);
 router.post("/unblock-user",protect, UnBlockUser);
 router.post("/block-guide",protect, BlockGuide);
 router.post("/unblock-guide",protect,UnBlockGuide);
-router.get('/listGuide',protect,listGuide)
+router.post('/listGuide',listGuide)
 export default router;

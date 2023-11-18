@@ -45,7 +45,7 @@ export const adminSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    unBlockGuide:builder.mutation({
+    unBlockGuide: builder.mutation({
       query: (data) => ({
         url: `${ADMIN_URL}/unblock-guide`,
         method: "POST",
@@ -53,10 +53,10 @@ export const adminSlice = userApiSlice.injectEndpoints({
       }),
     }),
     listGuide: builder.mutation({
-      query: () => ({
+      query: (data) => ({
         url: `${ADMIN_URL}/listGuide`,
-        method: "GET",
-       
+        method: "POST",
+        body: data,
       }),
     }),
     adminLogout: builder.mutation({

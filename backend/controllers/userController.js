@@ -114,7 +114,7 @@ const googleRegister = asyncHandler(async (req, res) => {
 
 //Load the guide data to display
 const getGuide = asyncHandler(async (req, res) => {
-  const guideData = await Guide.find({ isAuthorized: true });
+  const guideData = await Guide.find({ isAuthorized: true,isBlocked:false });
   if (guideData) {
     res.status(200).json({ guideData });
   } else {
