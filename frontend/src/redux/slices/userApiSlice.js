@@ -25,6 +25,29 @@ export const userSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getBooking: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/createBooking`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    stripeBooking: builder.mutation({
+      query: (data) => ({
+        url: `/api/stripe/create-checkout-session`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    confirmBooking: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/changeStaus`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    
     getGuideData: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/getGuide`,
@@ -34,6 +57,12 @@ export const userSlice = userApiSlice.injectEndpoints({
     getSingleGuide: builder.mutation({
       query: (params) => ({
         url: `${USERS_URL}/getSingleGuide?id=${params.guideId}`,
+        method: "GET",
+      }),
+    }),
+    getUserData: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/getUserData`,
         method: "GET",
       }),
     }),
@@ -53,6 +82,9 @@ export const {
   useRegisterMutation,
   useGoogleRegisterMutation,
   useGetGuideDataMutation,
-  useGetSingleGuideMutation
-  
+  useGetSingleGuideMutation,
+  useGetBookingMutation,
+  useStripeBookingMutation,
+  useConfirmBookingMutation,
+  useGetUserDataMutation
 } = userSlice;

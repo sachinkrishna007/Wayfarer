@@ -6,6 +6,8 @@ import AdminSidebar from "../../components/adminComponents/sidebar";
 import AdminCard from "../../components/adminComponents/AdminCard/adminCard";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+
 const AdminHome = () => {
   const [guideData, setGuideData] = useState([]);
   const navigate = useNavigate();
@@ -34,9 +36,12 @@ const AdminHome = () => {
     <div>
       <AdminSidebar></AdminSidebar>
       <h1>Guide Requests</h1>
-      {isLoading ? <Loader /> : <AdminCard guide={guideData} />}
+      {isLoading ? <Loader /> : <AdminCard guide={guideData} img={guideData.profileImage} />}
+
+    
     </div>
   );
 };
 
 export default AdminHome;
+

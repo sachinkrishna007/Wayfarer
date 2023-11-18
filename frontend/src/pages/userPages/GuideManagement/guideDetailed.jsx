@@ -5,6 +5,8 @@ import DatePicker from "react-datepicker";
 import { useState, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "../../../components/userComponents/loading";
+import { useDispatch, useSelector } from "react-redux";
+import {useNavigate } from "react-router-dom";
 import {
   MDBCol,
   MDBContainer,
@@ -17,16 +19,17 @@ import {
   MDBTypography,
 } from "mdb-react-ui-kit";
 import { useGetSingleGuideMutation } from "../../../redux/slices/userApiSlice";
+import { toast } from "react-toastify";
 export default function EditButton() {
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState("");
   const [availabilityStatus, setAvailabilityStatus] = useState("");
-
   const [endDate, setEndDate] = useState("");
   const id = location.pathname.split("/")[2];
-
   const [guideSingleDataFromAPI] = useGetSingleGuideMutation();
   const [guideData, setGuideData] = useState("");
+  const { userInfo } = useSelector((state) => state.auth);
+  const navigate = useNavigate()
   useEffect(() => {
     try {
       const fetchData = async () => {
@@ -47,13 +50,33 @@ export default function EditButton() {
       console.error("Error fetching users:", error);
     }
   }, []);
+
   if (loading) {
     return <Loader></Loader>;
   }
   const checkAvailability = () => {
-    // Add your availability check logic here
-    // Update the availabilityStatus state accordingly
-    setAvailabilityStatus("Available"); // Update with your actual logic
+    if (!startDate || !endDate) {
+      toast.warning('Please add dates')
+      return;
+    }
+    const bookingData = {
+      startDate,
+      endDate,
+      guideName: `${guideData.firstname} ${guideData.Lastname}`,
+      guideId: guideData._id,
+      userId: userInfo._id,
+      userEmail: userInfo.email,
+      guidePrice: guideData.price,
+      guideLocation: guideData.Location,
+      guideProfile:guideData.profileImage
+      
+    };
+
+    localStorage.setItem("bookingData", JSON.stringify(bookingData));
+
+       navigate('/bookingPage')
+    // Optionally, you can navigate to the next page here
+    // Example: history.push('/next-page');
   };
   return (
     <div>
@@ -64,10 +87,10 @@ export default function EditButton() {
             <MDBCol lg="12" xl="12">
               <MDBCard>
                 <div
-                  className="rounded-top text-white d-flex flex-row"
+                  className="rounded-top text-dark d-flex flex-row"
                   style={{
                     backgroundImage:
-                      'url("https://images.unsplash.com/photo-1524334228333-0f6db392f8a1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")', // Replace with the path to your background image
+                      'url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1473&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")', // Replace with the path to your background image
                     backgroundSize: "cover", // Adjust as needed
                     backgroundRepeat: "no-repeat", // Adjust as needed
                     height: "300px",
@@ -81,7 +104,7 @@ export default function EditButton() {
                     style={{ width: "150px" }}
                   >
                     <MDBCardImage
-                      src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      src={guideData.profileImage}
                       alt="Generic placeholder image"
                       className="mt-6 mb-2 img-thumbnail guideimage"
                       fluid
@@ -113,15 +136,15 @@ export default function EditButton() {
                       <div className="mb-2">
                         <strong>Email:</strong> {guideData.email}
                       </div>
-                      <div className="mb-2">
+                      <div className="mb-2 ">
                         <strong>Phone:</strong>
                         {guideData.mobile}
                       </div>
                       <div className="mb-2">
-                        <strong>Price:</strong> {guideData.price}
+                        <strong>Guide charge/day:</strong> {guideData.price}
                       </div>
                       <div className="mb-2">
-                        <strong>Languages:</strong> {guideData.Language[0]}
+                        <strong>Languages:</strong> {guideData.Language[0]}{" "}
                         {guideData.Language[1]}, {guideData.Language[2]}
                       </div>
                       {/* Add any other details you want to display */}
@@ -155,7 +178,7 @@ export default function EditButton() {
                           className="btn btn-primary"
                           onClick={checkAvailability}
                         >
-                          Check Availability
+                          BooK
                         </button>
                         <span className="ml-2">{availabilityStatus}</span>
                       </div>
@@ -172,36 +195,31 @@ export default function EditButton() {
                       </a>
                     </MDBCardText>
                   </div>
+
                   <MDBRow>
-                    <MDBCol className="mb-2">
+                    <MDBCol md="4" className="mb-4">
                       <MDBCardImage
-                        src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
+                        src="https://images.unsplash.com/photo-1496566084516-c5b96fcbd5c8?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="image 1"
                         className="w-100 rounded-3"
                       />
-                      <MDBCardText className="mt-2">
-                        Description for image 1
-                      </MDBCardText>
+                      <MDBCardText className="mt-2">My recent trip</MDBCardText>
                     </MDBCol>
-                    <MDBCol className="mb-2">
+                    <MDBCol md="4" className="mb-4">
                       <MDBCardImage
-                        src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
+                        src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="image 1"
                         className="w-100 rounded-3"
                       />
-                      <MDBCardText className="mt-2">
-                        Description for image 1
-                      </MDBCardText>
+                      <MDBCardText className="mt-2">the best one</MDBCardText>
                     </MDBCol>
-                    <MDBCol className="mb-2">
+                    <MDBCol md="4" className="mb-4">
                       <MDBCardImage
-                        src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
+                        src="https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="image 1"
                         className="w-100 rounded-3"
                       />
-                      <MDBCardText className="mt-2">
-                        Description for image 1
-                      </MDBCardText>
+                      <MDBCardText className="mt-2">All time best</MDBCardText>
                     </MDBCol>
                   </MDBRow>
                 </MDBCardBody>

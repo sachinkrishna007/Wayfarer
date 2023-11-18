@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import './login.css'
 import {
   MDBBtn,
   MDBCard,
@@ -64,14 +64,18 @@ const Login = () => {
           toast.error('no details found')
         }
        
-      } catch (error) {
-        toast.error('email/password is wrong')
+      } catch (err) {
+       if (err.data && err.data.message) {
+         toast.error(err.data.message);
+       } else {
+         toast.error("An error occurred. Please try again."); 
+       }
       }
     }
   };
 
   return (
-    <div style={{ backgroundColor: "#fffff" }}>
+    <div className="character" style={{ backgroundColor: "#fffff" }}>
       <div
         style={{
           display: "flex",
@@ -96,8 +100,8 @@ const Login = () => {
           </div>
 
           <MDBCard alignment="center" className="mb-5">
-            <MDBIcon fas icon="user-circle" className="fa-3x" />
-            <h5>Sign In </h5>
+            <MDBIcon fas icon="user-circle" className="fa-3x " />
+            <h4>Sign In </h4>
             <MDBCardBody>
               <MDBValidation
                 onSubmit={submitHandler}

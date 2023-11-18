@@ -49,7 +49,7 @@ export default function NavBar() {
   const loggedInUserItems = [
     {
       label:  (<Link
-          to="/home"
+          to="/"
           style={{ textDecoration: "none", color: "inherit" }}
         >
           Home
@@ -123,7 +123,7 @@ export default function NavBar() {
       ),
       icon: "pi pi-sign-in",
       // Add a link to the sign-in page
-      url: "/signin",
+      
     },
   ];
 

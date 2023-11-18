@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Loader from "../../components/userComponents/loading";
 
-
+import "./login/login.css";
 import {
   MDBBtn,
   MDBCard,
@@ -67,7 +67,13 @@ const Register = () => {
         }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate("/");
-      } catch (err) {}
+      } catch (err) {
+         if (err.data && err.data.message) {
+           toast.error(err.data.message);
+         } else {
+           toast.error("An error occurred. Please try again."); // Generic error message
+         }
+      }
     }
   };
   const googelAuth = async (data) => {
@@ -94,13 +100,10 @@ const Register = () => {
       console.log(res);
       dispatch(setCredentials({ ...res }));
       navigate("/");
-    } catch (err) {
-      
-    }
+    } catch (err) {}
   };
   return (
-    <div style={{ display: "flex" }}>
-     
+    <div style={{ display: "flex" }} className="character">
       {/* Left Side (Form and Logo) */}
       <div style={{ flex: 1 }}>
         <div style={{ maxWidth: "450px", margin: "auto" }}>
@@ -114,7 +117,7 @@ const Register = () => {
           </div>
 
           <MDBCard alignment="center" className="mb-5">
-            <MDBIcon fas icon="user-circle" className="fa-3x" />
+            <MDBIcon fas icon="user-circle" className="fa-3x heading" />
             <h5>Sign Up</h5>
             <MDBCardBody>
               <MDBValidation

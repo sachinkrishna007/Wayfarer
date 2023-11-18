@@ -2,58 +2,72 @@ import asyncHandler from "express-async-handler";
 
 import guideGenerateToken from "../utils/guideGenerateToken.js";
 import Guide from "../models/guideModel.js";
-
+import cloudinary from "../config/cloudinary.js";
 const authGuide = asyncHandler(async (req, res) => {
-  console.log("reached");
   const { email, password } = req.body;
 
   const guide = await Guide.findOne({ email });
-  console.log(guide);
+
+  if (!guide) {
+    res.status(400);
+    throw new Error("Invalid email or password");
+  }
+
+  if (guide.isBlocked) {
+    res.status(400);
+    throw new Error("Sorry, you are blocked. Please contact the admin.");
+  }
+
+  if (!guide.isAuthorized) {
+    res.status(400);
+    throw new Error("Approval pending");
+  }
 
   if (guide && (await guide.matchPassword(password))) {
-    if (guide.isAuthorized) {
-      guideGenerateToken(res, guide._id);
+    // If the password matches, generate and send a token
+    guideGenerateToken(res, guide._id);
 
-      res.status(201).json({
-        success: true,
-        data: {
-          _id: guide._id,
-          firstName: guide.firstname,
-          lastName: guide.Lastname,
-          Location: guide.Location,
-          email: guide.email,
-          mobile: guide.mobile,
-          isAuthorized: guide.isAuthorized,
-          Language: guide.Language,
-          price:guide.price
-        },
-      });
-    } else {
-      res.status(401).json({
-        success: false,
-        error: "Invalid user data",
-      });
-    }
-  } else {
-    res.status(400).json({
-      success: false,
-      error: "Invalid user data",
+    res.status(201).json({
+      success: true,
+      data: {
+        _id: guide._id,
+        firstName: guide.firstname,
+        lastName: guide.Lastname,
+        Location: guide.Location,
+        email: guide.email,
+        mobile: guide.mobile,
+        isAuthorized: guide.isAuthorized,
+        Language: guide.Language,
+        price: guide.price,
+        profileImage: guide.profileImage,
+        idCardFile: guide.idCardFile,
+      },
     });
+  } else {
+    res.status(400);
+    throw new Error("Invalid email or password");
   }
 });
 
+
 const registerGuide = asyncHandler(async (req, res) => {
   const {
-    firstname,
-    Lastname,
+    firstName,
+    LastName,
     email,
     mobile,
     password,
     Location,
     idCardNumber,
+    profileImage,
+    idCardFile,
   } = req.body;
-  console.log(req.body);
-
+  const result = await cloudinary.uploader.upload(profileImage, {
+    folder: "profilepic",
+  });
+  const documents = await cloudinary.uploader.upload(idCardFile, {
+    folder: "documents",
+  });
   const guideExists = await Guide.findOne({ email });
 
   if (guideExists) {
@@ -61,22 +75,19 @@ const registerGuide = asyncHandler(async (req, res) => {
     throw new Error("Guide already exists");
   }
 
-  let idCardFile = req.file.filename;
-  console.log(idCardFile);
-
   const Guides = await Guide.create({
-    firstname,
-    Lastname,
+    firstname: firstName,
+    Lastname: LastName,
     email,
     mobile,
     password,
     Location,
     idCardNumber,
-    idCardFile,
+    idCardFile: documents.secure_url,
+    profileImage: result.secure_url,
   });
 
   if (Guides) {
-    console.log("here");
     res.status(201).json({ sucess: true });
   } else {
     res.status(400);
@@ -91,18 +102,20 @@ const guideLogout = asyncHandler(async (req, res) => {
   });
   res.status(200).json({ message: "loggout successful" });
 });
+
 const guideAddLanguage = asyncHandler(async (req, res) => {
-  console.log("here");
   const { Lan, guideId } = req.body;
-  console.log(req.body);
+
   const guide = await Guide.findOne({ email: guideId });
-  console.log(guide);
+
   if (!guide) {
     return res.status(404).json({ success: false, message: "Guide not found" });
-  } else if (guide.Language.length >= 3) {
-    return res
+  }
+
+  if (guide.Language.length >= 3) {
+    res
       .status(400)
-      .json({ success: false, message: "Maximum language limit reached" });
+      .json({ success: false, message: "Language Limit exceeded" });
   } else {
     guide.Language.push(Lan);
     await guide.save();
@@ -111,8 +124,8 @@ const guideAddLanguage = asyncHandler(async (req, res) => {
       .json({ success: true, message: "Language added successfully", guide });
   }
 });
-const guideAddPrice = asyncHandler(async (req, res) => {
 
+const guideAddPrice = asyncHandler(async (req, res) => {
   const { price, guideId } = req.body;
 
   const guide = await Guide.findOne({ email: guideId });
@@ -128,16 +141,31 @@ const guideAddPrice = asyncHandler(async (req, res) => {
   }
 
   await guide.save();
-   res
-     .status(200)
-     .json({ success: true, message: "Language added successfully", guide });
+  res
+    .status(200)
+    .json({ success: true, message: "Language added successfully", guide });
+});
+const guideAddDescription = asyncHandler(async (req, res) => {
+  const { description, guideId } = req.body;
+
+  const guide = await Guide.findOne({ email: guideId });
+
+  if (!guide) {
+    return res.status(404).json({ success: false, message: "Guide not found" });
+  }
+
+  guide.Description = description;
+
+  await guide.save();
+  res
+    .status(200)
+    .json({ success: true, message: "Language added successfully", guide });
 });
 
 const getGuideData = asyncHandler(async (req, res) => {
-  console.log('reached here');
-  const {guideId} = req.body
-console.log('bod',req.body);
-  const guideData = await Guide.find({email:guideId});
+  const { guideId } = req.body;
+
+  const guideData = await Guide.find({ email: guideId });
 
   if (guideData) {
     res.status(200).json({ guideData });
@@ -148,4 +176,12 @@ console.log('bod',req.body);
   }
 });
 
-export { registerGuide, authGuide, guideLogout, guideAddLanguage ,guideAddPrice,getGuideData};
+export {
+  registerGuide,
+  authGuide,
+  guideLogout,
+  guideAddLanguage,
+  guideAddPrice,
+  getGuideData,
+  guideAddDescription,
+};

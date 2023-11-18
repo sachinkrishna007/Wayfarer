@@ -41,13 +41,16 @@ const guideSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    profileImageName: {
+    profileImage: {
       type: String,
     },
     Language:{
       type:[String]
     },
     price:{
+      type:String
+    },
+    Description:{
       type:String
     }
   },

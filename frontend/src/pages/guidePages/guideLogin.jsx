@@ -61,22 +61,18 @@ const GuideLogin = () => {
         if (responseFromApiCall) {
           
 
-          if (responseFromApiCall.data.isAuthorized) {
+          if (responseFromApiCall) {
             dispatch(setCredentials({ ...responseFromApiCall }));
             toast.success("sucess");
             navigate("/guideHome");
-          }else{
-             toast.warning("Approval pending please Wait....");
           }
-        } else {
-          toast.error("Invalid credentials"); // Handle invalid credentials
-        }
-      } catch (error) {
-        if (error.status === 401) {
-          toast.warning("Approval pending."); // Handle unauthorized access
-        } else if(error.status==400){
-          toast.error('check email/password'); // Handle other errors
-        }
+        } 
+      } catch (err) {
+         if (err.data && err.data.message) {
+           toast.error(err.data.message);
+         } else {
+           toast.error("An error occurred. Please try again."); // Generic error message
+         }
       }
     }
   };

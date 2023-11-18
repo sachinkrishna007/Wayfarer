@@ -1,6 +1,7 @@
 import  { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
+import GuideLoading from "../../components/guideComponents/guideLoading";
 import {
   MDBBtn,
   MDBCard,
@@ -29,12 +30,13 @@ const GuideRegister = () => {
   const [Location, setLocaton] = useState("");
   const [idCardNumber, setIdCardNumber] = useState(""); // New field for ID card number
   const [idCardFile, setIdCardFile] = useState(null); // New field for ID card image or PDF file
+  const [profileImage, setprofileImage] = useState(null); // New field for ID card image or PDF file
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { guideInfo } = useSelector((state) => state.auth);
   const [guideLogin, { isLoading }] = useGuideRegisterMutation();
-
+const [waitLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (guideInfo) {
       navigate("/home");
@@ -46,8 +48,50 @@ const GuideRegister = () => {
   //   setIdCardFile(file);
   // };
 
+    const handleImage1 = (e) => {
+      const file = e.target.files[0];
+      setFileToBase(file);
+    };
+
+    const setFileToBase = (file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setIdCardFile(reader.result);
+      };
+    };
+
+    const handleImage2 = (e) => {
+      const file = e.target.files[0];
+      setFileToBase2(file);
+    };
+
+    const setFileToBase2 = (file) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setprofileImage(reader.result);
+      };
+    };
+
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
+     if (
+       !firstName ||
+       !LastName ||
+       !email ||
+       !mobile ||
+       !password ||
+       !confirmPassword
+     ) {
+       toast.error("Please fill in all required fields.");
+       return;
+     }
+       if (!idCardFile || !profileImage) {
+         toast.error("Please upload ID card and profile photo.");
+         return;
+       }
     if (password !== confirmPassword) {
       toast.error(" password do not match", {
         position: "top-right",
@@ -59,8 +103,9 @@ const GuideRegister = () => {
         progress: undefined,
         theme: "colored",
       });
-    } else {
+    } else  {
       try {
+        setIsLoading(true);
         const formData = new FormData();
         formData.append("firstname", firstName);
         formData.append("Lastname", LastName);
@@ -70,10 +115,11 @@ const GuideRegister = () => {
         formData.append("Location", Location);
         formData.append("idCardNumber", idCardNumber);
         formData.append("idimage", idCardFile);
-        console.log(idCardFile);
-
+        formData.append("profileimage",profileImage);
+        
        
-        const responseFromApiCall = await guideLogin(formData).unwrap()
+        // const responseFromApiCall = await guideLogin(formData).unwrap()
+        const responseFromApiCall = await guideLogin({firstName,LastName,mobile,email,password,Location,idCardNumber,idCardFile,profileImage}).unwrap()
         // const res = await guideLogin({
         //   firstName,
         //   LastName,
@@ -85,12 +131,16 @@ const GuideRegister = () => {
         //   idCardFile,
         // }).unwrap();
         console.log('response ',responseFromApiCall);
-
+  setIsLoading(false);
         // dispatch(setCredentials({ ...responseFromApiCall}));
           toast.success("Registration Suceess Please wait for Admin Approvel");
         navigate("/guideLogin");
       } catch (err) {
-        toast.err(err.message)
+       if (err.data && err.data.message) {
+         toast.error(err.data.message);
+       } else {
+         toast.error("An error occurred. Please try again."); // Generic error message
+       }
       }
     }
   };
@@ -113,7 +163,11 @@ const GuideRegister = () => {
             <MDBIcon fas icon="user-circle" className="fa-3x" />
             <h3>Guide Sign Up</h3>
             <MDBCardBody>
-              <MDBValidation noValidate className="row g-3">
+              <MDBValidation
+             
+                noValidate
+                className="row g-3"
+              >
                 <div className="col-md-6">
                   <MDBValidationItem
                     className="col-md-12"
@@ -262,8 +316,19 @@ const GuideRegister = () => {
                     <input
                       type="file"
                       id="idimage"
-                      accept=".jpg, .jpeg, .png, .pdf"
-                      onChange={(e) => setIdCardFile(e.target.files[0])}
+                      accept=".jpg, .jpeg, .png, .pdf,.avif"
+                      onChange={handleImage1}
+                    />
+                  </MDBValidationItem>
+                </div>
+                <div className="col-md-6">
+                  <MDBValidationItem className="col-md-12">
+                    <label for="idCardFile">Upload Profile photo </label>
+                    <input
+                      type="file"
+                      id="profileimage"
+                      accept=".jpg, .jpeg, .png, .pdf,.avif"
+                      onChange={handleImage2}
                     />
                   </MDBValidationItem>
                 </div>
@@ -278,8 +343,9 @@ const GuideRegister = () => {
                     }}
                     className="mt-2"
                     onClick={HandleSubmit}
+                    disabled={waitLoading}
                   >
-                    Register
+                    {waitLoading ? <GuideLoading></GuideLoading> : "Register"}
                   </MDBBtn>
                 </div>
               </MDBValidation>

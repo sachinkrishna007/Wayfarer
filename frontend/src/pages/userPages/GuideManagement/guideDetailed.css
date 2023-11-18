@@ -3,14 +3,10 @@
 .guideName  {
   font-family: "Poppins", sans-serif;
    text-transform: uppercase;
-   color: rgb(255, 255, 255);
+   color: rgb(0, 0, 0);
 
 }
 
-.guideimage{
-
-height: ;
-}
 .guideLoc{
   font-family: "Poppins", sans-serif;
   font-size: 1.5rem;

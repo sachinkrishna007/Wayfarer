@@ -2,7 +2,7 @@ import Admin from "../models/adminModel.js";
 import Guide from "../models/guideModel.js";
 import asyncHandler from "express-async-handler";
 import AdmingenarateToken from "../utils/adminGenerateToken.js";
-
+import User from "../models/userModel.js";  
 
 const adminAuth = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -26,7 +26,7 @@ const adminAuth = asyncHandler(async (req, res) => {
 const registerAdmin = asyncHandler(async (req, res) => {
     
   const { email, password } = req.body;
-console.log('here');
+
   const AdminExists = await Admin.findOne({ email });
 
   if (AdminExists) {
@@ -85,6 +85,72 @@ const adminLogout = asyncHandler(async (req, res) => {
 });
 
 
+const BlockUser = asyncHandler(async (req, res) => {
+  console.log(req.body);
+  const userId = req.body.userId;
+  console.log(userId);
+  const BlockUser = await User.findByIdAndUpdate(userId, { isBlocked: true });
+  console.log(BlockUser);
+  if (BlockUser) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(404);
+
+    throw new Error("user delete failed");
+  }
+});
+const UnBlockUser = asyncHandler(async (req, res) => {
+  const userId = req.body.userId;
+  const UNBlockUser = await User.findByIdAndUpdate(userId, {
+    isBlocked: false,
+  });
+  if (UNBlockUser) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(404);
+
+    throw new Error("user delete failed");
+  }
+});
+const BlockGuide = asyncHandler(async (req, res) => {
+  console.log(req.body);
+  const guideId = req.body.guideId;
+
+  const blockGuide = await Guide.findByIdAndUpdate(guideId, { isBlocked: true });
+  
+  if (blockGuide) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(404);
+
+    throw new Error("user delete failed");
+  }
+});
+const UnBlockGuide = asyncHandler(async (req, res) => {
+  const guideId = req.body.guideId;
+  const unBlockGuide = await Guide.findByIdAndUpdate(guideId, {
+    isBlocked: false,
+  });
+  if (unBlockGuide) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(404);
+
+    throw new Error("user delete failed");
+  }
+});
+
+const listGuide = asyncHandler(async (req, res) => {
+  const guideData = await Guide.find({ isAuthorized: true });
+  if (guideData) {
+    res.status(200).json({ guideData });
+  } else {
+    res.status(404);
+
+    throw new Error("Users data fetch failed.");
+  }
+});
+
 export {
-    adminAuth,registerAdmin,getGuideRequest,adminLogout,acceptGuide
+    adminAuth,registerAdmin,getGuideRequest,adminLogout,acceptGuide,BlockUser,UnBlockUser,listGuide,BlockGuide,UnBlockGuide
 }

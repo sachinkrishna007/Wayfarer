@@ -32,14 +32,20 @@ font-family: 'Poppins', sans-serif;
  
 }
 .subtitle{
-color: rgb(255, 0, 0);
-font-family: 'Poppins', sans-serif;
-margin-top: -3rem;
+color: rgb(207, 46, 46);
+font-family: 'Poppins', sans-serif;;
 
 }
+.guideimage {
+  border-radius: 7%;
+  width: 100%; /* Set the width to fill the container */
+  height: 200px; /* Set a fixed height for uniformity */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+}
+
 
 .small-card {
-  width: calc(30.33% - 1px); /* Adjust the width and margin as needed */
+  width: calc(30.33% ); /* Adjust the width and margin as needed */
   padding: 20px 40px;
 
   height: 500px;
@@ -88,9 +94,11 @@ margin-top: -3rem;
 
 .guideHeading{
     font-family: 'Poppins', sans-serif;
-    text-align: center;
-    padding: 4%;
-    color: #387F8E;
+    margin-left: 50px;
+    padding: 1%;
+    color: #000000;
+    font-size: 1.5rem;
+    margin-top: 6%;
 }
 
 .guidebtn{

@@ -4,8 +4,11 @@ import DestinationData from "./destinationData";
 const Destination = () => {
   return (
     <div className="destination">
-      <h1>POPULAR DESTINATIONs</h1>
-      <p className="destinationptag">Tours gives you oppurtunity</p>
+      <h1>POPULAR DESTINATIONS</h1>
+      <p className="destinationptag">
+        "Explore the world, collect memories, and let every mile be a story to
+        tell."
+      </p>
       <DestinationData
         className="first-des"
         heading="Munnar,Kerala"

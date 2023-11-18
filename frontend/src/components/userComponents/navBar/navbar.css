@@ -9,3 +9,20 @@ font-family: 'Poppins', sans-serif;
 
 
 }
+
+
+.navbar-container {
+  position: fixed;
+  top: 3px;
+  left: 50%; /* Position at 50% of the viewport's width */
+  
+  transform: translateX(-50%); /* Center the navbar */
+  width: 99%; /* Adjust the width as needed */
+  max-width: 1800px; /* Set a maximum width if necessary */
+  z-index: 1000; /* Adjust the z-index if needed to ensure it's above other elements */
+  /* Padding values for top and bottom, left and right */
+  border-radius: 10px; /* Rounded edges */
+  background-color: white; /* Background color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+

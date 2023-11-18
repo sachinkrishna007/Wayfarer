@@ -4,15 +4,15 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import debounce from "lodash/debounce";
 
-
-import { CascadeSelect } from "primereact/cascadeselect";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./card.css";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 import { useSelector } from "react-redux";
+import { guideSlice } from "../../../redux/slices/guideSlice/guideApiSlice";
 export default function GuideList({ guide }) {
+  console.log(guide);
   const countries = [
     {
       name: "Australia",
@@ -33,24 +33,17 @@ export default function GuideList({ guide }) {
   const [selectedCity, setSelectedCity] = useState(null);
   const navigate = useNavigate();
 
-  const header = (
-    <img
-      alt="Card"
-      src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      style={{ height: "17rem" }}
-    />
-  );
-
+ 
   const footer = <></>;
 
-   const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-   const delayedSearch = debounce((value) => {
-     setSearchQuery(value);
-   }, 400);
+  const delayedSearch = debounce((value) => {
+    setSearchQuery(value);
+  }, 400);
   const handleSearch = (event) => {
-     const { value } = event.target;
-     delayedSearch(value);
+    const { value } = event.target;
+    delayedSearch(value);
   };
 
   const filteredGuides = guide.filter(
@@ -58,6 +51,15 @@ export default function GuideList({ guide }) {
       guides.Location.toLowerCase().includes(searchQuery.toLowerCase()) ||
       guides.firstname.toLowerCase().includes(searchQuery.toLowerCase())
   );
+    const header = guide.profileImage ? (
+      <img
+        alt="Guide Profile"
+        src={guide.profileImage}
+        style={{ width: "100%" }}
+      />
+    ) : null;
+
+
 
   return (
     <div>
@@ -76,44 +78,33 @@ export default function GuideList({ guide }) {
       </div>
 
       {guide && guide.length > 0 ? (
-        filteredGuides.length > 0 ? (
-          <div className="card-container">
-            {filteredGuides.map((guide, index) => (
-              <Card
-                key={index}
-                title={
-                  <span className="title">{`${guide.firstname} ${guide.Lastname}`}</span>
-                }
-                subTitle={
-                  <span className="subtitle">
-                    <FaMapMarkerAlt className="locationIcon" /> {guide.Location}
-                  </span>
-                }
-                footer={footer}
-                header={header}
-                className="small-card zoom-in-card "
-                role="region"
-              >
-                <div className="mobileop">
-                  <strong>Mobile:</strong> {guide.mobile}
-                </div>
-                <div>
-                  {userInfo && userInfo._id && (
-                    <Link to={`/guideDetailedView/${guide._id}`}>
-                      <Button className="guidebtn">More Details</Button>
-                    </Link>
-                  )}
-                </div>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <h1>No guides in this location.</h1>
-        )
+        <div className="card-container">
+          {filteredGuides.map((guideInfo, index) => (
+            <Card key={index} className="small-card">
+              <div>
+                <h3 className="title">{`${guideInfo.firstname} ${guideInfo.Lastname}`}</h3>
+                <img
+                  src={guideInfo.profileImage}
+                  alt={`Profile of ${guideInfo.firstname}`}
+                  style={{ width: "100%", height: "250px" }}
+                  className="guideimage"
+                />
+                <p className="subtitle">Email: {guideInfo.email}</p>
+                <p className="mobileop">Mobile: {guideInfo.mobile}</p>
+                <Link to={`/guideDetailedView/${guideInfo._id}`}>
+                  <Button
+                    label="View Details"
+                    className="p-button-raised p-button-info"
+                  />
+                </Link>
+                {/* Add more details or customize the display as needed */}
+              </div>
+            </Card>
+          ))}
+        </div>
       ) : (
         <h1>No guides available currently</h1>
       )}
     </div>
   );
-  
 }

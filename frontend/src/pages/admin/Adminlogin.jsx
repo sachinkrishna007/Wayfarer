@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   useAdminloginMutation
 } from "../../redux/slices/adminSlice/adminApiSlice";
@@ -29,11 +30,7 @@ const loginScreen = () => {
   const { adminInfo } = useSelector((state) => state.adminAuth);
 console.log(adminInfo);
 
-  useEffect(() => {
-    if (adminInfo) {
-      navigate("/adminHome");
-    }
-  }, [navigate, adminInfo]);
+
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -44,9 +41,10 @@ console.log(adminInfo);
         password,
       }).unwrap();
 
-      dispatch(setCredentials({ ...responseFromApiCall }));
 
-      navigate("/adminHome");
+      dispatch(setCredentials({ ...responseFromApiCall }));
+          navigate('/adminHome')
+    
     } catch (err) {
       toast.error('please check your email and password');
     }

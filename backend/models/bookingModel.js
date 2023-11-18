@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const bookingSchema = new Schema(
   {
-    username: {
+    userEmail: {
       type: String,
       required: true,
     },
@@ -24,11 +24,11 @@ const bookingSchema = new Schema(
       type: String,
       required: true,
     },
-    fromDate: {
+    startDate: {
       type: String,
       required: true,
     },
-    toDate: {
+    endDate: {
       type: String,
       required: true,
     },
@@ -51,4 +51,5 @@ const bookingSchema = new Schema(
   }
 );
 
-export default mongoose.model("Booking", bookingSchema);
+const Booking= mongoose.model("Booking", bookingSchema);
+export default Booking

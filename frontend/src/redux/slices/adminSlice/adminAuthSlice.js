@@ -10,7 +10,7 @@ const adminAuthSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCredentials: (state, action) => {
-      state.adminInfo = action.payload.user;
+      state.adminInfo = action.payload;
       localStorage.setItem("adminInfo", JSON.stringify(action.payload));
     },
     logout: (state, action) => {

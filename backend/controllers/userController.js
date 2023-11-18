@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import Guide from "../models/guideModel.js";
 import generateToken from "../utils/userGenerateToken.js";
 import { ObjectId } from "mongodb";
-
+import Booking from "../models/bookingModel.js"
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -25,11 +25,20 @@ const authUser = asyncHandler(async (req, res) => {
 
 //Register user normal
 const registerUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
+ 
   const { firstName, LastName, email, mobile, password } = req.body;
 
   const userExists = await User.findOne({ email });
+  const MobileExists = await User.findOne({mobile})
 
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+  if (MobileExists) {
+    res.status(400);
+    throw new Error("mobile already exists");
+  }
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
@@ -42,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     mobile,
     password,
   });
-  console.log("sdasdas", user);
+ 
 
   if (user) {
     generateToken(res, user._id);
@@ -62,7 +71,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 //register user using google
 const googleRegister = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  
   const { firstName, lastName, email, profileImageName } = req.body;
 
   const userExists = await User.findOne({ email });
@@ -83,7 +92,7 @@ const googleRegister = asyncHandler(async (req, res) => {
       email: email,
       profileImageName: profileImageName,
     });
-    console.log(user);
+  
     if (user) {
       generateToken(res, user._id);
 
@@ -99,7 +108,7 @@ const googleRegister = asyncHandler(async (req, res) => {
       throw new Error("Invalid user data");
     }
 
-    console.log("sucessssssssss");
+  
   }
 });
 
@@ -117,12 +126,11 @@ const getGuide = asyncHandler(async (req, res) => {
 const getSingleGuide = asyncHandler(async (req, res) => {
   const { id } = req.query;
 
-  console.log(id);
+ 
   try {
     const objectId = new ObjectId(id);
     const guideData = await Guide.findOne({ _id: objectId });
 
-    console.log(guideData, "guide");
 
     if (guideData) {
       res.status(200).json({ guideData });
@@ -134,6 +142,33 @@ const getSingleGuide = asyncHandler(async (req, res) => {
   }
 });
 
+const createBooking  = asyncHandler(async(req,res)=>{
+
+ 
+  const {userid,guideid,Location,startDate,endDate,Days,totalAmount,userEmail,guideName}=req.body
+try {
+
+   const newBooking = await Booking.create({
+     userEmail: userEmail,
+     userid: userid,
+     guidename: guideName,
+     guideid: guideid,
+     location: Location,
+     startDate: startDate,
+     endDate: endDate,
+     totalDays:Days,
+     totalAmount:totalAmount,
+     status: "Pending",
+   });
+
+   res.status(201).json({ success: true, data: newBooking });
+} catch (error) {
+   console.error(error);
+   res.status(500).json({ success: false, error: "Internal Server Error" });
+  
+}
+})
+
 //logout user
 const logout = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", {
@@ -143,6 +178,23 @@ const logout = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "loggout successful" });
 });
 
+const changeStatus = asyncHandler(async (req, res) => {
+ 
+ console.log('here');
+});
+
+
+const getUserData = asyncHandler(async(req,res)=>{
+  const  user = await User.find({})
+  if (user) {
+    res.status(200).json({ user });
+  } else {
+    res.status(404);
+
+    throw new Error("Users data fetch failed.");
+  }
+})
+
 export {
   authUser,
   registerUser,
@@ -150,4 +202,8 @@ export {
   logout,
   getGuide,
   getSingleGuide,
+  createBooking,
+  changeStatus,
+  getUserData
+
 };

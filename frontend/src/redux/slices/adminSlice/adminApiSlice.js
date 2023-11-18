@@ -24,7 +24,41 @@ export const adminSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-  
+    BlockUser: builder.mutation({
+      query: (data) => ({
+        url: `${ADMIN_URL}/block-user`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    unBlockUser: builder.mutation({
+      query: (data) => ({
+        url: `${ADMIN_URL}/unblock-user`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    BlockGuide: builder.mutation({
+      query: (data) => ({
+        url: `${ADMIN_URL}/block-guide`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    unBlockGuide:builder.mutation({
+      query: (data) => ({
+        url: `${ADMIN_URL}/unblock-guide`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    listGuide: builder.mutation({
+      query: () => ({
+        url: `${ADMIN_URL}/listGuide`,
+        method: "GET",
+       
+      }),
+    }),
     adminLogout: builder.mutation({
       query: (data) => ({
         url: `${ADMIN_URL}/adminLogout`,
@@ -32,8 +66,17 @@ export const adminSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-  
   }),
 });
 
-export const { useAdminloginMutation,useGuideRequestMutation,useGuideAcceptRequestMutation,useAdminLogoutMutation} = adminSlice;
+export const {
+  useAdminloginMutation,
+  useGuideRequestMutation,
+  useGuideAcceptRequestMutation,
+  useAdminLogoutMutation,
+  useBlockUserMutation,
+  useUnBlockUserMutation,
+  useBlockGuideMutation,
+  useUnBlockGuideMutation,
+  useListGuideMutation
+} = adminSlice;

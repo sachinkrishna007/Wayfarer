@@ -79,7 +79,8 @@ export default function AdminCard({ guide }) {
         {selectedGuide && (
           <img
             alt="ID Card"
-            src={`http://localhost:5000/guideImages/${selectedGuide.idCardFile}`}
+            // src={`http://localhost:5000/guideImages/${selectedGuide.idCardFile}`}
+            src={selectedGuide.idCardFile}
             style={{ width: "100%" }}
           />
         )}

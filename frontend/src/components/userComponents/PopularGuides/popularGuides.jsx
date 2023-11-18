@@ -6,7 +6,9 @@ const PopularGuides = () => {
   return (
     <div className="trip">
       <h1>Popualar Guides</h1>
-      <p className="tripptag">jdk sndsi jsncjs jnsd</p>
+      <p className="tripptag">
+        "Travel guides: your passport to hidden wonders."
+      </p>
       <div className="tripcard">
         <PopularData
           image={
@@ -28,7 +30,6 @@ const PopularGuides = () => {
           }
           heading="Ravindra"
           text="110 Trips Completed"
-          
         />
       </div>
     </div>

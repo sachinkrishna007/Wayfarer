@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button } from "primereact/button";
 import { Link } from "react-router-dom";
 import { useAdminLogoutMutation } from "../../redux/slices/adminSlice/adminApiSlice";
+
 // Theme
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primeicons/primeicons.css";
@@ -34,12 +35,7 @@ export default function AdminSidebar() {
       >
         <div className="admin-sidebar-content" style={{ flex: true }}>
           <Link className="sidebarOptions">
-            <img
-              alt="logo"
-              src="/logos2.png"
-              height="50"
-              className="mr-2"
-            ></img>
+            <h5> Admin panel</h5>
           </Link>
         </div>
         <div className="admin-sidebar-content">
@@ -58,6 +54,24 @@ export default function AdminSidebar() {
               style={{ fontSize: "1.2rem", padding: "20px" }}
             ></i>
             Guide Requests
+          </Link>
+        </div>
+        <div className="admin-sidebar-content">
+          <Link to={"/userList"} className="sidebarOptions">
+            <i
+              className="pi pi-user"
+              style={{ fontSize: "1.2rem", padding: "20px" }}
+            ></i>
+            User Management
+          </Link>
+        </div>
+        <div className="admin-sidebar-content">
+          <Link to={"/guideListData"} className="sidebarOptions">
+            <i
+              className="pi pi-user"
+              style={{ fontSize: "1.2rem", padding: "20px" }}
+            ></i>
+            Guide Management
           </Link>
         </div>
 
@@ -89,3 +103,5 @@ export default function AdminSidebar() {
     </div>
   );
 }
+
+
