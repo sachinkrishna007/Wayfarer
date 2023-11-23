@@ -2,8 +2,8 @@ import Admin from "../models/adminModel.js";
 import Guide from "../models/guideModel.js";
 import asyncHandler from "express-async-handler";
 import AdmingenarateToken from "../utils/adminGenerateToken.js";
-import User from "../models/userModel.js";  
-
+import User from "../models/userModel.js";
+import Booking from "../models/bookingModel.js";
 const adminAuth = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -24,7 +24,6 @@ const adminAuth = asyncHandler(async (req, res) => {
 });
 
 const registerAdmin = asyncHandler(async (req, res) => {
-    
   const { email, password } = req.body;
 
   const AdminExists = await Admin.findOne({ email });
@@ -54,7 +53,8 @@ const registerAdmin = asyncHandler(async (req, res) => {
 });
 
 const getGuideRequest = asyncHandler(async (req, res) => {
-  const guideData = await Guide.find({isAuthorized:false});
+  console.log("here");
+  const guideData = await Guide.find({ isAuthorized: false });
   if (guideData) {
     res.status(200).json({ guideData });
   } else {
@@ -64,18 +64,19 @@ const getGuideRequest = asyncHandler(async (req, res) => {
   }
 });
 
- const acceptGuide = asyncHandler(async(req,res)=>{
+const acceptGuide = asyncHandler(async (req, res) => {
   const guideId = req.body.userId;
-   const acceptGuide = await Guide.findByIdAndUpdate(guideId, { isAuthorized: true });
-   if (acceptGuide) {
-     res.status(200).json({ success: true });
-   } else {
-     res.status(404);
+  const acceptGuide = await Guide.findByIdAndUpdate(guideId, {
+    isAuthorized: true,
+  });
+  if (acceptGuide) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(404);
 
-     throw new Error(" failed to acccept ");
-   }
-
- })
+    throw new Error(" failed to acccept ");
+  }
+});
 const adminLogout = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", {
     httpOnly: true,
@@ -83,7 +84,6 @@ const adminLogout = asyncHandler(async (req, res) => {
   });
   res.status(200).json({ message: "loggout successful" });
 });
-
 
 const BlockUser = asyncHandler(async (req, res) => {
   console.log(req.body);
@@ -116,8 +116,10 @@ const BlockGuide = asyncHandler(async (req, res) => {
   console.log(req.body);
   const guideId = req.body.guideId;
 
-  const blockGuide = await Guide.findByIdAndUpdate(guideId, { isBlocked: true });
-  
+  const blockGuide = await Guide.findByIdAndUpdate(guideId, {
+    isBlocked: true,
+  });
+
   if (blockGuide) {
     res.status(200).json({ success: true });
   } else {
@@ -151,6 +153,28 @@ const listGuide = asyncHandler(async (req, res) => {
   }
 });
 
+const getAdminBookingData = asyncHandler(async (req, res) => {
+  console.log("here");
+  const booking = await Booking.find({});
+  if (booking) {
+    res.status(200).json({ booking });
+  } else {
+    res.status(404);
+
+    throw new Error("Users data fetch failed.");
+  }
+});
+
 export {
-    adminAuth,registerAdmin,getGuideRequest,adminLogout,acceptGuide,BlockUser,UnBlockUser,listGuide,BlockGuide,UnBlockGuide
-}
+  adminAuth,
+  registerAdmin,
+  getGuideRequest,
+  adminLogout,
+  acceptGuide,
+  BlockUser,
+  UnBlockUser,
+  listGuide,
+  BlockGuide,
+  UnBlockGuide,
+  getAdminBookingData,
+};

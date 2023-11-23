@@ -46,6 +46,27 @@ export const userSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    forgotPassword: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/forgotPassword`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    verifyOtp: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/verifyOtp`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    changePassword: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/changePassword`,
+        method: "POST",
+        body: data,
+      }),
+    }),
 
     
     getGuideData: builder.mutation({
@@ -63,6 +84,12 @@ export const userSlice = userApiSlice.injectEndpoints({
     getUserData: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/getUserData`,
+        method: "GET",
+      }),
+    }),
+    getBookingData: builder.mutation({
+      query: (params) => ({
+        url: `${USERS_URL}/getBookingData?id=${params.email}`,
         method: "GET",
       }),
     }),
@@ -84,7 +111,12 @@ export const {
   useGetGuideDataMutation,
   useGetSingleGuideMutation,
   useGetBookingMutation,
+  useGetBookingDataMutation,
   useStripeBookingMutation,
   useConfirmBookingMutation,
-  useGetUserDataMutation
+  useGetUserDataMutation,
+  useForgotPasswordMutation,
+  useVerifyOtpMutation,
+  useChangePasswordMutation,
+
 } = userSlice;

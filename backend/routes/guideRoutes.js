@@ -10,6 +10,7 @@ import {
   guideAddPrice,
   getGuideData,
   guideAddDescription,
+  changePassword
 } from "../controllers/guideController.js";
 import { protect } from "../middleware/guideAuthMiddlware.js";
 
@@ -20,4 +21,5 @@ router.post("/guideAddLanguage", guideAddLanguage);
 router.post("/guideAddPrice", protect, guideAddPrice);
 router.post("/guideAddDesc", protect, guideAddDescription);
 router.post("/getGuideData", protect, getGuideData);
+router.post("/Changepassword", protect, changePassword);
 export default router;

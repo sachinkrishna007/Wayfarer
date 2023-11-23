@@ -49,7 +49,6 @@ const authGuide = asyncHandler(async (req, res) => {
   }
 });
 
-
 const registerGuide = asyncHandler(async (req, res) => {
   const {
     firstName,
@@ -109,13 +108,14 @@ const guideAddLanguage = asyncHandler(async (req, res) => {
   const guide = await Guide.findOne({ email: guideId });
 
   if (!guide) {
-    return res.status(404).json({ success: false, message: "Guide not found" });
+    res.status(400);
+    throw new Error("Data fetch failed.");
   }
 
   if (guide.Language.length >= 3) {
-    res
-      .status(400)
-      .json({ success: false, message: "Language Limit exceeded" });
+    console.log("jj");
+    res.status(400);
+    throw new Error("Max limit is 3.");
   } else {
     guide.Language.push(Lan);
     await guide.save();
@@ -124,6 +124,7 @@ const guideAddLanguage = asyncHandler(async (req, res) => {
       .json({ success: true, message: "Language added successfully", guide });
   }
 });
+
 
 const guideAddPrice = asyncHandler(async (req, res) => {
   const { price, guideId } = req.body;
@@ -176,6 +177,30 @@ const getGuideData = asyncHandler(async (req, res) => {
   }
 });
 
+const changePassword = asyncHandler(async (req, res) => {
+
+  const { guideId, oldPassword, password } = req.body;
+
+  const guide = await Guide.findOne({ email: guideId });
+
+  if (!guide) {
+    res.status(404);
+    throw new Error("Guide not found");
+  }
+
+  const isPasswordMatch = await guide.matchPassword(oldPassword);
+
+  if (isPasswordMatch) {
+    guide.password = password;
+    await guide.save();
+
+    res.status(200).json({ success: true });
+  } else {
+    res.status(401);
+    throw new Error("Incorrect old password");
+  }
+});
+
 export {
   registerGuide,
   authGuide,
@@ -184,4 +209,5 @@ export {
   guideAddPrice,
   getGuideData,
   guideAddDescription,
+  changePassword,
 };

@@ -7,8 +7,11 @@ import { Flip, ToastContainer } from 'react-toastify';
 import Login from './pages/userPages/login/login';
 import UserHome from './pages/userPages/userHome/UserHome';
 import Booking from './pages/userPages/booking/booking';
+import ForgotPassword from './pages/userPages/forgotPassword/ForgotPassword';
+import Verifyotp from './pages/userPages/forgotPassword/Verifyotp';
+import UserChangePassword from './pages/userPages/forgotPassword/UserChangePassword';
+import BookingData from './pages/userPages/booking/BookingData';
 
-import Guidehelp from './pages/guidePages/guidehelp';
 import GuideRegister from './pages/guidePages/guideRegister';
 import GuideListing from './pages/userPages/GuideManagement/guideListing';
 import GuideLogin from './pages/guidePages/guideLogin';
@@ -24,9 +27,10 @@ import GuideData from './pages/admin/guideList';
 
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from './components/userComponents/privateRoute';
+import AdminBookingData from './pages/admin/Booking';
 import GuidePrivateRoute from './components/guideComponents/guidePrivateRoute';
 import AdminPrivateRoute from './components/adminComponents/AdminCard/AdminPrivateRoute';
-
+import ChangePassword from './pages/guidePages/passwordPages/ChangePassword';
 const App = () => {
   return (
     <div style={{ position: "relative" }}>
@@ -43,14 +47,20 @@ const App = () => {
         pauseOnHover
         theme="colored"
       />
+      
 
       <Routes>
+
         <Route path="/" element={<UserHome />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/guideList" element={<GuideListing />} />
         <Route path="/bookingPage" element={<Booking />} />
         <Route path="/checkout-success" element={<Confirmation />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/verifyOtp" element={<Verifyotp />} />
+        <Route path="/changePassword" element={<UserChangePassword />} />
+        <Route path="/Bookings" element={<BookingData />} />
         <Route
           path="/guideDetailedView/:userId"
           element={<GuideDetailedView />}
@@ -60,8 +70,7 @@ const App = () => {
 
         <Route path="/guideRegister" element={<GuideRegister />} />
         <Route path="/guideLogin" element={<GuideLogin></GuideLogin>} />
-        <Route path="/guidehelp" element={<Guidehelp />} />
-
+       
         <Route
           path="/guideHome"
           element={<GuidePrivateRoute element={<GuideHome />} />}
@@ -69,6 +78,10 @@ const App = () => {
         <Route
           path="/guideAddData"
           element={<GuidePrivateRoute element={<GuideDetails />} />}
+        />
+        <Route
+          path="/GuideChangePassword"
+          element={<GuidePrivateRoute element={<ChangePassword />} />}
         />
 
         {/* --------------------Admin Routes----------------------------------------- */}
@@ -85,6 +98,10 @@ const App = () => {
         <Route
           path="/guideListData"
           element={<AdminPrivateRoute element={<GuideData />} />}
+        />
+        <Route
+          path="/AdminBookingData"
+          element={<AdminPrivateRoute element={<AdminBookingData />} />}
         />
       </Routes>
     </div>

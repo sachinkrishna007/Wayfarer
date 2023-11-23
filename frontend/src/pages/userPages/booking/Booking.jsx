@@ -63,6 +63,7 @@ const Booking = () => {
         endDate: bookingDetails.endDate,
         userEmail: bookingDetails.userEmail,
         guideName: bookingDetails.guideName,
+        guideImage:bookingDetails.guideProfile,
         Days: days,
         totalAmount: totalPrice,
       });
@@ -80,7 +81,7 @@ const Booking = () => {
   };
 
   return (
-    <div>
+    <div>c
       <NavBar />
       <Heading
         cName="hero"
@@ -215,6 +216,7 @@ const Booking = () => {
               endDate={bookingDetails.endDate}
               userEmail={bookingDetails.userEmail}
               guideName={bookingDetails.guideName}
+              guideImage={bookingDetails.guideProfile}
               Days={days}
               totalAmount={totalPrice}
             />

@@ -36,7 +36,7 @@ const AdminHome = () => {
     <div>
       <AdminSidebar></AdminSidebar>
       <h1>Guide Requests</h1>
-      {isLoading ? <Loader /> : <AdminCard guide={guideData} img={guideData.profileImage} />}
+      {isLoading ? <Loader /> : <AdminCard guide={guideData} />}
 
     
     </div>

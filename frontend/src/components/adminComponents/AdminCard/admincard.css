@@ -24,11 +24,11 @@ color: rgb(0, 0, 0),
  
 }
 .subTitle{
-color: blueviolet;
+color: rgb(11, 1, 20);
 }
 
 .small-card {
-  width: calc(33.33% - px); /* Adjust the width and margin as needed */
+  width: calc(33.33% -px); /* Adjust the width and margin as needed */
   
  
   margin: 0 10px 60px 10px;

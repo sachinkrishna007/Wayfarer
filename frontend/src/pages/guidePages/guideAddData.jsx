@@ -37,24 +37,16 @@ const handleSubmit = async (e) => {
       guideId: guideInfo.data.email,
       Lan: Language,
     });
-    if (responseFromApiCall.success) {
+    if (responseFromApiCall) {
       toast.success("Language added Successfully.");
       navigate("/guideHome");
-    } else {
-      toast.error(responseFromApiCall.message);
     }
   } catch (err) {
-    if (
-      err.response &&
-      err.response.data &&
-      err.response.data.message === "Language Limit exceeded"
-    ) {
-      toast.error("Maximum languages you can add is 3");
-    } else if (err.response && err.response.data && err.response.data.message) {
-      toast.error(err.response.data.message);
-    } else {
-      toast.error("An error occurred. Please try again."); // Generic error message
-    }
+      if (err.data && err.data.message) {
+        toast.error(err.data.message);
+      } else {
+        toast.error("An error occurred. Please try again."); // Generic error message
+      }
   }
 };
 
@@ -98,13 +90,7 @@ const handleSubmit = async (e) => {
   return (
     <>
       <div
-        style={{
-          backgroundImage: `url(${"/guide1.jpg"})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          minHeight: "100vh", // Set this to the desired height
-          overflow: "hidden",
-        }}
+ 
       >
         <NavBar></NavBar>
         {isLoading && <Loader></Loader>}

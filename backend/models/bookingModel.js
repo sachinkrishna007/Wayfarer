@@ -45,6 +45,9 @@ const bookingSchema = new Schema(
       required: true,
       default: "Pending",
     },
+    guideImage: {
+      type: String,
+    },
   },
   {
     timestamps: true,

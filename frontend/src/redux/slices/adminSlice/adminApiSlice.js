@@ -59,6 +59,12 @@ export const adminSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getAdminBookingData: builder.mutation({
+      query: () => ({
+        url: `${ADMIN_URL}/adminBookingData`,
+        method: "GET",
+      }),
+    }),
     adminLogout: builder.mutation({
       query: (data) => ({
         url: `${ADMIN_URL}/adminLogout`,
@@ -78,5 +84,6 @@ export const {
   useUnBlockUserMutation,
   useBlockGuideMutation,
   useUnBlockGuideMutation,
-  useListGuideMutation
+  useListGuideMutation,
+  useGetAdminBookingDataMutation
 } = adminSlice;

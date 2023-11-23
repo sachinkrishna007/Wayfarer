@@ -12,6 +12,7 @@ const PayButton = ({
   guideName,
   Days,
   totalAmount,
+  guideImage
 }) => {
   const [Stripe, { isLoading }] = useStripeBookingMutation();
    const [createBooking] = useGetBookingMutation();
@@ -28,6 +29,7 @@ const PayButton = ({
         guideName,
         Days,
         totalAmount,
+        
       });
       console.log(responseFromApiCall);
        const response = await createBooking({
@@ -40,6 +42,7 @@ const PayButton = ({
          guideName,
          Days,
          totalAmount,
+         guideImage
        });
        if(response){
 

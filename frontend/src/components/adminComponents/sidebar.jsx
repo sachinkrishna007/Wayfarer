@@ -74,6 +74,16 @@ export default function AdminSidebar() {
             Guide Management
           </Link>
         </div>
+        <div className="admin-sidebar-content">
+          <Link to={"/AdminBookingData"} className="sidebarOptions">
+            <i
+              className="pi pi-calendar
+"
+              style={{ fontSize: "1.2rem", padding: "20px" }}
+            ></i>
+            Bookings Details
+          </Link>
+        </div>
 
         {/* Add the "Logout" link here */}
         <div className="admin-sidebar-content">

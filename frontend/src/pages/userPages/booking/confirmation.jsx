@@ -49,8 +49,8 @@ useEffect(()=>{
       <NavBar></NavBar>
       <Heading
         cName="hero"
-        name="htext123"
-        img="https://cdn.dribbble.com/users/5338201/screenshots/13804672/media/ce7ee9f720a36ac1a2782c79dc8f5728.gif"
+        name="htext1234"
+        img="https://cdn.dribbble.com/users/1751799/screenshots/5512482/check02.gif"
         imageclass="cover1234"
         title="Booking Sucesss"
         text="Wait for confirmation from guide "

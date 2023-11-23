@@ -43,39 +43,43 @@ const Register = () => {
       navigate("/");
     }
   }, [navigate, userInfo]);
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      toast.error(" password do not match", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-    } else {
-      try {
-        const res = await login({
-          firstName,
-          LastName,
-          mobile,
-          email,
-          password,
-        }).unwrap();
-        dispatch(setCredentials({ ...res }));
-        navigate("/");
-      } catch (err) {
-         if (err.data && err.data.message) {
-           toast.error(err.data.message);
-         } else {
-           toast.error("An error occurred. Please try again."); // Generic error message
-         }
-      }
-    }
-  };
+ const submitHandler = async (e) => {
+   e.preventDefault();
+
+   // Mobile number validation
+   const mobileRegex = /^\d{10}$/;
+
+   // Password complexity requirements
+   const passwordRegex =
+     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+   try {
+     if (!mobileRegex.test(mobile)) {
+       toast.error("Invalid mobile number. Please enter a 10-digit number") 
+     } else if (password !== confirmPassword) {
+       toast.error("Passwords do not match")
+     } else if (!passwordRegex.test(password)) {
+       toast.error("Password should have 8 characters,digit,one special character,uppercase and lowercase")
+     } else {
+       const res = await login({
+         firstName,
+         LastName,
+         mobile,
+         email,
+         password,
+       }).unwrap();
+       dispatch(setCredentials({ ...res }));
+       navigate("/");
+     }
+   } catch (err) {
+     if (err.data && err.data.message) {
+       toast.error(err.data.message);
+     } else {
+       toast.error("An error occurred. Please try again."); // Generic error message
+     }
+   }
+ };
+
   const googelAuth = async (data) => {
     try {
       console.log(data);

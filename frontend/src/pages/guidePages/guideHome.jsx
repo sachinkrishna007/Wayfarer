@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useGuideGetDataMutation } from "../../redux/slices/guideSlice/guideApiSlice";
 import "./guideHome.css";
 import Loader from "../../components/userComponents/loading";
+import Heading from "../../components/userComponents/Headings/heading";
 import {
   MDBCol,
   MDBContainer,
@@ -58,6 +59,14 @@ export default function GuideHome() {
   return (
     <>
       <NavBar />
+      <Heading
+        cName="hero"
+        name="htext123"
+        imageclass="coverProfile"
+        img="https://t3.ftcdn.net/jpg/01/91/95/30/240_F_191953033_gehQATeDoh5z6PyRDbeKyBZuS83CjMEF.jpg"
+        title="Profile"
+        text="Treat your guests as if they were your own family."
+      />
 
       <MDBContainer className="py-5  container">
         <MDBRow>
@@ -106,7 +115,10 @@ export default function GuideHome() {
                       style={{ color: "#55acee" }}
                     />
 
-                    <Link className="genric-btn info w-50 mx-auto ">
+                    <Link
+                      to={"/guideChangePassword"}
+                      className="genric-btn info w-50 mx-auto "
+                    >
                       <MDBBtn style={{ backgroundColor: "#387F8E" }}>
                         ChangePassword
                       </MDBBtn>
@@ -187,7 +199,7 @@ export default function GuideHome() {
                       <span className="text-primary font-italic me-1"></span>
                       <h6>Added Languages</h6>
                     </MDBCardText>
-                    {guideData.Language  ? (
+                    {guideData.Language ? (
                       <>
                         <li>{guideData.Language[0]}</li>
                         <li>{guideData.Language[1]}</li>

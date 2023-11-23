@@ -16,7 +16,7 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setCredentials } from "../../redux/slices/guideSlice/guideAuthSlice";
+
 import { useGuideRegisterMutation } from "../../redux/slices/guideSlice/guideApiSlice";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 
@@ -53,7 +53,7 @@ const [waitLoading, setIsLoading] = useState(false);
       setFileToBase(file);
     };
 
-    const setFileToBase = (file) => {
+    const setFileToBase = (file) => { 
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
@@ -88,6 +88,18 @@ const [waitLoading, setIsLoading] = useState(false);
        toast.error("Please fill in all required fields.");
        return;
      }
+      const passwordRegex =
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/; // Example: Minimum 8 characters, at least one uppercase letter, one lowercase letter, and one number
+
+      if (!password.match(passwordRegex)) {
+        toast.error(
+          "Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number."
+        );
+        return;
+      }
+
+      
+      
        if (!idCardFile || !profileImage) {
          toast.error("Please upload ID card and profile photo.");
          return;

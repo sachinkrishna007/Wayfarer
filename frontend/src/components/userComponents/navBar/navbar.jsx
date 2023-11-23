@@ -73,12 +73,22 @@ export default function NavBar() {
       // Add a link to the guides page
      
     },
+   
     {
-      label: "Bookings",
-      icon: "pi pi-fw pi-book custom-icon",
-      // Add a link to the bookings page
-      url: "/bookings",
+      label: (
+        <Link
+          to="/Bookings"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          Bookings
+
+        </Link>
+      ),
+      icon: "pi pi-fw pi-users custom-icon",
+      // Add a link to the guides page
+     
     },
+   
 
     {
       label: ` ${userName}`, // Dynamically include the user name

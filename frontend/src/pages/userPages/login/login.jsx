@@ -41,6 +41,11 @@ const Login = () => {
     };
   }, []);
 
+ useEffect(() => {
+   if (userInfo) {
+     navigate("/");
+   }
+ }, [navigate, userInfo]);
   //  useEffect(() => {
   //    if (userInfo) {
   //      navigate("/");
@@ -58,8 +63,8 @@ const Login = () => {
         console.log(responseFromApiCall);
         if(responseFromApiCall){
           dispatch(setCredentials({ ...responseFromApiCall }));
-          toast.success('sucess')
-           navigate("/home");
+          toast.success("Login Sucessfull")
+           navigate("/");
         }else{
           toast.error('no details found')
         }
@@ -91,13 +96,13 @@ const Login = () => {
           <img src={images[imageIndex]} alt="" />
         </div>
         <div style={{ flex: 1, maxWidth: "450px", margin: "0 15px" }}>
-          <div style={{ paddingLeft: "120px" }}>
-            <img
-              src="/wayfarerlogo.png" // Use the imported variable
-              alt="Logo"
-              style={{ width: "180px", height: "180px" }} // Adjust the width and height as needed
-            />
-          </div>
+            <div style={{ paddingLeft: "120px" }}>
+              <img
+                src="/wayfarerlogo.png" // Use the imported variable
+                alt="Logo"
+                style={{ width: "180px", height: "180px" }} // Adjust the width and height as needed
+              />
+            </div>
 
           <MDBCard alignment="center" className="mb-5">
             <MDBIcon fas icon="user-circle" className="fa-3x " />
@@ -165,6 +170,13 @@ const Login = () => {
                   <span style={{ color: "#387F8E" }}> Sign Up </span>
                 </p>
               </Link>
+              <Link to="/forgotPassword">
+                <p style={{ color: "black" }}>
+               
+                  <span style={{ color: "#387F8E" }}> Forgot passsword? </span>
+                </p>
+              </Link>
+              <hr />
 
               <div style={{ paddingLeft: "100px" }}>
                 <GoogleOAuthProvider clientId="567248772521-2abchm47hgkto581ctci87o3tq2n7s5j.apps.googleusercontent.com">
