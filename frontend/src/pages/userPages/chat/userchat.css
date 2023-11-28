@@ -1,0 +1,37 @@
+#chat2 .form-control {
+  border-color: transparent;
+}
+
+#chat2 .form-control:focus {
+  border-color: transparent;
+  box-shadow: inset 0px 0px 0px 1px transparent;
+}
+
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+
+/* Add this to your userChat.css or your stylesheet */
+
+.chat-body {
+  overflow-y: auto; /* Enable vertical scrollbar */
+}
+
+.receive{
+    background-color: blueviolet;
+}
+
+.user-message {
+  background-color: #2196F3; /* Set the background color for user messages */
+  color: #fff; /* Set the text color for user messages */
+}
+
+.guide-message {
+  background-color: #4CAF50; /* Set the background color for guide messages */
+  color: #fff; /* Set the text color for guide messages */
+}

@@ -8,10 +8,10 @@ const bookingSchema = new Schema(
       type: String,
       required: true,
     },
-    userid: {
-      type: String,
-      required: true,
-    },
+      userid: {
+        type: String,
+        required: true,
+      },
     guidename: {
       type: String,
       required: true,

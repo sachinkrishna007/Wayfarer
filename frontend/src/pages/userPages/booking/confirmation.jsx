@@ -10,23 +10,23 @@ import "./confirmation.css";
 const Confirmation = () => {
 
   const [confirmBooking] = useConfirmBookingMutation();
-//   useEffect(() => {
-//     const queryString = window.location.search;
-//     const urlParams = new URLSearchParams(queryString);
-//     const sessionId = urlParams.get("session_id");
-// console.log(sessionId);
-//     const sendPayment = async () => {
-//       try {
-//         console.log('inside');
-//         const response = await confirmBooking({
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const sessionId = urlParams.get("session_id");
+console.log(sessionId);
+    const sendPayment = async () => {
+      try {
+        console.log('inside');
+        const response = await confirmBooking({
        
-//         });
+        });
 
-//         console.log(response);
-//       } catch (error) {}
-//     };
-//     sendPayment();
-//   }, []);
+        console.log(response);
+      } catch (error) {}
+    };
+    sendPayment();
+  }, []);
 
 useEffect(()=>{
 

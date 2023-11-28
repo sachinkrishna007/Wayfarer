@@ -2,11 +2,19 @@ import NavBar from "../../../components/userComponents/navBar/navBar";
 import "./guideDetailed.css";
 import Footer from "../../../components/userComponents/footer/footer";
 import DatePicker from "react-datepicker";
+import { Calendar } from "primereact/calendar";
 import { useState, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import Loader from "../../../components/userComponents/loading";
 import { useDispatch, useSelector } from "react-redux";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button } from "primereact/button";
+import { Chip } from "primereact/chip";
+import { Knob } from "primereact/knob";
+import { Sidebar } from "primereact/sidebar";
+import { Link } from "react-router-dom";
+ import { useGetRatingsMutation } from "../../../redux/slices/userApiSlice";
+
 import {
   MDBCol,
   MDBContainer,
@@ -17,6 +25,7 @@ import {
   MDBCardImage,
   MDBBtn,
   MDBTypography,
+  MDBIcon,
 } from "mdb-react-ui-kit";
 import { useGetSingleGuideMutation } from "../../../redux/slices/userApiSlice";
 import { toast } from "react-toastify";
@@ -27,9 +36,15 @@ export default function EditButton() {
   const [endDate, setEndDate] = useState("");
   const id = location.pathname.split("/")[2];
   const [guideSingleDataFromAPI] = useGetSingleGuideMutation();
+  const [getRatings] = useGetRatingsMutation()
+ 
   const [guideData, setGuideData] = useState("");
+  const [rating, setGuiderating] = useState("");
   const { userInfo } = useSelector((state) => state.auth);
-  const navigate = useNavigate()
+  const [value, setValue] = useState(67);
+  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     try {
       const fetchData = async () => {
@@ -38,7 +53,7 @@ export default function EditButton() {
         });
 
         const guide = await responseFromApiCall.data.guideData;
-        console.log("llll", guide);
+      
         setGuideData(guide);
         setLoading(false);
       };
@@ -51,12 +66,36 @@ export default function EditButton() {
     }
   }, []);
 
+  useEffect(() => {
+    try {
+      const fetchRating = async () => {
+        const responseFromApiCall = await getRatings({
+          guideId: id,
+        });
+
+      
+        console.log("ratings", responseFromApiCall);
+        // setGuiderating(rating);
+      
+      };
+
+      fetchRating();
+    } catch (error) {
+      toast.error(error);
+
+      console.error("Error fetching data:", error);
+    }
+  }, []);
+
+  
+
   if (loading) {
     return <Loader></Loader>;
   }
+
   const checkAvailability = () => {
     if (!startDate || !endDate) {
-      toast.warning('Please add dates')
+      toast.warning("Please add dates");
       return;
     }
     const bookingData = {
@@ -68,16 +107,14 @@ export default function EditButton() {
       userEmail: userInfo.email,
       guidePrice: guideData.price,
       guideLocation: guideData.Location,
-      guideProfile:guideData.profileImage
-      
+      guideProfile: guideData.profileImage,
     };
 
     localStorage.setItem("bookingData", JSON.stringify(bookingData));
 
-       navigate('/bookingPage')
-    // Optionally, you can navigate to the next page here
-    // Example: history.push('/next-page');
+    navigate("/bookingPage");
   };
+
   return (
     <div>
       <NavBar></NavBar>
@@ -86,10 +123,7 @@ export default function EditButton() {
           <MDBRow className="justify-content-center align-items-center h-100">
             <MDBCol lg="12" xl="12">
               <MDBCard>
-                <div
-                  className="rounded-top text-dark d-flex flex-row"
-                 
-                >
+                <div className="rounded-top text-dark d-flex flex-row">
                   <div
                     className="ms-4 mt-5 d-flex flex-column"
                     style={{ width: "150px" }}
@@ -97,7 +131,7 @@ export default function EditButton() {
                     <MDBCardImage
                       src={guideData.profileImage}
                       alt="Generic placeholder image"
-                      className="mt-6 mb-2 img-thumbnail guideimage"
+                      className="mt-6  img-thumbnail guideimage"
                       fluid
                     />
                   </div>
@@ -110,6 +144,10 @@ export default function EditButton() {
                       {guideData.Location}
                     </MDBCardText>
                   </div>
+                  <div className="justify-content-center knob1">
+                    <Knob value={value} />
+                    <h6>Rating </h6>
+                  </div>
                 </div>
                 <div
                   className="p-4 text-black"
@@ -120,105 +158,188 @@ export default function EditButton() {
                     <div className="px-3"></div>
                   </div>
                 </div>
-                <MDBCardBody className="text-black p-4 guideAbout">
-                  <div className="mb-5">
-                    <h1 className="lead fw-normal mb-1">About</h1>
-                    <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
-                      <div className="mb-2">
-                        <strong>Email:</strong> {guideData.email}
-                      </div>
-                      <div className="mb-2 ">
-                        <strong>Phone:</strong>
-                        {guideData.mobile}
-                      </div>
-                      <div className="mb-2">
-                        <strong>Guide charge/day:</strong> {guideData.price}
-                      </div>
-                      <div className="mb-2">
-                        <strong>Languages:</strong> {guideData.Language[0]}{" "}
-                        {guideData.Language[1]}, {guideData.Language[2]}
-                      </div>
-                      {/* Add any other details you want to display */}
+                <div className="font-medium text-3xl text-900 mb-3">
+                  More Information
+                </div>
+                <div className="text-500 mb-5">
+                  Morbi tristique blandit turpis. In viverra ligula id nulla
+                  hendrerit rutrum.
+                </div>
 
-                      <div className="mb-2">
-                        <strong>Select Start Date :</strong>
-                        <DatePicker
-                          selected={startDate}
-                          onChange={(date) => setStartDate(date)}
-                          selectsStart
-                          startDate={startDate}
-                          endDate={endDate}
-                          dateFormat="dd/MM/yyyy"
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="mb-2">
-                        <strong>Select End Date :</strong>
-                        <DatePicker
-                          selected={endDate}
-                          onChange={(date) => setEndDate(date)}
-                          selectsEnd
-                          startDate={startDate}
-                          endDate={endDate}
-                          dateFormat="dd/MM/yyyy"
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="mb-2">
-                        <button
-                          className="btn btn-primary"
-                          onClick={checkAvailability}
-                        >
-                          BooK
-                        </button>
-                        <span className="ml-2">{availabilityStatus}</span>
-                      </div>
+                <ul className="list-none p-0 m-0">
+                  <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                    <div className="text-500 w-6 md:w-2 font-medium">
+                      About me
                     </div>
+                    <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                      {guideData.Description}
+                    </div>
+                  </li>
+                  <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                    <div className="text-500 w-6 md:w-2 font-medium">
+                      Languages
+                    </div>
+                    <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                      {guideData.Language.map((language, index) => (
+                        <Chip
+                          key={index}
+                          label={language}
+                          className={
+                            index < guideData.Language.length - 1 ? "mr-2" : ""
+                          }
+                        />
+                      ))}
+                    </div>
+                  </li>
+                  <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                    <div className="text-500 w-6 md:w-2 font-medium">Email</div>
+                    <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                      {guideData.email}
+                    </div>
+                  </li>
+                  <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                    <div className="text-500 w-6 md:w-2 font-medium">
+                      Guide Charge
+                    </div>
+                    <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                      {guideData.price}
+                    </div>
+                  </li>
+                  <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                    <div className="text-500 w-6 md:w-2 font-medium">
+                      Start Date
+                    </div>
+                    <div className="mb-2">
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        selectsStart
+                        startDate={startDate}
+                        endDate={endDate}
+                        dateFormat="dd/MM/yyyy"
+                        className="form-control"
+                      />
+                    </div>
+                  </li>
+                  <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                    <div className="text-500 w-6 md:w-2 font-medium">
+                      End Date
+                    </div>
+                    <div className="mb-2">
+                      <DatePicker
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        selectsEnd
+                        startDate={startDate}
+                        endDate={endDate}
+                        dateFormat="dd/MM/yyyy"
+                        className="form-control"
+                      />
+                    </div>
+                  </li>
+                  <div className="mb-2">
+                    <Button onClick={checkAvailability}>
+                      Continue Booking
+                    </Button>
+
+                    <span className="ml-2">{availabilityStatus}</span>
+                   
+                      <Button
+                        onClick={() => setVisible(true)}
+                        style={{ float: "right" }}
+                      >
+                        View Reviews
+                      </Button>
+                  
                   </div>
 
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <MDBCardText className="lead fw-normal mb-0">
-                      Recent Travel Pictures & Experience
-                    </MDBCardText>
-                    <MDBCardText className="mb-0">
-                      <a href="#!" className="text-muted">
-                        Show all
-                      </a>
-                    </MDBCardText>
-                  </div>
+                  <li>
+                    <div className=" justify-content-center">
+                      <Sidebar
+                        visible={visible}
+                        style={{ width: "70%" }}
+                        position="right"
+                        onHide={() => setVisible(false)}
+                      >
+                        <section>
+                          <MDBContainer
+                            className="py--5"
+                            style={{ maxWidth: "1000px" }}
+                          >
+                            <MDBRow className="justify-content-center">
+                              <MDBCol md="12" lg="10">
+                                <MDBCard className="text-dark">
+                                  <MDBCardBody>
+                                    <MDBTypography tag="h0" className="mb-0">
+                                      Recent comments
+                                    </MDBTypography>
+                                    <p className="fw-light mb-4 pb-2">
+                                      Latest Comments section by users
+                                    </p>
 
-                  <MDBRow>
-                    <MDBCol md="4" className="mb-4">
-                      <MDBCardImage
-                        src="https://images.unsplash.com/photo-1496566084516-c5b96fcbd5c8?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="image 1"
-                        className="w-100 rounded-3"
-                      />
-                      <MDBCardText className="mt-2">My recent trip</MDBCardText>
-                    </MDBCol>
-                    <MDBCol md="4" className="mb-4">
-                      <MDBCardImage
-                        src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="image 1"
-                        className="w-100 rounded-3"
-                      />
-                      <MDBCardText className="mt-2">the best one</MDBCardText>
-                    </MDBCol>
-                    <MDBCol md="4" className="mb-4">
-                      <MDBCardImage
-                        src="https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="image 1"
-                        className="w-100 rounded-3"
-                      />
-                      <MDBCardText className="mt-2">All time best</MDBCardText>
-                    </MDBCol>
-                  </MDBRow>
-                </MDBCardBody>
+                                    <div className="d-flex flex-start">
+                                      <MDBCardImage
+                                        className="rounded-circle shadow-1-strong me-3"
+                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
+                                        alt="avatar"
+                                        width="60"
+                                        height="60"
+                                      />
+                                      <div>
+                                        <MDBTypography
+                                          tag="h6"
+                                          className="fw-bold mb-1"
+                                        >
+                                          Maggie Marsh
+                                        </MDBTypography>
+                                        <div className="d-flex align-items-center mb-3">
+                                          <p className="mb-0">
+                                            March 07, 2021
+                                            <span className="badge bg-primary">
+                                              Pending
+                                            </span>
+                                          </p>
+                                          <a href="#!" className="link-muted">
+                                            <MDBIcon
+                                              fas
+                                              icon="pencil-alt ms-2"
+                                            />
+                                          </a>
+                                          <a href="#!" className="link-muted">
+                                            <MDBIcon fas icon="redo-alt ms-2" />
+                                          </a>
+                                          <a href="#!" className="link-muted">
+                                            <MDBIcon fas icon="heart ms-2" />
+                                          </a>
+                                        </div>
+                                        <p className="mb-0">
+                                          Lorem Ipsum is simply dummy text of
+                                          the printing and typesetting industry.
+                                          Lorem Ipsum has been the industry's
+                                          standard dummy text ever since the
+                                          1500s, when an unknown printer took a
+                                          galley of type and scrambled it.
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </MDBCardBody>
+
+                                  <hr className="my-0" />
+                                </MDBCard>
+                              </MDBCol>
+                            </MDBRow>
+                          </MDBContainer>
+                        </section>
+                      </Sidebar>
+                    </div>
+                  </li>
+                </ul>
               </MDBCard>
             </MDBCol>
           </MDBRow>
         </MDBContainer>
       </div>
+      <div></div>
       <Footer></Footer>
     </div>
   );

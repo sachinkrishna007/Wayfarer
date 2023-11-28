@@ -1,16 +1,16 @@
 import React from 'react'
-
 import { Route, Routes } from "react-router-dom";
 import Register from './pages/userPages/register';
 import { Flip, ToastContainer } from 'react-toastify';
 
 import Login from './pages/userPages/login/login';
 import UserHome from './pages/userPages/userHome/UserHome';
-import Booking from './pages/userPages/booking/booking';
+import Booking from './pages/userPages/booking/Booking';
 import ForgotPassword from './pages/userPages/forgotPassword/ForgotPassword';
 import Verifyotp from './pages/userPages/forgotPassword/Verifyotp';
 import UserChangePassword from './pages/userPages/forgotPassword/UserChangePassword';
 import BookingData from './pages/userPages/booking/BookingData';
+import ViewBooking from './pages/userPages/booking/ViewBooking';
 
 import GuideRegister from './pages/guidePages/guideRegister';
 import GuideListing from './pages/userPages/GuideManagement/guideListing';
@@ -20,6 +20,7 @@ import GuideDetails from './pages/guidePages/guideAddData';
 import GuideDetailedView from './pages/userPages/GuideManagement/guideDetailed';
 import Confirmation from './pages/userPages/booking/confirmation';
 
+import "primeflex/primeflex.css";
 import AdminLogin from './pages/admin/Adminlogin';
 import AdminHome from './pages/admin/adminHome';
 import Userlist from './pages/admin/userList';
@@ -31,6 +32,8 @@ import AdminBookingData from './pages/admin/Booking';
 import GuidePrivateRoute from './components/guideComponents/guidePrivateRoute';
 import AdminPrivateRoute from './components/adminComponents/AdminCard/AdminPrivateRoute';
 import ChangePassword from './pages/guidePages/passwordPages/ChangePassword';
+import UserChat from './pages/userPages/chat/UserChat';
+import GuideChat from './pages/guidePages/guideChat/guideChat';
 const App = () => {
   return (
     <div style={{ position: "relative" }}>
@@ -61,6 +64,9 @@ const App = () => {
         <Route path="/verifyOtp" element={<Verifyotp />} />
         <Route path="/changePassword" element={<UserChangePassword />} />
         <Route path="/Bookings" element={<BookingData />} />
+        <Route path="/ViewBooking/:bookingId" element={<ViewBooking />} />
+        <Route path="/UserChat/:id" element={<UserChat />} />
+        
         <Route
           path="/guideDetailedView/:userId"
           element={<GuideDetailedView />}
@@ -82,6 +88,10 @@ const App = () => {
         <Route
           path="/GuideChangePassword"
           element={<GuidePrivateRoute element={<ChangePassword />} />}
+        />
+        <Route
+          path="/GuideChat"
+          element={<GuidePrivateRoute element={<GuideChat />} />}
         />
 
         {/* --------------------Admin Routes----------------------------------------- */}

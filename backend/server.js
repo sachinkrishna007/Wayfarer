@@ -23,9 +23,49 @@ app.use("/api/guide", guideRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/stripe", stripeRoutes);
 
+
 app.get("/", (req, res) => res.send("wayfarer is ready "));
 
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(port, () => console.log(`server started on ${port}`));
+const server = app.listen(port, () => console.log(`server started on ${port}`));
+
+import { Server } from "socket.io";
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: ["http://localhost:3000"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("connected with socket io");
+
+  socket.on("setup", (userData) => {
+    socket.join(userData._id);
+    socket.emit("connected");
+  });
+
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log(room);
+    console.log("User Joined room:" + room);
+  });
+
+  socket.on("new message", (newMessageReceived) => {
+    console.log(newMessageReceived,'bjhbjh');
+    var chat = newMessageReceived.newMessage.room;
+    console.log('chat',chat);
+    if (!chat.user || !chat.guide) {
+      return console.log("chat.users not defined");
+    }
+
+   
+     
+  
+      socket.to(chat._id).emit("message received", newMessageReceived.newMessage)
+  
+  });
+});

@@ -1,12 +1,10 @@
-
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../../redux/slices/userAuthSlice";
 import { useLogoutMutation } from "../../../redux/slices/userApiSlice";
+import { NavLink, useLocation } from "react-router-dom";
 
 import "./navbar.css";
-
-
 
 import React, { useState, useEffect } from "react";
 import { Menubar } from "primereact/menubar";
@@ -14,11 +12,11 @@ import { InputText } from "primereact/inputtext";
 import { Link } from "react-router-dom";
 
 export default function NavBar() {
+
   const menubarStyle = {
     backgroundColor: "white", // Specify your desired background color here
     justifyContent: "space-between",
     alignItems: "center",
-   
   };
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,16 +46,13 @@ export default function NavBar() {
   // Define menu items for logged-in users
   const loggedInUserItems = [
     {
-      label:  (<Link
-          to="/"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
+      label: (
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           Home
-
-        </Link>),
+        </Link>
+      ),
       icon: "pi pi-fw pi-home custom-icon",
       // Add a link to the home page
- 
     },
     {
       label: (
@@ -66,14 +61,12 @@ export default function NavBar() {
           style={{ textDecoration: "none", color: "inherit" }}
         >
           Guides
-
         </Link>
       ),
       icon: "pi pi-fw pi-users custom-icon",
-      // Add a link to the guides page
-     
+
     },
-   
+
     {
       label: (
         <Link
@@ -81,14 +74,11 @@ export default function NavBar() {
           style={{ textDecoration: "none", color: "inherit" }}
         >
           Bookings
-
         </Link>
       ),
       icon: "pi pi-fw pi-users custom-icon",
       // Add a link to the guides page
-     
     },
-   
 
     {
       label: ` ${userName}`, // Dynamically include the user name
@@ -124,44 +114,37 @@ export default function NavBar() {
     },
     {
       label: (
-        <Link
-          to="/login"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
+        <Link to="/login" style={{ textDecoration: "none", color: "inherit" }}>
           Sign in
         </Link>
       ),
       icon: "pi pi-sign-in",
       // Add a link to the sign-in page
-      
     },
   ];
 
   // Determine which set of items to render based on the presence of userInfo
   const items = userInfo ? loggedInUserItems : signUpSignInItems;
-    const navbarContainerStyle = {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-    };
+  const navbarContainerStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  };
 
-    const logoStyle = {
-      margin: "0",
-    };
+  const logoStyle = {
+    margin: "0",
+  };
 
   const start = (
     <div style={navbarContainerStyle}>
       <img alt="logo" src="/logos2.png" height="50" className="mr-2"></img>
     </div>
   );
-  const end = <InputText  placeholder="Search" type="text" className="w-full" />;
+  const end = <InputText placeholder="Search" type="text" className="w-full" />;
 
   return (
-
-    
     <div className="card navbar-container">
-      <Menubar model={items} start={start}  style={menubarStyle} />
-      
+      <Menubar model={items} start={start} style={menubarStyle} />
     </div>
   );
 }

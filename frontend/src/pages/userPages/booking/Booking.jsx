@@ -51,34 +51,34 @@ const Booking = () => {
 
   const { days, totalPrice } = calculateTotalPrice();
 
-  const handleSubmit = async () => {
-    console.log("here");
+  // const handleSubmit = async () => {
+  //   console.log("here");
 
-    try {
-      const responseFromApiCall = await createBooking({
-        userid: userInfo._id,
-        guideid: bookingDetails.guideId,
-        Location: bookingDetails.guideLocation,
-        startDate: bookingDetails.startDate,
-        endDate: bookingDetails.endDate,
-        userEmail: bookingDetails.userEmail,
-        guideName: bookingDetails.guideName,
-        guideImage:bookingDetails.guideProfile,
-        Days: days,
-        totalAmount: totalPrice,
-      });
+  //   try {
+  //     const responseFromApiCall = await createBooking({
+  //       userid: userInfo._id,
+  //       guideid: bookingDetails.guideId,
+  //       Location: bookingDetails.guideLocation,
+  //       startDate: bookingDetails.startDate,
+  //       endDate: bookingDetails.endDate,
+  //       userEmail: bookingDetails.userEmail,
+  //       guideName: bookingDetails.guideName,
+  //       guideImage:bookingDetails.guideProfile,
+  //       Days: days,
+  //       totalAmount: totalPrice,
+  //     });
 
-      if (responseFromApiCall) {
-        toast.success("booking Successfully.");
-        localStorage.removeItem("bookingData");
-        navigate("/Confirmation");
-      } else {
-        toast.error("error");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     if (responseFromApiCall) {
+  //       toast.success("booking Successfully.");
+  //       localStorage.removeItem("bookingData");
+  //       navigate("/Confirmation");
+  //     } else {
+  //       toast.error("error");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <div>c
@@ -209,6 +209,7 @@ const Booking = () => {
             </MDBCard>
 
             <PayButton
+            
               userid={userInfo._id}
               guideid={bookingDetails.guideId}
               Location={bookingDetails.guideLocation}

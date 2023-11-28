@@ -17,7 +17,7 @@ export const guideSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-  
+
     guideLogout: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guideLogout`,
@@ -25,7 +25,7 @@ export const guideSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-  
+
     guideAddLanguage: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guideAddLanguage`,
@@ -33,7 +33,7 @@ export const guideSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-  
+
     guideAddPrice: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guideAddPrice`,
@@ -62,11 +62,40 @@ export const guideSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-  
-   
+    GuideSendChat: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/guidesendchat`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    GuidegetMessages: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/guidegetmessages`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    GuidegetRooms: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/getguiderooms`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
 export const {
-  useGuideRegisterMutation,useGuideLoginMutation,useGuideLogoutMutation,useGuideAddLanguageMutation,useGuideAddPriceMutation,useGuideGetDataMutation,useGuideAddDescMutation,useGuideChangePasswordMutation
-} = guideSlice
+  useGuideRegisterMutation,
+  useGuideLoginMutation,
+  useGuideLogoutMutation,
+  useGuideAddLanguageMutation,
+  useGuideAddPriceMutation,
+  useGuideGetDataMutation,
+  useGuideAddDescMutation,
+  useGuideChangePasswordMutation,
+  useGuideSendChatMutation,
+  useGuidegetMessagesMutation,
+  useGuidegetRoomsMutation
+} = guideSlice;

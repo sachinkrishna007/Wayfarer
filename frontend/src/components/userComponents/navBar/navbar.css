@@ -1,21 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
-    /* Change the color of custom icons in the navbar */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap");
+/* Change the color of custom icons in the navbar */
 .custom-icon {
-  color:#387F8E /* Replace with your desired color code */
+  color: #387f8e; /* Replace with your desired color code */
 }
 
-.custom-text{
-font-family: 'Poppins', sans-serif;
-
-
+.custom-text {
+  font-family: "Poppins", sans-serif;
+ 
 }
-
 
 .navbar-container {
   position: fixed;
   top: 3px;
   left: 50%; /* Position at 50% of the viewport's width */
-  
+
   transform: translateX(-50%); /* Center the navbar */
   width: 99%; /* Adjust the width as needed */
   max-width: 1800px; /* Set a maximum width if necessary */
@@ -25,4 +23,3 @@ font-family: 'Poppins', sans-serif;
   background-color: white; /* Background color */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for depth */
 }
-

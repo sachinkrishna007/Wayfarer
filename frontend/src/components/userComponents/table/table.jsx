@@ -2,8 +2,9 @@ import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "./userTable.css";
+import { Link } from "react-router-dom";
 export default function BookingTable({ booking }) {
-    console.log(booking);
+    
 
      const formatDate = (dateString) => {
        const date = new Date(dateString);
@@ -22,10 +23,13 @@ export default function BookingTable({ booking }) {
       />
     );
   };
-
-  const actionTemplate = () => {
-    return <button className="p-button p-button-success">View</button>;
-  };
+const actionTemplate = (rowData) => {
+  return (
+    <Link to={`/ViewBooking/${rowData._id}`}>
+      <button className="p-button p-button-success">View</button>
+    </Link>
+  );
+};
 
   return (
     <div className="card">

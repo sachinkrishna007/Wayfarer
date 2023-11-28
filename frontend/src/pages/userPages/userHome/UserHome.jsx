@@ -5,6 +5,7 @@ import Destination from '../../../components/userComponents/hero/destinaion/dest
 import PopularGuides from '../../../components/userComponents/PopularGuides/popularGuides'
 import Footer from '../../../components/userComponents/footer/footer'
 import Loader from '../../../components/userComponents/loading'
+import Cover from '../../../components/userComponents/Cover/Cover'
 import { useState,useEffect } from 'react'
 const UserHome = () => {
    const [loading, setLoading] = useState(true);
@@ -18,7 +19,7 @@ const UserHome = () => {
   return (
     <div>
         <Navbars />
-        <Hero></Hero>
+    <Cover></Cover>
         <Destination></Destination>
         <PopularGuides></PopularGuides>
         <Footer></Footer>

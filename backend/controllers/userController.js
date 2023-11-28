@@ -20,6 +20,7 @@ const authUser = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       email: user.email,
       mobile: user.mobile,
+      image: user.ProfileImage,
     });
   } else {
     res.status(400);
@@ -116,11 +117,11 @@ const getGuide = asyncHandler(async (req, res) => {
   const guideData = await Guide.find({ isAuthorized: true, isBlocked: false });
   if (guideData) {
     res.status(200).json({ guideData });
-  } else {
-    res.status(404);
+    } else {
+      res.status(404);
 
-    throw new Error("Users data fetch failed.");
-  }
+      throw new Error("Users data fetch failed.");
+    }
 });
 const getSingleGuide = asyncHandler(async (req, res) => {
   const { id } = req.query;
@@ -138,6 +139,7 @@ const getSingleGuide = asyncHandler(async (req, res) => {
     res.status(500).json({ message: "Internal server error." });
   }
 });
+
 
 const createBooking = asyncHandler(async (req, res) => {
   const {

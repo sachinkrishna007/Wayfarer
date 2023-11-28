@@ -89,8 +89,11 @@ export default function GuideList({ guide }) {
                   style={{ width: "100%", height: "250px" }}
                   className="guideimage"
                 />
-                <p className="subtitle">Email: {guideInfo.email}</p>
-                <p className="mobileop">Mobile: {guideInfo.mobile}</p>
+               <p>{''}</p>
+                <p className="subtitle">
+                  <FaMapMarkerAlt /> Location: {guideInfo.Location}
+                </p>
+
                 <Link to={`/guideDetailedView/${guideInfo._id}`}>
                   <Button
                     label="View Details"

@@ -28,7 +28,7 @@ const GuideRegister = () => {
   const [LastName, setLastName] = useState("");
   const [mobile, setMobile] = useState("");
   const [Location, setLocaton] = useState("");
-  const [idCardNumber, setIdCardNumber] = useState(""); // New field for ID card number
+  const [idCardNumber, setIdCardNumber] = useState(""); 
   const [idCardFile, setIdCardFile] = useState(null); // New field for ID card image or PDF file
   const [profileImage, setprofileImage] = useState(null); // New field for ID card image or PDF file
 
