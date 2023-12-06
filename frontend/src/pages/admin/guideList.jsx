@@ -1,97 +1,105 @@
-import { useEffect, useState } from "react";
-import { Button, Modal, Table, Form as BootstrapForm } from "react-bootstrap";
-import { useListGuideMutation } from "../../redux/slices/adminSlice/adminApiSlice";
+import { useEffect, useState } from 'react'
+import { Button, Modal, Table, Form as BootstrapForm } from 'react-bootstrap'
+import { useListGuideMutation } from '../../redux/slices/adminSlice/adminApiSlice'
+import { Paginator } from 'primereact/paginator'
 import {
   useBlockGuideMutation,
   useUnBlockGuideMutation,
-} from "../../redux/slices/adminSlice/adminApiSlice";
-import { toast } from "react-toastify";
-import "./table.css";
-import AdminSidebar from "../../components/adminComponents/sidebar";
+} from '../../redux/slices/adminSlice/adminApiSlice'
+import { toast } from 'react-toastify'
+import './table.css'
+import AdminSidebar from '../../components/adminComponents/sidebar'
 const GuideData = () => {
-    
-  const [guideDataFromAPI, { isLoading }] = useListGuideMutation();
-  const [guideData, setGuideData] = useState([]);
+  const [guideDataFromAPI, { isLoading }] = useListGuideMutation()
+  const [guideData, setGuideData] = useState([])
   useEffect(() => {
-    fetchData();
-  }, [guideData]);
+    fetchData()
+  }, [guideData])
 
   const fetchData = async () => {
-    const responseFromApiCall = await guideDataFromAPI();
-    console.log(responseFromApiCall);
+    const responseFromApiCall = await guideDataFromAPI()
+    console.log(responseFromApiCall)
 
-    const guideArray = responseFromApiCall.data.guideData;
+    const guideArray = responseFromApiCall.data.guideData
 
-    setGuideData(guideArray);
-  };
-  const [searchQuery, setSearchQuery] = useState("");
+    setGuideData(guideArray)
+  }
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const [userIdToBlock, setUserIdToBlock] = useState(null);
+  const [userIdToBlock, setUserIdToBlock] = useState(null)
   const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
-  };
+    setSearchQuery(event.target.value)
+  }
 
   const filteredGuides = guideData.filter(
     (user) =>
       user.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      user.email.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
-  const [blockGuide, { isLoading: isBlocking }] = useBlockGuideMutation();
-  const [unblockGuide, { isLoading: isunBlocking }] = useUnBlockGuideMutation();
+  const [blockGuide, { isLoading: isBlocking }] = useBlockGuideMutation()
+  const [unblockGuide, { isLoading: isunBlocking }] = useUnBlockGuideMutation()
+
+    const [first, setFirst] = useState(0)
+    const [rows, setRows] = useState(5)
+
+    const onPaginationChange = (event) => {
+      setFirst(event.first)
+      setRows(event.rows)
+    }
 
   const handleBlock = async (guideId) => {
     try {
-      const responseFromApiCall = await blockGuide({ guideId });
+      const responseFromApiCall = await blockGuide({ guideId })
 
-      console.log("Block API Response:", responseFromApiCall);
+      console.log('Block API Response:', responseFromApiCall)
 
       if (responseFromApiCall.success) {
-        toast.success("Block successful");
+        toast.success('Block successful')
         // Update the guideData state to reflect the change in the UI
         setGuideData((prevGuideData) => {
           const updatedGuideData = prevGuideData.map((guide) =>
-            guide._id === guideId ? { ...guide, isBlocked: true } : guide
-          );
+            guide._id === guideId ? { ...guide, isBlocked: true } : guide,
+          )
 
-          console.log("Updated Guide Data:", updatedGuideData);
-          return updatedGuideData;
-        });
+          console.log('Updated Guide Data:', updatedGuideData)
+          return updatedGuideData
+        })
       }
     } catch (err) {
-      toast.error(err?.data?.message || err?.error);
+      toast.error(err?.data?.message || err?.error)
     }
-  };
+  }
 
   const handleUnblock = async (guideId) => {
     try {
-      const responseFromApiCall = await unblockGuide({ guideId });
+      const responseFromApiCall = await unblockGuide({ guideId })
 
-      console.log("Unblock API Response:", responseFromApiCall);
+      console.log('Unblock API Response:', responseFromApiCall)
 
       if (responseFromApiCall.success) {
-        toast.success("User unblocked successfully.");
+        toast.success('User unblocked successfully.')
         // Update the guideData state to reflect the change in the UI
         setGuideData((prevGuideData) => {
           const updatedGuideData = prevGuideData.map((guide) =>
-            guide._id === guideId ? { ...guide, isBlocked: false } : guide
-          );
+            guide._id === guideId ? { ...guide, isBlocked: false } : guide,
+          )
 
-          console.log("Updated Guide Data:", updatedGuideData);
-          return updatedGuideData;
-        });
+          console.log('Updated Guide Data:', updatedGuideData)
+          return updatedGuideData
+        })
       }
     } catch (err) {
-      toast.error(err?.data?.message || err?.error);
+      toast.error(err?.data?.message || err?.error)
     }
-  };
+  }
 
   return (
     <>
-    <AdminSidebar></AdminSidebar>
+      <AdminSidebar></AdminSidebar>
       <div>
         <h3 className="Heading">Guide Management</h3>
-      </div> 
+      </div>
       <div className="Table">
         <BootstrapForm>
           <BootstrapForm.Group
@@ -100,7 +108,7 @@ const GuideData = () => {
           >
             <BootstrapForm.Label>Search users:</BootstrapForm.Label>
             <BootstrapForm.Control
-              style={{ width: "500px" }}
+              style={{ width: '500px' }}
               value={searchQuery}
               type="text"
               placeholder="Enter Name or email........"
@@ -112,31 +120,29 @@ const GuideData = () => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
-              <th>#</th>
+             
               <th>Profile</th>
               <th> Name</th>
-
               <th>Email</th>
               <th>Location</th>
               <th>Charge</th>
               <th>Verified</th>
-
               <th>Block</th>
             </tr>
           </thead>
           <tbody>
-            {filteredGuides.map((user, index) => (
+            {filteredGuides.slice(first, first + rows).map((user, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
+              
                 <td>
                   <img
                     src={user.profileImage}
                     alt={`Guide ${index}`}
                     style={{
-                      width: "50px",
-                      height: "50px",
-                      borderRadius: "50%",
-                      overflow: "hidden",
+                      width: '50px',
+                      height: '50px',
+                      borderRadius: '50%',
+                      overflow: 'hidden',
                     }}
                   />
                 </td>
@@ -147,41 +153,47 @@ const GuideData = () => {
                 <td>{user.email}</td>
 
                 <td>{user.Location}</td>
-                <td>{user.price ? user.price : "not added"}</td>
-                <td style={{ color: user.isAuthorized ? "green" : "red" }}>
-                  {user.isAuthorized ? "verified" : "false"}
+                <td>{user.price ? user.price : 'not added'}</td>
+                <td style={{ color: user.isAuthorized ? 'green' : 'red' }}>
+                  {user.isAuthorized ? 'verified' : 'false'}
                 </td>
 
                 <td>
                   <Button
                     type="button"
-                    variant={user.isBlocked ? "success" : "warning"}
+                    variant={user.isBlocked ? 'success' : 'warning'}
                     className="mt-3 blockBtn"
                     disabled={isBlocking || isunBlocking} // Disable the button during API calls
                     onClick={() => {
                       if (user.isBlocked) {
                         // Unblock the user
-                        handleUnblock(user._id);
+                        handleUnblock(user._id)
                       } else {
                         // Block the user
-                        handleBlock(user._id);
+                        handleBlock(user._id)
                       }
                     }}
                   >
                     {isBlocking || isunBlocking
-                      ? "Processing..."
+                      ? 'Processing...'
                       : user.isBlocked
-                      ? "Unblock"
-                      : "Block"}
+                        ? 'Unblock'
+                        : 'Block'}
                   </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
+        <Paginator
+          first={first}
+          rows={rows}
+          totalRecords={filteredGuides.length}
+          onPageChange={onPaginationChange}
+        />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default GuideData;
+export default GuideData

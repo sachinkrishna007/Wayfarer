@@ -12,6 +12,16 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+  if (!user) {
+    res.status(400);
+    throw new Error("email doest exist");
+  }
+
+  if (user.isBlocked) {
+    res.status(400);
+    throw new Error("Sorry you are blocked");
+  }
+
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
 
@@ -114,14 +124,14 @@ const googleRegister = asyncHandler(async (req, res) => {
 
 //Load the guide data to display
 const getGuide = asyncHandler(async (req, res) => {
-  const guideData = await Guide.find({ isAuthorized: true, isBlocked: false });
+  const guideData = await Guide.find({ isAuthorized: true, isBlocked: false,isActive:true });
   if (guideData) {
     res.status(200).json({ guideData });
-    } else {
-      res.status(404);
+  } else {
+    res.status(404);
 
-      throw new Error("Users data fetch failed.");
-    }
+    throw new Error("Users data fetch failed.");
+  }
 });
 const getSingleGuide = asyncHandler(async (req, res) => {
   const { id } = req.query;
@@ -140,10 +150,80 @@ const getSingleGuide = asyncHandler(async (req, res) => {
   }
 });
 
+const checkAvailablity = asyncHandler(async (req, res) => {
+  console.log("here");
+  const { startDate, endDate, guideId } = req.body;
+  const currentDate = new Date();
+  console.log(currentDate);
+  const startDateObj = new Date(startDate);
+  const endDateObj = new Date(endDate);
+  if (
+    startDateObj.getTime() < currentDate.getTime() ||
+    endDateObj.getTime() < currentDate.getTime()
+  ) {
+   
+    res.status(400);
+    throw new Error("Start date or end date is in the past");
+  }
+
+   if (endDateObj.getTime() < startDateObj.getTime()) {
+     res.status(400);
+     throw new Error("End date cannot be before the start date");
+   }
+
+  const overlappingBookings = await Booking.find({
+    guideid: guideId,
+    $or: [
+      { startDate: { $lte: endDate }, endDate: { $gte: startDate } },
+      { startDate: { $gte: startDate, $lte: endDate } },
+    ],
+  });
+
+  if (overlappingBookings.length > 0) {
+    res.status(400);
+    throw new Error("GUIDE IS NOT AVAILABLE IN THESE DATES");
+  } else {
+    return res.status(200).json({ available: true });
+  }
+});
+
+const GetGuidesOnDates = asyncHandler(async (req, res) => {
+  const { Startdates, Enddates } = req.body;
+
+  const startDate = new Date(Startdates);
+  const endDate = new Date(Enddates);
+
+  const overlappingBookings = await Booking.find({
+    $or: [
+      { startDate: { $gte: startDate, $lte: endDate } },
+      { endDate: { $gte: startDate, $lte: endDate } },
+      {
+        $and: [
+          { startDate: { $lte: startDate } },
+          { endDate: { $gte: endDate } },
+        ],
+      },
+    ],
+  });
+  console.log(overlappingBookings);
+
+  const bookedGuideIds = overlappingBookings.map((booking) => booking.guideid);
+
+  const availableGuides = await Guide.find({
+    _id: { $nin: bookedGuideIds },
+  });
+
+  const availableGuideIds = availableGuides.map((guide) => guide._id);
+  console.log(availableGuideIds);
+
+  res.status(200).json({ availableGuideIds });
+});
+
 
 const createBooking = asyncHandler(async (req, res) => {
   const {
     userid,
+    userName,
     guideid,
     Location,
     startDate,
@@ -152,12 +232,14 @@ const createBooking = asyncHandler(async (req, res) => {
     totalAmount,
     userEmail,
     guideName,
-    guideImage
+    guideImage,
   } = req.body;
+  console.log(req.body, "jg");
   try {
     const newBooking = await Booking.create({
       userEmail: userEmail,
       userid: userid,
+      userName: userName,
       guidename: guideName,
       guideid: guideid,
       location: Location,
@@ -165,7 +247,7 @@ const createBooking = asyncHandler(async (req, res) => {
       endDate: endDate,
       totalDays: Days,
       totalAmount: totalAmount,
-      guideImage:guideImage,
+      guideImage: guideImage,
       status: "Pending",
     });
 
@@ -178,7 +260,7 @@ const createBooking = asyncHandler(async (req, res) => {
 
 //logout user
 const logout = asyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
+  res.cookie("Userjwt", "", {
     httpOnly: true,
     expires: new Date(0),
   });
@@ -199,7 +281,7 @@ const getUserData = asyncHandler(async (req, res) => {
 const getBookingData = asyncHandler(async (req, res) => {
   const { id } = req.query;
 
-  const booking = await Booking.find({ userEmail: id })
+  const booking = await Booking.find({ userEmail: id });
   if (booking) {
     res.status(200).json({ booking });
   } else {
@@ -323,4 +405,6 @@ export {
   verifyAndChangePassword,
   changePassword,
   getBookingData,
+  checkAvailablity,
+  GetGuidesOnDates
 };

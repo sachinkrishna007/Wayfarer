@@ -5,14 +5,13 @@ import Guide from "../models/guideModel.js";
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  token = req.cookies.jwt;
-  console.log(token);
+  token = req.cookies.Guidejwt;
 
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_CODE);
-
-      req.user = await Guide.findById(decoded.adminId).select("-password");
+console.log(decoded);
+      req.user = await Guide.findById(decoded.guideId).select("-password");
 
       next();
     } catch (error) {

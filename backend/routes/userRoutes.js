@@ -8,12 +8,13 @@ import {
   getGuide,
   getSingleGuide,
   logout,
-  createBooking,
   getBookingData,
   getUserData,
   forgotPassword,
   verifyAndChangePassword,
   changePassword,
+  checkAvailablity,
+  GetGuidesOnDates
 } from "../controllers/userController.js";
 import {
   getRooms,
@@ -22,7 +23,7 @@ import {
   getMessages,
 } from "../controllers/chatController.js";
 
-import { getSingleBooking } from "../controllers/bookingController.js";
+import { getSingleBooking ,createBooking} from "../controllers/bookingController.js";
 import { AddRating, findRating } from "../controllers/ratingController.js";
 
 router.post("/auth", authUser);
@@ -30,17 +31,20 @@ router.post("/register", registerUser);
 router.get("/getGuide", getGuide);
 router.post("/googleRegister", googleRegister);
 router.post("/createBooking", protect, createBooking);
-router.get("/getSingleGuide", getSingleGuide);
-router.get("/getSingleGuide", getSingleGuide);
+router.get("/getSingleGuide",protect,getSingleGuide);
+
 router.get("/getUserData", getUserData);
-router.get("/getBookingData", getBookingData);
+router.get("/getBookingData",protect, getBookingData);
 router.post("/forgotPassword", forgotPassword);
 router.post("/verifyOtp", verifyAndChangePassword);
 router.post("/changePassword", changePassword);
-router.get("/getBooking", getSingleBooking);
-router.post("/addRating", AddRating);
-router.post("/getRatings", findRating);
-router.get("/logout", protect, logout);
+router.get("/getBooking",protect, getSingleBooking);
+router.post("/addRating",protect, AddRating);
+router.post("/getRatings",protect, findRating);
+router.post("/checkAvailablity",protect, checkAvailablity);
+router.post("/filterGuides",protect, GetGuidesOnDates);
+
+router.get("/logout", logout);
 
 //chat routes
 router.get("/getrooms", getRooms);

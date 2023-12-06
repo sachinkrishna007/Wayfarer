@@ -1,45 +1,45 @@
-import {React,useState,useEffect} from 'react'
+import { React, useState, useEffect } from 'react'
 import GuideList from '../../../components/userComponents/guideCard/Guidelist'
 import NavBar from '../../../components/userComponents/navBar/navBar'
-import { toast } from "react-toastify";
-import { useGetGuideDataMutation } from '../../../redux/slices/userApiSlice';
-import Loader from '../../../components/userComponents/loading';
-import Footer from '../../../components/userComponents/footer/footer';
+import { toast } from 'react-toastify'
+import { useGetGuideDataMutation } from '../../../redux/slices/userApiSlice'
+import Loader from '../../../components/userComponents/loading'
+import Footer from '../../../components/userComponents/footer/footer'
+
 import './guideListing.css'
 const GuideListing = () => {
-    const [guideData, setGuideData] = useState([]);
- const [guideDataFromAPI, { isLoading }] = useGetGuideDataMutation()
+  const [guideData, setGuideData] = useState([])
+  const [guideDataFromAPI, { isLoading }] = useGetGuideDataMutation()
 
-   useEffect(() => {
-     try {
-      
-       const fetchData = async () => {
-         const responseFromApiCall = await guideDataFromAPI()
-        
+   
 
-         const guideArray = responseFromApiCall.data.guideData;
-console.log('llll',guideArray);
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const responseFromApiCall = await guideDataFromAPI()
 
-         setGuideData(guideArray);
-       };
+        const guideArray = responseFromApiCall.data.guideData
 
-       fetchData();
-     } catch (error) {
-       toast.error(error);
+        setGuideData(guideArray)
+      }
 
-       console.error("Error fetching users:", error);
-     }
-   }, []);
-   console.log(guideData);
+      fetchData()
+    } catch (error) {
+      toast.error(error)
+
+      console.error('Error fetching users:', error)
+    }
+  }, [])
+  console.log(guideData)
 
   return (
     <div>
       <NavBar></NavBar>
-    
+
       {isLoading ? <Loader /> : <GuideList guide={guideData} />}
       <Footer></Footer>
     </div>
-  );
+  )
 }
 
 export default GuideListing

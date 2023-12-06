@@ -1,48 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
 
-import Heading from "../../../components/userComponents/Headings/heading";
-import NavBar from "../../../components/userComponents/navBar/navBar";
-import { useConfirmBookingMutation } from "../../../redux/slices/userApiSlice";
-import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { BsCheckCircle } from "react-icons/bs";
-import "./confirmation.css";
+import Heading from '../../../components/userComponents/Headings/heading'
+import NavBar from '../../../components/userComponents/navBar/navBar'
+import { useConfirmBookingMutation } from '../../../redux/slices/userApiSlice'
+import { Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { BsCheckCircle } from 'react-icons/bs'
+import './confirmation.css'
 const Confirmation = () => {
-
-  const [confirmBooking] = useConfirmBookingMutation();
+  const [confirmBooking] = useConfirmBookingMutation()
   useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const sessionId = urlParams.get("session_id");
-console.log(sessionId);
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    const sessionId = urlParams.get('session_id')
+    console.log(sessionId)
     const sendPayment = async () => {
       try {
-        console.log('inside');
-        const response = await confirmBooking({
-       
-        });
+        console.log('inside')
+        const response = await confirmBooking({})
 
-        console.log(response);
+        console.log(response)
       } catch (error) {}
-    };
-    sendPayment();
-  }, []);
+    }
+    sendPayment()
+  }, [])
 
-useEffect(()=>{
-
-
-    const changeStatus = async()=>{
-        try {
-            const responseFromApiCall = await confirmBooking({
-
-            })
-        } catch (error) {
-            
-        }
-    } 
+  useEffect(() => {
+    const changeStatus = async () => {
+      try {
+        const responseFromApiCall = await confirmBooking({})
+      } catch (error) {}
+    }
     changeStatus()
-},[])
-
+  }, [])
 
   return (
     <div>
@@ -54,12 +44,12 @@ useEffect(()=>{
         imageclass="cover1234"
         title="Booking Sucesss"
         text="Wait for confirmation from guide "
-      />{" "}
+      />{' '}
       <div className="confirmation-container">
         <BsCheckCircle className="confirmation-icon" />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Confirmation;
+export default Confirmation

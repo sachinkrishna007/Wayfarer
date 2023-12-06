@@ -1,19 +1,19 @@
-import { userApiSlice } from "../apiSlice";
-const GUIDE_URL = "/api/guide";
+import { userApiSlice } from '../apiSlice'
+const GUIDE_URL = '/api/guide'
 
 export const guideSlice = userApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     guideLogin: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/authGuide`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     guideRegister: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/registerGuide`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
@@ -21,7 +21,7 @@ export const guideSlice = userApiSlice.injectEndpoints({
     guideLogout: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guideLogout`,
-        method: "GET",
+        method: 'GET',
         body: data,
       }),
     }),
@@ -29,7 +29,7 @@ export const guideSlice = userApiSlice.injectEndpoints({
     guideAddLanguage: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guideAddLanguage`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
@@ -37,54 +37,74 @@ export const guideSlice = userApiSlice.injectEndpoints({
     guideAddPrice: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guideAddPrice`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     guideAddDesc: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guideAddDesc`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     guideGetData: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/getGuideData`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     guideChangePassword: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/Changepassword`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     GuideSendChat: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guidesendchat`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     GuidegetMessages: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/guidegetmessages`,
-        method: "POST",
+        method: 'POST',
         body: data,
+      }),
+    }),
+    GuideDeleteLang: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/deleteLanguage`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    GuideActivate: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/Activate`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    GuidegetBookings: builder.mutation({
+      query: (params) => ({
+        url: `${GUIDE_URL}/getGuideBookings?id=${params.guideId}`,
+        method: 'GET',
       }),
     }),
     GuidegetRooms: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/getguiderooms`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
   }),
-});
+})
 
 export const {
   useGuideRegisterMutation,
@@ -97,5 +117,8 @@ export const {
   useGuideChangePasswordMutation,
   useGuideSendChatMutation,
   useGuidegetMessagesMutation,
-  useGuidegetRoomsMutation
-} = guideSlice;
+  useGuidegetRoomsMutation,
+  useGuidegetBookingsMutation,
+  useGuideDeleteLangMutation,
+  useGuideActivateMutation
+} = guideSlice

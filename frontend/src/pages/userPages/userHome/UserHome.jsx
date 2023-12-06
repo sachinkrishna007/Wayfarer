@@ -6,25 +6,26 @@ import PopularGuides from '../../../components/userComponents/PopularGuides/popu
 import Footer from '../../../components/userComponents/footer/footer'
 import Loader from '../../../components/userComponents/loading'
 import Cover from '../../../components/userComponents/Cover/Cover'
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import ChatBot from '../../../components/chatBot'
 const UserHome = () => {
-   const [loading, setLoading] = useState(true);
-
-   useEffect(()=>{
-     setLoading(false);
-   })
-     if (loading) {
-       return <Loader></Loader>;
-     }
+  const [loading, setLoading] = useState(true)
+const [showChatbot, setShowChatbot] = useState(false)
+  useEffect(() => {
+    setLoading(false)
+  })
+  if (loading) {
+    return <Loader></Loader>
+  }
   return (
     <div>
-        <Navbars />
-    <Cover></Cover>
-        <Destination></Destination>
-        <PopularGuides></PopularGuides>
-        <Footer></Footer>
+      <Navbars />
+      <Cover></Cover>
+      <ChatBot></ChatBot>
+      <Destination></Destination>
+      <PopularGuides></PopularGuides>
+      <Footer></Footer>
     
-      
     </div>
   )
 }

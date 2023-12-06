@@ -11,6 +11,14 @@ const ratingSchema = mongoose.Schema({
     ref: "User", 
     required: true,
   },
+  userName: {
+    type:String,
+    required: true,
+  },
+  userImage: {
+    type:String,
+
+  },
   rating: {
     type: Number,
     required: true,

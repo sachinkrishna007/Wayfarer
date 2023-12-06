@@ -1,42 +1,43 @@
 import React from 'react'
-import AdminSidebar from '../../components/adminComponents/sidebar'
-import BookingTable from '../../components/userComponents/table/table'
-import { useState, useEffect } from 'react'
+import NavBar from '../../components/guideComponents/navbar/GuideNavbar'
 import { useSelector } from 'react-redux'
-import { useGetAdminBookingDataMutation } from '../../redux/slices/adminSlice/adminApiSlice'
+import { useState, useEffect } from 'react'
+import { useGuidegetBookingsMutation } from '../../redux/slices/guideSlice/guideApiSlice'
 
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 
-const AdminBookingData = () => {
-  const [bookingDataFromAPI, { isLoading }] = useGetAdminBookingDataMutation()
+const GuideBookingData = () => {
+  const [bookingDataFromAPI, { isLoading }] = useGuidegetBookingsMutation()
   const [Data, setData] = useState([])
-  const { userInfo } = useSelector((state) => state.auth)
+  const [userData, setuserData] = useState([])
+   const { guideInfo } = useSelector((state) => state.guideAuth)
+   console.log(guideInfo);
 
   useEffect(() => {
     fetchData()
   }, [])
 
   const fetchData = async () => {
-    const responseFromApiCall = await bookingDataFromAPI()
+    const responseFromApiCall = await bookingDataFromAPI({guideId:guideInfo.data._id})
     console.log(responseFromApiCall)
 
     const bookingData = responseFromApiCall.data.booking
+    const userData = responseFromApiCall.data.user
 
     setData(bookingData)
-
-    
+    setuserData(userData)
   }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString()
   }
-  const guideImageTemplate = (rowData) => {
+  const UserImageTemplate = (rowData) => {
     return (
       <img
         src={
-          rowData.guideImage
+          rowData.UserImage
             ? rowData.guideImage
             : 'https://img.freepik.com/premium-vector/anonymous-user-circle-icon-vector-illustration-flat-style-with-long-shadow_520826-1931.jpg'
         }
@@ -47,7 +48,7 @@ const AdminBookingData = () => {
   }
   return (
     <div>
-      <AdminSidebar />
+  <NavBar></NavBar>
       <div>
         <h3 className="Heading">Bookings</h3>
       </div>
@@ -61,13 +62,13 @@ const AdminBookingData = () => {
           emptyMessage="No bookings found"
         >
           <Column
-            header="Guide Image"
-            body={guideImageTemplate}
+            header="#"
+            body={UserImageTemplate}
             style={{ width: '10%' }}
           ></Column>
           <Column
-            field="guidename"
-            header="Guide Name"
+            field="userName"
+            header="Name"
             style={{ width: '15%' }}
           ></Column>
           <Column
@@ -108,4 +109,4 @@ const AdminBookingData = () => {
   )
 }
 
-export default AdminBookingData
+export default GuideBookingData

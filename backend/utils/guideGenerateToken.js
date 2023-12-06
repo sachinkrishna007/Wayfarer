@@ -5,7 +5,7 @@ const guideGenerateToken = (res, guideId) => {
     expiresIn: "30d",
   });
 
-  res.cookie("jwt", token, {
+  res.cookie("Guidejwt", token, {
     httpOnly: true,
     sameSite: "strict",
     maxAge: 30 * 24 * 60 * 60 * 1000,

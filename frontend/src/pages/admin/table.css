@@ -1,17 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
 
-
-.Table{
-font-family: 'Poppins', sans-serif;
-margin: 0 8%;
-
+.Table {
+  font-family: 'Poppins', sans-serif;
+  margin: 0 8%;
 }
-.Heading{
-    padding-left: 8%;
-    padding-top: 4%;
+.Heading {
+  padding-left: 8%;
+  padding-top: 4%;
 
-    font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
-.blockBtn{
+.blockBtn {
   width: 100px;
 }

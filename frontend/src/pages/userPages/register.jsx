@@ -1,8 +1,8 @@
-import { React, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import Loader from "../../components/userComponents/loading";
+import { React, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import Loader from '../../components/userComponents/loading'
 
-import "./login/login.css";
+import './login/login.css'
 import {
   MDBBtn,
   MDBCard,
@@ -13,83 +13,85 @@ import {
   MDBInput,
   MDBValidation,
   MDBValidationItem,
-} from "mdb-react-ui-kit";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { setCredentials } from "../../redux/slices/userAuthSlice";
+} from 'mdb-react-ui-kit'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { setCredentials } from '../../redux/slices/userAuthSlice'
 import {
   useRegisterMutation,
   useGoogleRegisterMutation,
-} from "../../redux/slices/userApiSlice";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+} from '../../redux/slices/userApiSlice'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
+import { jwtDecode } from 'jwt-decode'
 
-import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
-  const [login, { isLoading }] = useRegisterMutation();
-  const [googelLogin] = useGoogleRegisterMutation();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [LastName, setLastName] = useState('')
+  const [mobile, setMobile] = useState('')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { userInfo } = useSelector((state) => state.auth)
+  const [login, { isLoading }] = useRegisterMutation()
+  const [googelLogin] = useGoogleRegisterMutation()
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate('/')
     }
-  }, [navigate, userInfo]);
- const submitHandler = async (e) => {
-   e.preventDefault();
+  }, [navigate, userInfo])
+  const submitHandler = async (e) => {
+    e.preventDefault()
 
-   // Mobile number validation
-   const mobileRegex = /^\d{10}$/;
+    // Mobile number validation
+    const mobileRegex = /^\d{10}$/
 
-   // Password complexity requirements
-   const passwordRegex =
-     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // Password complexity requirements
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 
-   try {
-     if (!mobileRegex.test(mobile)) {
-       toast.error("Invalid mobile number. Please enter a 10-digit number") 
-     } else if (password !== confirmPassword) {
-       toast.error("Passwords do not match")
-     } else if (!passwordRegex.test(password)) {
-       toast.error("Password should have 8 characters,digit,one special character,uppercase and lowercase")
-     } else {
-       const res = await login({
-         firstName,
-         LastName,
-         mobile,
-         email,
-         password,
-       }).unwrap();
-       dispatch(setCredentials({ ...res }));
-       navigate("/");
-     }
-   } catch (err) {
-     if (err.data && err.data.message) {
-       toast.error(err.data.message);
-     } else {
-       toast.error("An error occurred. Please try again."); // Generic error message
-     }
-   }
- };
+    try {
+      if (!mobileRegex.test(mobile)) {
+        toast.error('Invalid mobile number. Please enter a 10-digit number')
+      } else if (password !== confirmPassword) {
+        toast.error('Passwords do not match')
+      } else if (!passwordRegex.test(password)) {
+        toast.error(
+          'Password should have 8 characters,digit,one special character,uppercase and lowercase',
+        )
+      } else {
+        const res = await login({
+          firstName,
+          LastName,
+          mobile,
+          email,
+          password,
+        }).unwrap()
+        dispatch(setCredentials({ ...res }))
+        navigate('/')
+      }
+    } catch (err) {
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error('An error occurred. Please try again.') // Generic error message
+      }
+    }
+  }
 
   const googelAuth = async (data) => {
     try {
-      console.log(data);
+      console.log(data)
       const {
         email,
         family_name: lastName,
         given_name: firstName,
         sub: googleId,
         picture: profileImageURL,
-      } = data;
+      } = data
 
       const userData = {
         firstName,
@@ -98,25 +100,25 @@ const Register = () => {
         googleId,
         profileImageName: profileImageURL,
         // Add other properties like mobile if needed
-      };
+      }
 
-      const res = await googelLogin(userData).unwrap();
-      console.log(res);
-      dispatch(setCredentials({ ...res }));
-      navigate("/");
+      const res = await googelLogin(userData).unwrap()
+      console.log(res)
+      dispatch(setCredentials({ ...res }))
+      navigate('/')
     } catch (err) {}
-  };
+  }
   return (
-    <div style={{ display: "flex" }} className="character">
+    <div style={{ display: 'flex' }} className="character">
       {/* Left Side (Form and Logo) */}
       <div style={{ flex: 1 }}>
-        <div style={{ maxWidth: "450px", margin: "auto" }}>
+        <div style={{ maxWidth: '450px', margin: 'auto' }}>
           {/* Your logo */}
-          <div style={{ paddingLeft: "120px" }}>
+          <div style={{ paddingLeft: '120px' }}>
             <img
               src="/wayfarerlogo.png"
               alt="Logo"
-              style={{ width: "200px", height: "200px" }}
+              style={{ width: '200px', height: '200px' }}
             />
           </div>
 
@@ -237,10 +239,10 @@ const Register = () => {
                 <div className="col-12">
                   <MDBBtn
                     style={{
-                      width: "100%",
-                      borderRadius: "50px",
-                      backgroundColor: "#387F8E",
-                      color: "white",
+                      width: '100%',
+                      borderRadius: '50px',
+                      backgroundColor: '#387F8E',
+                      color: 'white',
                     }}
                     className="mt-2"
                   >
@@ -249,26 +251,26 @@ const Register = () => {
                 </div>
               </MDBValidation>
             </MDBCardBody>
-            <p style={{ textAlign: "center" }}></p>
+            <p style={{ textAlign: 'center' }}></p>
             <MDBCardFooter className="mb-2">
               <Link to="/">
-                <p style={{ color: "black" }}>
+                <p style={{ color: 'black' }}>
                   Already registered?
-                  <span style={{ color: "#387F8E" }}> Sign in </span>
+                  <span style={{ color: '#387F8E' }}> Sign in </span>
                 </p>
               </Link>
-              <div style={{ paddingLeft: "100px" }}>
+              <div style={{ paddingLeft: '100px' }}>
                 <GoogleOAuthProvider clientId="567248772521-2abchm47hgkto581ctci87o3tq2n7s5j.apps.googleusercontent.com">
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
-                      const decoded = jwtDecode(credentialResponse.credential);
-                      googelAuth(decoded);
+                      const decoded = jwtDecode(credentialResponse.credential)
+                      googelAuth(decoded)
 
                       //   console.log(decoded);
                     }}
                     onError={() => {
-                      toast.error("failed to verify");
-                      console.log("Login Failed");
+                      toast.error('failed to verify')
+                      console.log('Login Failed')
                     }}
                   />
                 </GoogleOAuthProvider>
@@ -278,15 +280,15 @@ const Register = () => {
         </div>
       </div>
       {isLoading && <Loader></Loader>}
-      <div style={{ flex: 1, textAlign: "center" }}>
+      <div style={{ flex: 1, textAlign: 'center' }}>
         <img
           src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?q=80&w=1375&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="New Image"
-          style={{ width: "550px", height: "550px", margin: "40px" }}
+          style={{ width: '550px', height: '550px', margin: '40px' }}
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

@@ -1,6 +1,6 @@
-import React from "react";
-import { InputText } from "primereact/inputtext";
-import "./hero.css";
+import React from 'react'
+import { InputText } from 'primereact/inputtext'
+import './hero.css'
 const Hero = () => {
   return (
     <div className="hero">
@@ -17,7 +17,7 @@ const Hero = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero

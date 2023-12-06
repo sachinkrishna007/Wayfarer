@@ -1,43 +1,46 @@
-import React, { useState } from "react";
-import { Sidebar } from "primereact/sidebar";
-import { Button } from "primereact/button";
-import { Knob } from "primereact/knob";
-import { InputTextarea } from "primereact/inputtextarea";
-import "./Rating.css";
-import { useAddRatingMutation } from "../../../redux/slices/userApiSlice";
-import { toast } from "react-toastify";
-export default function Rating({ guideId, userId }) {
-  const [visible, setVisible] = useState(false);
-  const [value, setValue] = useState(0);
-  const [comment, setComment] = useState("");
-  const [rating] = useAddRatingMutation();
+import React, { useState } from 'react'
+import { Sidebar } from 'primereact/sidebar'
+import { Button } from 'primereact/button'
+import { Knob } from 'primereact/knob'
+import { InputTextarea } from 'primereact/inputtextarea'
+import './Rating.css'
+import { useAddRatingMutation } from '../../../redux/slices/userApiSlice'
+import { toast } from 'react-toastify'
+export default function Rating({ guideId, userId,userName,userimage }) {
+  const [visible, setVisible] = useState(false)
+  const [value, setValue] = useState(0)
+  const [comment, setComment] = useState('')
+  const [rating] = useAddRatingMutation()
   const submitHandler = async () => {
-    console.log("here");
+    console.log('here')
     try {
       const responseFromApiCall = await rating({
         guideId,
         userId,
         comment,
         value,
-      });
+        userName,
+        userimage
+      }).unwrap()
       if (responseFromApiCall) {
-        toast.success("Rating sucessfully posted");
+        toast.success('Rating sucessfully posted')
+        setVisible(false)
       }
     } catch (err) {
       if (err.data && err.data.message) {
-        toast.error(err.data.message);
+        toast.error(err.data.message)
       } else {
-        toast.error("An error occurred. Please try again."); // Generic error message
+        toast.error('An error occurred. Please try again.') // Generic error message
       }
     }
-  };
+  }
   return (
     <div className="card flex justify-content-center">
       <Sidebar
         visible={visible}
         position="right"
         onHide={() => setVisible(false)}
-        style={{ width: "500px" }}
+        style={{ width: '500px' }}
       >
         <h6>Give Rating </h6>
         <div className=" justify-content-center">
@@ -47,7 +50,7 @@ export default function Rating({ guideId, userId }) {
             max={10}
             step={1.0}
             strokeWidth={5}
-            style={{ paddingLeft: "20px" }}
+            style={{ paddingLeft: '20px' }}
           />
         </div>
         <div className="card flex justify-content-center">
@@ -69,5 +72,5 @@ export default function Rating({ guideId, userId }) {
 
       <Button onClick={() => setVisible(true)}>Give Rating</Button>
     </div>
-  );
+  )
 }

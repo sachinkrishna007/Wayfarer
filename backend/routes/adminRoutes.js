@@ -11,7 +11,8 @@ import {
   listGuide,
   BlockGuide,
   UnBlockGuide,
-  getAdminBookingData
+  getAdminBookingData,
+  loadDashboard
 } from "../controllers/adminController.js";
 
 const router = express.Router();
@@ -28,4 +29,5 @@ router.post("/block-guide",protect, BlockGuide);
 router.post("/unblock-guide",protect,UnBlockGuide);
 router.post('/listGuide',listGuide)
 router.get('/adminBookingData',getAdminBookingData)
+router.get('/adminDashboard',loadDashboard)
 export default router;

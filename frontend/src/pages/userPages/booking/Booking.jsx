@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Heading from "../../../components/userComponents/Headings/heading";
-import NavBar from "../../../components/userComponents/navBar/navBar";
-import { useGetBookingMutation } from "../../../redux/slices/userApiSlice";
-import PayButton from "../../../components/PayButton";
+import React, { useEffect, useState } from 'react'
+import Heading from '../../../components/userComponents/Headings/heading'
+import NavBar from '../../../components/userComponents/navBar/navBar'
+import { useGetBookingMutation } from '../../../redux/slices/userApiSlice'
+import PayButton from '../../../components/PayButton'
 import {
   MDBCol,
   MDBContainer,
@@ -11,45 +11,45 @@ import {
   MDBCardText,
   MDBCardBody,
   MDBCardImage,
-} from "mdb-react-ui-kit";
-import moment from "moment";
-import { Button } from "react-bootstrap";
-import Loader from "../../../components/userComponents/loading";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+} from 'mdb-react-ui-kit'
+import moment from 'moment'
+import { Button } from 'react-bootstrap'
+import Loader from '../../../components/userComponents/loading'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const Booking = () => {
   const [bookingDetails, setBookingDetails] = useState({
-    startDate: "",
-    endDate: "",
-    guideName: "",
-    guideId: "",
-    userId: "",
-    price: "",
-    location: "",
-  });
-  const [createBooking, { isLoading }] = useGetBookingMutation();
-  const { userInfo } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+    startDate: '',
+    endDate: '',
+    guideName: '',
+    guideId: '',
+    userId: '',
+    price: '',
+    location: '',
+  })
+  const [createBooking, { isLoading }] = useGetBookingMutation()
+  const { userInfo } = useSelector((state) => state.auth)
+  const navigate = useNavigate()
   useEffect(() => {
     // Retrieve booking details from local storage
     const storedBookingDetails =
-      JSON.parse(localStorage.getItem("bookingData")) || {};
-    setBookingDetails(storedBookingDetails);
-  }, []);
+      JSON.parse(localStorage.getItem('bookingData')) || {}
+    setBookingDetails(storedBookingDetails)
+  }, [])
 
   const calculateTotalPrice = () => {
-    const startMoment = moment(bookingDetails.startDate);
+    const startMoment = moment(bookingDetails.startDate)
 
-    const endMoment = moment(bookingDetails.endDate);
-    const duration = moment.duration(endMoment.diff(startMoment));
-    const days = duration.asDays() + 1;
-    const totalPrice = days * bookingDetails.guidePrice;
-    return { days, totalPrice };
-  };
+    const endMoment = moment(bookingDetails.endDate)
+    const duration = moment.duration(endMoment.diff(startMoment))
+    const days = duration.asDays() + 1
+    const totalPrice = days * bookingDetails.guidePrice
+    return { days, totalPrice }
+  }
 
-  const { days, totalPrice } = calculateTotalPrice();
+  const { days, totalPrice } = calculateTotalPrice()
 
   // const handleSubmit = async () => {
   //   console.log("here");
@@ -81,7 +81,8 @@ const Booking = () => {
   // };
 
   return (
-    <div>c
+    <div>
+      c
       <NavBar />
       <Heading
         cName="hero"
@@ -91,7 +92,6 @@ const Booking = () => {
         title="Confirm Booking"
         text="Happy to have you on board"
       />
-
       <MDBContainer className="py-5">
         <MDBRow>
           <MDBCol lg="4">
@@ -100,7 +100,7 @@ const Booking = () => {
                 <MDBCardImage
                   src={bookingDetails.guideProfile}
                   alt="avatar"
-                  style={{ width: "autopx", height: "200px" }}
+                  style={{ width: 'autopx', height: '200px' }}
                   fluid
                 />
               </MDBCardBody>
@@ -170,7 +170,7 @@ const Booking = () => {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {moment(bookingDetails.startDate).format("LL")}
+                      {moment(bookingDetails.startDate).format('LL')}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -181,7 +181,7 @@ const Booking = () => {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {moment(bookingDetails.endDate).format("LL")}
+                      {moment(bookingDetails.endDate).format('LL')}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -209,8 +209,8 @@ const Booking = () => {
             </MDBCard>
 
             <PayButton
-            
               userid={userInfo._id}
+              userName={userInfo.firstName}
               guideid={bookingDetails.guideId}
               Location={bookingDetails.guideLocation}
               startDate={bookingDetails.startDate}
@@ -225,7 +225,7 @@ const Booking = () => {
         </MDBRow>
       </MDBContainer>
     </div>
-  );
-};
+  )
+}
 
-export default Booking;
+export default Booking

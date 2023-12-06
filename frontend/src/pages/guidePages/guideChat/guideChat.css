@@ -15,22 +15,20 @@
   margin-left: 2.9rem;
   margin-top: -0.75rem;
 }
-.chatBox{
-    border-radius: 1%;
-     overflow-y: auto; /* Enable vertical scrollbar */
+.chatBox {
+  border-radius: 1%;
+  overflow-y: auto; /* Enable vertical scrollbar */
   max-height: 400px; /* Set the maximum height for the chat box */
 }
 
-.TextBox{
-font-family: 'Poppins', sans-serif;
-background-color: rgb(162, 162, 212);
+.TextBox {
+  font-family: 'Poppins', sans-serif;
+  background-color: rgb(162, 162, 212);
 }
-
 
 .userChat {
   background-color: #3f393c; /* Set the background color for user chats */
   color: #ffffff; /* Set the text color for user chats */
-
 }
 
 .guideChat {

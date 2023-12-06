@@ -2,43 +2,42 @@
   display: flex;
   justify-content: space-between; /* Adjust as needed */
   flex-wrap: wrap;
-   padding: 0 10px; /* Add padding to both sides of the container */
-   padding-top: 4%;
+  padding: 0 10px; /* Add padding to both sides of the container */
+  padding-top: 4%;
 }
-.w-full{
-    margin-left: 7%;
+.w-full {
+  margin-left: 7%;
 }
 .card-item {
   flex: 1;
   margin: 0 20px; /* Adjust the margin as needed for spacing */
-  
 }
-.mobilead{
+.mobilead {
   color: rgb(2, 47, 88);
 }
-.title{
-font-size: 20px;
-text-transform: uppercase;
-color: rgb(0, 0, 0),
-
- 
+.title {
+  font-size: 20px;
+  text-transform: uppercase;
+  color: rgb(0, 0, 0);
 }
-.subTitle{
-color: rgb(11, 1, 20);
+.subTitle {
+  color: rgb(11, 1, 20);
 }
 
 .small-card {
   width: calc(33.33% -px); /* Adjust the width and margin as needed */
-  
- 
+
   margin: 0 10px 60px 10px;
- 
- 
 }
-.heading{
-    align-items: center;
-    font-size: large;
-    padding-left: 9rem;
+.heading {
+  align-items: center;
+  font-size: large;
+  padding-left: 9rem;
+}
+.headingTop {
+  align-items: center;
+ padding-top: 4%;
+  padding-left: 5rem;
 }
 
 /* Adjust the breakpoint to your desired screen size */
@@ -48,8 +47,20 @@ color: rgb(11, 1, 20);
   }
 }
 
+.btnagree {
+  background-color: #4caf50;
+}
 
 
-.btnagree{
-  background-color: #4CAF50
+/* Add this CSS in your admincard.css or related styling file */
+.button-container {
+  display: flex;
+  justify-content: space-around; /* Adjust as needed */
+  height: 100px;
+}
+
+.button-wrapper {
+  margin: 5px; /* Adjust spacing between buttons */
+ 
+
 }

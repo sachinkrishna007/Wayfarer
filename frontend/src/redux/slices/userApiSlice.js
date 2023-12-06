@@ -1,76 +1,76 @@
-import { userApiSlice } from "./apiSlice";
+import { userApiSlice } from './apiSlice'
 
-const USERS_URL = "/api/users";
+const USERS_URL = '/api/users'
 
 export const userSlice = userApiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/auth`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     register: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/register`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     googleRegister: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/googleRegister`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     getBooking: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/createBooking`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     stripeBooking: builder.mutation({
       query: (data) => ({
         url: `/api/stripe/create-checkout-session`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     confirmBooking: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/changeStaus`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     forgotPassword: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/forgotPassword`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     verifyOtp: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/verifyOtp`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     changePassword: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/changePassword`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     AddRating: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/addRating`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
@@ -78,59 +78,80 @@ export const userSlice = userApiSlice.injectEndpoints({
     getGuideData: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/getGuide`,
-        method: "GET",
+        method: 'GET',
       }),
     }),
     getRatings: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/getRatings`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     getSingleGuide: builder.mutation({
       query: (params) => ({
         url: `${USERS_URL}/getSingleGuide?id=${params.guideId}`,
-        method: "GET",
+        method: 'GET',
       }),
     }),
     getUserBooking: builder.mutation({
       query: (params) => ({
         url: `${USERS_URL}/getBooking?id=${params.bookingId}`,
-        method: "GET",
+        method: 'GET',
       }),
     }),
     getUserData: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/getUserData`,
-        method: "GET",
+        method: 'GET',
       }),
     }),
     getBookingData: builder.mutation({
       query: (params) => ({
         url: `${USERS_URL}/getBookingData?id=${params.email}`,
-        method: "GET",
+        method: 'GET',
       }),
     }),
 
     createChatRoom: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/createRoom`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     SendChat: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/sendchat`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     getMessages: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/getmessages  `,
-        method: "POST",
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    checkAvilablityGuide: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/checkAvailablity  `,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getBookedDates: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/getBookedDates  `,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getFilteredGuides: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/filterGuides  `,
+        method: 'POST',
         body: data,
       }),
     }),
@@ -138,11 +159,11 @@ export const userSlice = userApiSlice.injectEndpoints({
     logout: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/logout`,
-        method: "GET",
+        method: 'GET',
       }),
     }),
   }),
-});
+})
 
 export const {
   useLoginMutation,
@@ -164,5 +185,8 @@ export const {
   useSendChatMutation,
   useGetMessagesMutation,
   useAddRatingMutation,
-  useGetRatingsMutation
-} = userSlice;
+  useGetRatingsMutation,
+  useCheckAvilablityGuideMutation,
+  useGetBookedDatesMutation,
+  useGetFilteredGuidesMutation
+} = userSlice

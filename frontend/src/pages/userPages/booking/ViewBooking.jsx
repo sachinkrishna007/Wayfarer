@@ -1,62 +1,63 @@
-import React, { useEffect, useState } from "react";
-import NavBar from "../../../components/userComponents/navBar/navBar";
-import { Button } from "primereact/button";
-import { Link, useNavigate } from "react-router-dom";
-import moment from "moment";
-import { Chip } from "primereact/chip";
-import { Navigate } from "react-router-dom";
-import "primeflex/primeflex.css";
+import React, { useEffect, useState } from 'react'
+import NavBar from '../../../components/userComponents/navBar/navBar'
+
+import { Button } from 'primereact/button'
+import { Link, useNavigate } from 'react-router-dom'
+import moment from 'moment'
+import { Chip } from 'primereact/chip'
+import { Navigate } from 'react-router-dom'
+import 'primeflex/primeflex.css'
 import {
   useGetUserBookingMutation,
   useCreateChatRoomMutation,
-} from "../../../redux/slices/userApiSlice";
-import { useSelector } from "react-redux";
-import Loader from "../../../components/userComponents/loading";
-import Rating from "../Rating/Rating";
+} from '../../../redux/slices/userApiSlice'
+import { useSelector } from 'react-redux'
+import Loader from '../../../components/userComponents/loading'
+import Rating from '../Rating/Rating'
 const ViewBooking = () => {
-  const [loading, setLoading] = useState(true);
-  const [BookingData, setBookingData] = useState("");
-  const [bookingData] = useGetUserBookingMutation();
-  const [createRoom, { isloading }] = useCreateChatRoomMutation();
-  const id = location.pathname.split("/")[2];
-  const { userInfo } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true)
+  const [BookingData, setBookingData] = useState('')
+  const [bookingData] = useGetUserBookingMutation()
+  const [createRoom, { isloading }] = useCreateChatRoomMutation()
+  const id = location.pathname.split('/')[2]
+  const { userInfo } = useSelector((state) => state.auth)
+  const navigate = useNavigate()
   useEffect(() => {
     try {
       const fetchData = async () => {
         const responseFromApiCall = await bookingData({
           bookingId: id,
-        });
-        const booking = await responseFromApiCall.data.bookingData;
+        })
+        const booking = await responseFromApiCall.data.bookingData
 
-        setBookingData(booking);
-        setLoading(false);
-      };
+        setBookingData(booking)
+        setLoading(false)
+      }
 
-      fetchData();
+      fetchData()
     } catch (error) {
-      toast.error(error);
+      toast.error(error)
 
-      console.error("Error fetching users:", error);
+      console.error('Error fetching users:', error)
     }
-  });
+  })
   if (loading) {
-    return <Loader></Loader>;
+    return <Loader></Loader>
   }
 
   const chatHandler = async () => {
     const responseFromApiCall = await createRoom({
       userId: userInfo._id,
       guideId: BookingData.guideid,
-    });
+    })
     if (responseFromApiCall) {
-      navigate(`/UserChat/${responseFromApiCall.data._id}`);
+      navigate(`/UserChat/${responseFromApiCall.data._id}`)
     }
-  };
+  }
   return (
     <div>
       <NavBar></NavBar>
-      <div style={{ padding: "90px" }}>
+      <div style={{ padding: '90px' }}>
         <div className="surface-0">
           <div className="font-medium text-3xl text-900 mb-3">
             Booking Details
@@ -66,7 +67,7 @@ const ViewBooking = () => {
               src={
                 BookingData.guideImage
                   ? BookingData.guideImage
-                  : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
               }
               alt="Guide"
               className="rounded-full w-1 h-9 "
@@ -94,13 +95,13 @@ const ViewBooking = () => {
             <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
               <div className="text-500 w-6 md:w-2 font-medium">Start Date</div>
               <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                {moment(BookingData.startDate).format("LL")}
+                {moment(BookingData.startDate).format('LL')}
               </div>
             </li>
             <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
               <div className="text-500 w-6 md:w-2 font-medium">End Date</div>
               <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                {moment(BookingData.endtDate).format("LL")}
+                {moment(BookingData.endtDate).format('LL')}
               </div>
             </li>
             <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
@@ -108,23 +109,30 @@ const ViewBooking = () => {
                 Booking Date
               </div>
               <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                {moment(BookingData.createdAt).format("LL")}
+                {moment(BookingData.createdAt).format('LL')}
               </div>
             </li>
           </ul>
           <div className="  mr-2">
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "10px",
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '10px',
               }}
             >
-              <Button onClick={chatHandler}>Message Guide</Button>
-              <div style={{ marginLeft: "30px" }}>
+              <Button
+               
+                severity="help"
+                onClick={chatHandler}
+               
+              >Message Guide</Button>
+              <div style={{ marginLeft: '30px' }}>
                 <Rating
                   guideId={BookingData.guideid}
                   userId={userInfo._id}
+                  userName={userInfo.firstName}
+                  userimage={userInfo.profileImageName}
                 ></Rating>
               </div>
             </div>
@@ -134,7 +142,8 @@ const ViewBooking = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
+
 
 export default ViewBooking;

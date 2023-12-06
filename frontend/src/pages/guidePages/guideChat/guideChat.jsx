@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   MDBContainer,
   MDBRow,
@@ -8,117 +8,150 @@ import {
   MDBIcon,
   MDBTypography,
   MDBInputGroup,
-} from "mdb-react-ui-kit";
-import io from "socket.io-client";
+} from 'mdb-react-ui-kit'
+import io from 'socket.io-client'
 
-const ENDPOINT = "http://localhost:5000";
-var socket, selectedChatCompare;
-import NavBar from "../../../components/guideComponents/navbar/GuideNavbar";
-import "./guideChat.css";
+const ENDPOINT = 'http://localhost:5000'
+var socket, selectedChatCompare
+import NavBar from '../../../components/guideComponents/navbar/GuideNavbar'
+import './guideChat.css'
 import {
   useGuideSendChatMutation,
   useGuidegetMessagesMutation,
   useGuidegetRoomsMutation,
-} from "../../../redux/slices/guideSlice/guideApiSlice";
-import { useSelector } from "react-redux";
+} from '../../../redux/slices/guideSlice/guideApiSlice'
+import { useSelector } from 'react-redux'
 export default function GuideChat() {
-  const [sendChat] = useGuideSendChatMutation();
-  const [getChat] = useGuidegetMessagesMutation();
-  const [getRoom] = useGuidegetRoomsMutation();
-  const [rooms, setRooms] = useState([]);
-  const [chatId, setChatId] = useState("");
-  const [chats, setChats] = useState([]);
-  const [user, setUser] = useState("");
-  const [content, setContent] = useState("");
-  const [messageSent, setMessageSent] = useState(false);
-  const { guideInfo } = useSelector((state) => state.guideAuth);
-   useEffect(() => {
-     socket = io(ENDPOINT);
-     socket.emit("setup", guideInfo);
-     socket.on("connection", () => setSocketConnected(true));
-   }, []);
+  const [sendChat] = useGuideSendChatMutation()
+  const [getChat] = useGuidegetMessagesMutation()
+  const [getRoom] = useGuidegetRoomsMutation()
+  const [rooms, setRooms] = useState([])
+  const [chatId, setChatId] = useState('')
+  const [lastMessages, setLastMessages] = useState({})
+
+  const [chats, setChats] = useState([])
+  const [user, setUser] = useState('')
+  const [content, setContent] = useState('')
+  const [image, setImage] = useState('')
+  const [messageSent, setMessageSent] = useState(false)
+  const { guideInfo } = useSelector((state) => state.guideAuth)
+  const formatTime = (timestamp) => {
+    const options = { hour: 'numeric', minute: 'numeric' }
+    return new Date(timestamp).toLocaleTimeString('en-US', options)
+  }
+  useEffect(() => {
+    socket = io(ENDPOINT)
+    socket.emit('setup', guideInfo)
+    socket.on('connection', () => setSocketConnected(true))
+  }, [])
   const sendHandler = async () => {
-    if (content === "") {
-      toast.error("Message cannot be empty");
-      return;
+    if (content === '') {
+      toast.error('Message cannot be empty')
+      return
     }
     try {
       const responseFromApiCall = await sendChat({
         sender: guideInfo.data._id,
         chatId: chatId,
         content: content,
-        type: "Guide",
-      });
+        type: 'Guide',
+      })
 
       if (responseFromApiCall) {
-        console.log(responseFromApiCall.data);
-        setContent("");
-        setMessageSent(true);
-         socket.emit("new message", responseFromApiCall.data);
+        console.log(responseFromApiCall.data)
+        setContent('')
+        setMessageSent(true)
+        socket.emit('new message', responseFromApiCall.data)
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message)
     }
-  };
+  }
   useEffect(() => {
-    let fetchRoom = async () => {
-      let res = await getRoom({ guideId: guideInfo.data._id });
+   const fetchRoom = async () => {
+     let res = await getRoom({ guideId: guideInfo.data._id })
+
+     if (res) {
+       console.log(res)
+       setRooms(res.data)
+
+        const messagesPromises = res.data.map(async (room) => {
+          const messages = await getChat({ chatId: room._id })
+          const lastMessage = messages.data[messages.data.length - 1]
+          return { roomId: room._id, lastMessage }
+        })
+
+      const messages = await Promise.all(messagesPromises)
+      const lastMessagesMap = messages.reduce(
+        (acc, { roomId, lastMessage }) => {
+          acc[roomId] = lastMessage
+          return acc
+        },
+        {},
+      )
+
+       setLastMessages(lastMessagesMap)
+     }
+   }
+
+    fetchRoom()
+  }, [guideInfo])
+
+  useEffect(() => {
+    let fetchMessages = async () => {
+      let res = await getChat({ chatId: chatId })
 
       if (res) {
-        console.log(res);
-        setRooms(res.data);
+        console.log(res)
+        setChats(res.data)
+        setMessageSent(false)
+        socket.emit('join chat', chatId)
       }
-    };
+    }
+    if (chatId) {
+      fetchMessages()
+      selectedChatCompare = chats
+    }
+  }, [chatId, messageSent])
 
-    fetchRoom();
-  }, [guideInfo]);
-
-
-    useEffect(() => {
-      let fetchMessages = async () => {
-        let res = await getChat({ chatId: chatId });
-
-        if (res) {
-          console.log(res);
-          setChats(res.data);
-          setMessageSent(false);
-           socket.emit("join chat", chatId);
-        }
-      };
-      if (chatId) {
-        fetchMessages();
-         selectedChatCompare = chats;
+  useEffect(() => {
+    const scrollToBottom = () => {
+      const chatBody = document.getElementById('chat-box')
+      if (chatBody) {
+        chatBody.scrollTop = chatBody.scrollHeight
       }
-    }, [chatId, messageSent]);
+    }
 
-        useEffect(() => {
-          socket.on("message received", (newMessageReceived) => {
-            if (
-              !selectedChatCompare ||
-              chatId !== newMessageReceived.room._id
-            ) {
-            } else {
-              setChats([...chats, newMessageReceived]);
-            }
-          });
-        });
+    // Scroll to bottom when component mounts
+    scrollToBottom()
+    socket.on('message received', (newMessageReceived) => {
+      if (!selectedChatCompare || chatId !== newMessageReceived.room._id) {
+      } else {
+        setChats([...chats, newMessageReceived])
+        scrollToBottom()
+      }
+    })
+  })
   return (
     <div>
       <NavBar></NavBar>
 
-      <MDBContainer fluid className="py-5" style={{ backgroundColor: "" }}>
+      <MDBContainer
+        fluid
+        className="py-5"
+        style={{ backgroundColor: '#ededed' }}
+      >
         <MDBRow>
-          <MDBCol md="6" lg="5" xl="4" className="mb-4 mb-md-0">
+          <MDBCol
+            md="6"
+            lg="5"
+            xl="4"
+            className="mb-4 mb-md-0"
+            style={{ backgroundColor: '' }}
+          >
             <div className="p-3">
               <MDBInputGroup className="rounded mb-3">
-                <input
-                  className="form-control rounded"
-                  placeholder="Search"
-                  type="search"
-                />
-                <span className="input-group-text border-0" id="search-addon">
-                  <MDBIcon fas icon="search" />
-                </span>
+                <h3>Chats</h3>
               </MDBInputGroup>
               {rooms.length > 0 ? (
                 rooms.map((chat, index) => (
@@ -128,8 +161,9 @@ export default function GuideChat() {
                         href="#!"
                         className="d-flex justify-content-between"
                         onClick={() => {
-                          setChatId(chat._id);
-                          setUser(chat.user.firstName);
+                          setChatId(chat._id)
+                          setUser(chat.user.firstName)
+                          setImage(chat.user.profileImageName)
                         }}
                       >
                         <div className="d-flex flex-row">
@@ -138,7 +172,7 @@ export default function GuideChat() {
                               src={
                                 chat.user.profileImageName
                                   ? chat.user.profileImageName
-                                  : "https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg"
+                                  : 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg'
                               }
                               alt="avatar"
                               className="d-flex align-self-center me-3"
@@ -150,6 +184,11 @@ export default function GuideChat() {
                             <p className="fw-bold mb-0">
                               {chat.user.firstName}
                             </p>
+                            {lastMessages[chat._id] && (
+                              <p className="small text-muted mb-0">
+                                {lastMessages[chat._id].content}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </a>
@@ -166,34 +205,52 @@ export default function GuideChat() {
           <MDBCol md="6" lg="7" xl="8">
             {chatId && (
               <div className="h-full d-flex flex-column justify-content-between">
-                <div>
-                  <h6 className="font-medium">{user}</h6>
+                <div className="d-flex align-items-center p-3">
+                  <img
+                    src={
+                      image
+                        ? image
+                        : 'https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg'
+                    }
+                    alt=""
+                    className="rounded-circle me-3"
+                    style={{ width: '50px', height: '50px' }}
+                  />
+                  <h3
+                    className="mb-0"
+                    style={{
+                      backgroundColor: '#ededed',
+                      color: 'black',
+                      height: '50px',
+                      lineHeight: '50px',
+                      paddingLeft: '15px',
+                      borderRadius: '0 10px 10px 0',
+                    }}
+                  >
+                    {user}
+                  </h3>
                 </div>
-                <div className="bg-white p-5 chatBox">
+                <div className="bg-white p-5 chatBox " id="chat-box">
                   {chats && chats.length > 0 ? (
                     chats.map((chat, index) => (
                       <div
                         key={index}
                         className={`d-flex flex-row justify-content-${
-                          chat.senderType === "User" ? "start" : "end"
+                          chat.senderType === 'User' ? 'start' : 'end'
                         }  `}
                       >
                         <div>
                           <p
                             className={`small p-2 ${
-                              chat.senderType === "User"
-                                ? "userChat  rounded-3"
-                                : "guideChat"
+                              chat.senderType === 'User'
+                                ? 'userChat  rounded-3'
+                                : 'guideChat'
                             }`}
                           >
                             {chat.content}
                           </p>
-                          <p
-                            className={`small p-2-${
-                              chat.senderType === "User" ? "start " : "end"
-                            }`}
-                          >
-                            {chat.sentAt}
+                          <p className="small text-muted">
+                            {formatTime(chat.createdAt)}
                           </p>
                         </div>
                       </div>
@@ -208,7 +265,7 @@ export default function GuideChat() {
                   <img
                     src={guideInfo.data.profileImage}
                     alt="avatar 3"
-                    style={{ width: "40px", height: "100%" }}
+                    style={{ width: '40px', height: '100%' }}
                   />
                   <input
                     value={content}
@@ -243,5 +300,5 @@ export default function GuideChat() {
         </MDBRow>
       </MDBContainer>
     </div>
-  );
+  )
 }

@@ -1,12 +1,9 @@
-.conBtn{
-    margin-left: 570px;
+.conBtn {
+  margin-left: 570px;
 }
 
-
-
 @media screen and (max-width: 900px) {
-  .conBtn{
-margin-left: 35%;
+  .conBtn {
+    margin-left: 35%;
   }
-   
-  }
+}

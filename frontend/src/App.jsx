@@ -1,42 +1,44 @@
 import React from 'react'
-import { Route, Routes } from "react-router-dom";
-import Register from './pages/userPages/register';
-import { Flip, ToastContainer } from 'react-toastify';
+import { Route, Routes } from 'react-router-dom'
+import Register from './pages/userPages/register'
+import { Flip, ToastContainer } from 'react-toastify'
 
-import Login from './pages/userPages/login/login';
-import UserHome from './pages/userPages/userHome/UserHome';
-import Booking from './pages/userPages/booking/Booking';
-import ForgotPassword from './pages/userPages/forgotPassword/ForgotPassword';
-import Verifyotp from './pages/userPages/forgotPassword/Verifyotp';
-import UserChangePassword from './pages/userPages/forgotPassword/UserChangePassword';
-import BookingData from './pages/userPages/booking/BookingData';
-import ViewBooking from './pages/userPages/booking/ViewBooking';
+import Login from './pages/userPages/login/login'
+import UserHome from './pages/userPages/userHome/UserHome'
+import Booking from './pages/userPages/booking/Booking'
+import ForgotPassword from './pages/userPages/forgotPassword/ForgotPassword'
+import Verifyotp from './pages/userPages/forgotPassword/Verifyotp'
+import UserChangePassword from './pages/userPages/forgotPassword/UserChangePassword'
+import BookingData from './pages/userPages/booking/BookingData'
+import ViewBooking from './pages/userPages/booking/ViewBooking'
 
-import GuideRegister from './pages/guidePages/guideRegister';
-import GuideListing from './pages/userPages/GuideManagement/guideListing';
-import GuideLogin from './pages/guidePages/guideLogin';
-import GuideHome from './pages/guidePages/guideHome';
-import GuideDetails from './pages/guidePages/guideAddData';
-import GuideDetailedView from './pages/userPages/GuideManagement/guideDetailed';
-import Confirmation from './pages/userPages/booking/confirmation';
+import GuideRegister from './pages/guidePages/guideRegister'
+import GuideListing from './pages/userPages/GuideManagement/guideListing'
+import GuideLogin from './pages/guidePages/guideLogin'
+import GuideHome from './pages/guidePages/guideHome'
+import GuideDetails from './pages/guidePages/guideAddData'
+import GuideDetailedView from './pages/userPages/GuideManagement/guideDetailed'
+import Confirmation from './pages/userPages/booking/confirmation'
+import GuideBookingData from './pages/guidePages/guideBookings'
 
-import "primeflex/primeflex.css";
-import AdminLogin from './pages/admin/Adminlogin';
-import AdminHome from './pages/admin/adminHome';
-import Userlist from './pages/admin/userList';
-import GuideData from './pages/admin/guideList';
+import 'primeflex/primeflex.css'
+import AdminLogin from './pages/admin/Adminlogin'
+import AdminHome from './pages/admin/adminHome'
+import Userlist from './pages/admin/userList'
+import GuideData from './pages/admin/guideList'
 
-import "react-toastify/dist/ReactToastify.css";
-import PrivateRoute from './components/userComponents/privateRoute';
-import AdminBookingData from './pages/admin/Booking';
-import GuidePrivateRoute from './components/guideComponents/guidePrivateRoute';
-import AdminPrivateRoute from './components/adminComponents/AdminCard/AdminPrivateRoute';
-import ChangePassword from './pages/guidePages/passwordPages/ChangePassword';
-import UserChat from './pages/userPages/chat/UserChat';
-import GuideChat from './pages/guidePages/guideChat/guideChat';
+import 'react-toastify/dist/ReactToastify.css'
+import PrivateRoute from './components/userComponents/privateRoute'
+import AdminBookingData from './pages/admin/Booking'
+import AdminDashboard from './pages/admin/adminDAshboard'
+import GuidePrivateRoute from './components/guideComponents/guidePrivateRoute'
+import AdminPrivateRoute from './components/adminComponents/AdminCard/AdminPrivateRoute'
+import ChangePassword from './pages/guidePages/passwordPages/ChangePassword'
+import UserChat from './pages/userPages/chat/UserChat'
+import GuideChat from './pages/guidePages/guideChat/guideChat'
 const App = () => {
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: 'relative' }}>
       <ToastContainer
         position="top-right"
         transition={Flip}
@@ -50,10 +52,8 @@ const App = () => {
         pauseOnHover
         theme="colored"
       />
-      
 
       <Routes>
-
         <Route path="/" element={<UserHome />} />
         <Route path="/register" element={<Register />} />
         <Route path="/Login" element={<Login />} />
@@ -66,7 +66,7 @@ const App = () => {
         <Route path="/Bookings" element={<BookingData />} />
         <Route path="/ViewBooking/:bookingId" element={<ViewBooking />} />
         <Route path="/UserChat/:id" element={<UserChat />} />
-        
+
         <Route
           path="/guideDetailedView/:userId"
           element={<GuideDetailedView />}
@@ -76,7 +76,7 @@ const App = () => {
 
         <Route path="/guideRegister" element={<GuideRegister />} />
         <Route path="/guideLogin" element={<GuideLogin></GuideLogin>} />
-       
+
         <Route
           path="/guideHome"
           element={<GuidePrivateRoute element={<GuideHome />} />}
@@ -93,13 +93,21 @@ const App = () => {
           path="/GuideChat"
           element={<GuidePrivateRoute element={<GuideChat />} />}
         />
+        <Route
+          path="/GuideBookings"
+          element={<GuidePrivateRoute element={<GuideBookingData />} />}
+        />
 
         {/* --------------------Admin Routes----------------------------------------- */}
 
         <Route path="/adminLogin" element={<AdminLogin></AdminLogin>} />
         <Route
-          path="/adminHome"
+          path="/admin-guide-Requests"
           element={<AdminPrivateRoute element={<AdminHome />} />}
+        />
+        <Route
+          path="/adminHome"
+          element={<AdminPrivateRoute element={<AdminDashboard />} />}
         />
         <Route
           path="/userList"
@@ -115,7 +123,7 @@ const App = () => {
         />
       </Routes>
     </div>
-  );
+  )
 }
 
 export default App

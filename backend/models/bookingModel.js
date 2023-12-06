@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./userModel.js";
 
 const Schema = mongoose.Schema;
 
@@ -11,6 +12,12 @@ const bookingSchema = new Schema(
       userid: {
         type: String,
         required: true,
+        ref:User
+      },
+      userName: {
+        type: String,
+        required: true,
+     
       },
     guidename: {
       type: String,

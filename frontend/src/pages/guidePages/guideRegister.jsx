@@ -1,137 +1,141 @@
-import  { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 
-import GuideLoading from "../../components/guideComponents/guideLoading";
+import GuideLoading from '../../components/guideComponents/guideLoading'
 import {
   MDBBtn,
   MDBCard,
   MDBCardBody,
   MDBCardFooter,
-
   MDBIcon,
   MDBInput,
   MDBValidation,
   MDBValidationItem,
-} from "mdb-react-ui-kit";
+} from 'mdb-react-ui-kit'
 
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { useGuideRegisterMutation } from "../../redux/slices/guideSlice/guideApiSlice";
-import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import { useGuideRegisterMutation } from '../../redux/slices/guideSlice/guideApiSlice'
+import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 
 const GuideRegister = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [Location, setLocaton] = useState("");
-  const [idCardNumber, setIdCardNumber] = useState(""); 
-  const [idCardFile, setIdCardFile] = useState(null); // New field for ID card image or PDF file
-  const [profileImage, setprofileImage] = useState(null); // New field for ID card image or PDF file
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [LastName, setLastName] = useState('')
+  const [mobile, setMobile] = useState('')
+  const [Location, setLocaton] = useState('')
+  const [idCardNumber, setIdCardNumber] = useState('')
+  const [idCardFile, setIdCardFile] = useState(null) // New field for ID card image or PDF file
+  const [profileImage, setprofileImage] = useState(null) // New field for ID card image or PDF file
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { guideInfo } = useSelector((state) => state.auth);
-  const [guideLogin, { isLoading }] = useGuideRegisterMutation();
-const [waitLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { guideInfo } = useSelector((state) => state.auth)
+  const [guideLogin, { isLoading }] = useGuideRegisterMutation()
+  const [waitLoading, setIsLoading] = useState(false)
   useEffect(() => {
     if (guideInfo) {
-      navigate("/home");
+      navigate('/home')
     }
-  }, [navigate, guideInfo]);
+  }, [navigate, guideInfo])
   // const handleFileUpload = (e) => {
   //   const file = e.target.files[0];
 
   //   setIdCardFile(file);
   // };
 
-    const handleImage1 = (e) => {
-      const file = e.target.files[0];
-      setFileToBase(file);
-    };
+  const handleImage1 = (e) => {
+    const file = e.target.files[0]
+    setFileToBase(file)
+  }
 
-    const setFileToBase = (file) => { 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setIdCardFile(reader.result);
-      };
-    };
+  const setFileToBase = (file) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      setIdCardFile(reader.result)
+    }
+  }
 
-    const handleImage2 = (e) => {
-      const file = e.target.files[0];
-      setFileToBase2(file);
-    };
+  const handleImage2 = (e) => {
+    const file = e.target.files[0]
+    setFileToBase2(file)
+  }
 
-    const setFileToBase2 = (file) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setprofileImage(reader.result);
-      };
-    };
-
+  const setFileToBase2 = (file) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      setprofileImage(reader.result)
+    }
+  }
 
   const HandleSubmit = async (e) => {
-    e.preventDefault();
-     if (
-       !firstName ||
-       !LastName ||
-       !email ||
-       !mobile ||
-       !password ||
-       !confirmPassword
-     ) {
-       toast.error("Please fill in all required fields.");
-       return;
-     }
-      const passwordRegex =
-        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/; // Example: Minimum 8 characters, at least one uppercase letter, one lowercase letter, and one number
+    e.preventDefault()
+    if (
+      !firstName ||
+      !LastName ||
+      !email ||
+      !mobile ||
+      !password ||
+      !confirmPassword
+    ) {
+      toast.error('Please fill in all required fields.')
+      return
+    }
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/ // Example: Minimum 8 characters, at least one uppercase letter, one lowercase letter, and one number
 
-      if (!password.match(passwordRegex)) {
-        toast.error(
-          "Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number."
-        );
-        return;
-      }
+    if (!password.match(passwordRegex)) {
+      toast.error(
+        'Password should contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.',
+      )
+      return
+    }
 
-      
-      
-       if (!idCardFile || !profileImage) {
-         toast.error("Please upload ID card and profile photo.");
-         return;
-       }
+    if (!idCardFile || !profileImage) {
+      toast.error('Please upload ID card and profile photo.')
+      return
+    }
     if (password !== confirmPassword) {
-      toast.error(" password do not match", {
-        position: "top-right",
+      toast.error(' password do not match', {
+        position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "colored",
-      });
-    } else  {
+        theme: 'colored',
+      })
+    } else {
       try {
-        setIsLoading(true);
-        const formData = new FormData();
-        formData.append("firstname", firstName);
-        formData.append("Lastname", LastName);
-        formData.append("mobile", mobile);
-        formData.append("email", email);
-        formData.append("password", password);
-        formData.append("Location", Location);
-        formData.append("idCardNumber", idCardNumber);
-        formData.append("idimage", idCardFile);
-        formData.append("profileimage",profileImage);
-        
-       
+        setIsLoading(true)
+        const formData = new FormData()
+        formData.append('firstname', firstName)
+        formData.append('Lastname', LastName)
+        formData.append('mobile', mobile)
+        formData.append('email', email)
+        formData.append('password', password)
+        formData.append('Location', Location)
+        formData.append('idCardNumber', idCardNumber)
+        formData.append('idimage', idCardFile)
+        formData.append('profileimage', profileImage)
+
         // const responseFromApiCall = await guideLogin(formData).unwrap()
-        const responseFromApiCall = await guideLogin({firstName,LastName,mobile,email,password,Location,idCardNumber,idCardFile,profileImage}).unwrap()
+        const responseFromApiCall = await guideLogin({
+          firstName,
+          LastName,
+          mobile,
+          email,
+          password,
+          Location,
+          idCardNumber,
+          idCardFile,
+          profileImage,
+        }).unwrap()
         // const res = await guideLogin({
         //   firstName,
         //   LastName,
@@ -142,32 +146,32 @@ const [waitLoading, setIsLoading] = useState(false);
         //   idCardNumber,
         //   idCardFile,
         // }).unwrap();
-        console.log('response ',responseFromApiCall);
-  setIsLoading(false);
+        console.log('response ', responseFromApiCall)
+        setIsLoading(false)
         // dispatch(setCredentials({ ...responseFromApiCall}));
-          toast.success("Registration Suceess Please wait for Admin Approvel");
-        navigate("/guideLogin");
+        toast.success('Registration Suceess Please wait for Admin Approvel')
+        navigate('/guideLogin')
       } catch (err) {
-       if (err.data && err.data.message) {
-         toast.error(err.data.message);
-       } else {
-         toast.error("An error occurred. Please try again."); // Generic error message
-       }
+        if (err.data && err.data.message) {
+          toast.error(err.data.message)
+        } else {
+          toast.error('An error occurred. Please try again.') // Generic error message
+        }
       }
     }
-  };
+  }
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: 'flex' }}>
       {/* Left Side (Form and Logo) */}
       <div style={{ flex: 1 }}>
-        <div style={{ maxWidth: "450px", margin: "auto" }}>
+        <div style={{ maxWidth: '450px', margin: 'auto' }}>
           {/* Your logo */}
-          <div style={{ paddingLeft: "120px" }}>
+          <div style={{ paddingLeft: '120px' }}>
             <img
               src="/wayfarerlogo.png"
               alt="Logo"
-              style={{ width: "200px", height: "200px" }}
+              style={{ width: '200px', height: '200px' }}
             />
           </div>
 
@@ -175,11 +179,7 @@ const [waitLoading, setIsLoading] = useState(false);
             <MDBIcon fas icon="user-circle" className="fa-3x" />
             <h3>Guide Sign Up</h3>
             <MDBCardBody>
-              <MDBValidation
-             
-                noValidate
-                className="row g-3"
-              >
+              <MDBValidation noValidate className="row g-3">
                 <div className="col-md-6">
                   <MDBValidationItem
                     className="col-md-12"
@@ -252,7 +252,7 @@ const [waitLoading, setIsLoading] = useState(false);
                     />
                   </MDBValidationItem>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-12">
                   <MDBValidationItem
                     className="col-md-12"
                     feedback="Please provide your Location"
@@ -304,7 +304,7 @@ const [waitLoading, setIsLoading] = useState(false);
                   </MDBValidationItem>
                 </div>
                 {/* New fields for ID card */}
-                <div className="col-md-6">
+                <div className="col-md-12">
                   <MDBValidationItem
                     className="col-md-12"
                     feedback="Please provide your ID card number."
@@ -322,8 +322,8 @@ const [waitLoading, setIsLoading] = useState(false);
                     />
                   </MDBValidationItem>
                 </div>
-                <div className="col-md-6">
-                  <MDBValidationItem className="col-md-12">
+                <div className="col-md-12">
+                  <MDBValidationItem className="col-md-4">
                     <label for="idCardFile">Upload ID Card </label>
                     <input
                       type="file"
@@ -341,6 +341,7 @@ const [waitLoading, setIsLoading] = useState(false);
                       id="profileimage"
                       accept=".jpg, .jpeg, .png, .pdf,.avif"
                       onChange={handleImage2}
+                      
                     />
                   </MDBValidationItem>
                 </div>
@@ -348,26 +349,26 @@ const [waitLoading, setIsLoading] = useState(false);
                 <div className="col-12">
                   <MDBBtn
                     style={{
-                      width: "100%",
-                      borderRadius: "50px",
-                      backgroundColor: "#387F8E",
-                      color: "white",
+                      width: '100%',
+                      borderRadius: '50px',
+                      backgroundColor: '#387F8E',
+                      color: 'white',
                     }}
                     className="mt-2"
                     onClick={HandleSubmit}
                     disabled={waitLoading}
                   >
-                    {waitLoading ? <GuideLoading></GuideLoading> : "Register"}
+                    {waitLoading ? <GuideLoading></GuideLoading> : 'Register'}
                   </MDBBtn>
                 </div>
               </MDBValidation>
             </MDBCardBody>
-            <p style={{ textAlign: "center" }}></p>
+            <p style={{ textAlign: 'center' }}></p>
             <MDBCardFooter className="mb-2">
               <Link to="/">
-                <p style={{ color: "black" }}>
+                <p style={{ color: 'black' }}>
                   Already registered?
-                  <span style={{ color: "#387F8E" }}> Sign in </span>
+                  <span style={{ color: '#387F8E' }}> Sign in </span>
                 </p>
               </Link>
             </MDBCardFooter>
@@ -383,7 +384,7 @@ const [waitLoading, setIsLoading] = useState(false);
         />
       </div> */}
     </div>
-  );
-};
+  )
+}
 
-export default GuideRegister;
+export default GuideRegister

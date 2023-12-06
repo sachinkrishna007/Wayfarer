@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import NavBar from "../../components/guideComponents/navbar/GuideNavbar";
-import { useSelector } from "react-redux";
-import { useGuideGetDataMutation } from "../../redux/slices/guideSlice/guideApiSlice";
-import "./guideHome.css";
-import Loader from "../../components/userComponents/loading";
-import Heading from "../../components/userComponents/Headings/heading";
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import NavBar from '../../components/guideComponents/navbar/GuideNavbar'
+import { useSelector } from 'react-redux'
+import { useGuideGetDataMutation } from '../../redux/slices/guideSlice/guideApiSlice'
+import './guideHome.css'
+import Loader from '../../components/userComponents/loading'
+import Heading from '../../components/userComponents/Headings/heading'
+import { useGuideActivateMutation } from '../../redux/slices/guideSlice/guideApiSlice'
+import { Chip } from 'primereact/chip'
 import {
   MDBCol,
   MDBContainer,
@@ -18,44 +20,68 @@ import {
   MDBIcon,
   MDBListGroup,
   MDBListGroupItem,
-} from "mdb-react-ui-kit";
+} from 'mdb-react-ui-kit'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
+import { Button } from 'primereact/button'
 export default function GuideHome() {
-  const [guideData, setGuideData] = useState([]);
-  const { guideInfo } = useSelector((state) => state.guideAuth);
-  const [guideDataFromAPI] = useGuideGetDataMutation();
-  
-  const [loading, setLoading] = useState(true);
+  const [guideData, setGuideData] = useState([])
+  const { guideInfo } = useSelector((state) => state.guideAuth)
+  const [guideDataFromAPI] = useGuideGetDataMutation()
+  const [ActivateGuide] = useGuideActivateMutation()
+  const [loading, setLoading] = useState(true)
   useEffect(
     () => {
       try {
         const fetchData = async () => {
           const responseFromApiCall = await guideDataFromAPI({
             guideId: guideInfo.data.email,
-          });
+          })
 
-          const guideArray = responseFromApiCall.data.guideData;
-          
+          const guideArray = responseFromApiCall.data.guideData
 
-          setGuideData(guideArray[0]);
-           setLoading(false);
-        };
+          setGuideData(guideArray[0])
+          setLoading(false)
+        }
 
-        fetchData();
+        fetchData()
       } catch (error) {
-        toast.error(error);
+        toast.error(error)
 
-        console.error("Error fetching users:", error);
+        console.error('Error fetching users:', error)
       }
     },
     [],
-    guideData
-  );
-  if (loading) {
-    return <Loader></Loader>;
+    guideData,
+  )
+
+  const ActivateHandler = async () => {
+try {
+   const responseFromApiCall = await ActivateGuide({
+     guideId: guideInfo.data._id,
+   }).unwrap()
+   if (responseFromApiCall) {
+      toast.success(
+        `Successfully ${guideData.isActive ? 'deactivated' : 'activated'}`,
+      )
+      setGuideData((prevGuideData) => ({
+        ...prevGuideData,
+        isActive: !prevGuideData.isActive,
+      }))
+   }
+} catch (err) {
+   if (err.data && err.data.message) {
+     toast.error(err.data.message)
+   } else {
+     toast.error('An error occurred. Please try again.') // Generic error message
+   }
+}
+   
   }
-  const languages = guideData.Language > 0 ? guideData[0].Language : [];
+  if (loading) {
+    return <Loader></Loader>
+  }
+  const languages = guideData.Language > 0 ? guideData[0].Language : []
   return (
     <>
       <NavBar />
@@ -77,7 +103,7 @@ export default function GuideHome() {
                   src={guideData.profileImage}
                   alt="avatar"
                   className="square"
-                  style={{ width: "500px" }}
+                  style={{ width: '500px' }}
                   fluid
                 />
                 {/* <p className="text-muted mb-1">{guideInfo.data.firstName}</p>
@@ -97,13 +123,13 @@ export default function GuideHome() {
                     <MDBIcon
                       fab
                       icon="github fa-lg"
-                      style={{ color: "#333333" }}
+                      style={{ color: '#333333' }}
                     />
                     <Link
-                      to={"/guideAddData"}
+                      to={'/guideAddData'}
                       className="genric-btn info w-50 mx-auto "
                     >
-                      <MDBBtn style={{ backgroundColor: "#387F8E" }}>
+                      <MDBBtn style={{ backgroundColor: '#387F8E' }}>
                         ADD/Edit DETAILS
                       </MDBBtn>
                     </Link>
@@ -112,14 +138,14 @@ export default function GuideHome() {
                     <MDBIcon
                       fab
                       icon="twitter fa-lg"
-                      style={{ color: "#55acee" }}
+                      style={{ color: '#55acee' }}
                     />
 
                     <Link
-                      to={"/guideChangePassword"}
+                      to={'/guideChangePassword'}
                       className="genric-btn info w-50 mx-auto "
                     >
-                      <MDBBtn style={{ backgroundColor: "#387F8E" }}>
+                      <MDBBtn style={{ backgroundColor: '#387F8E' }}>
                         ChangePassword
                       </MDBBtn>
                     </Link>
@@ -178,69 +204,93 @@ export default function GuideHome() {
 
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Address</MDBCardText>
+                    <MDBCardText>Guide Charge</MDBCardText>
                   </MDBCol>
+
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {guideData.Description
-                        ? guideData.Description
-                        : "Please add t activate your account"}
+                      <h6>
+                        ₹
+                        {guideData.price ? (
+                          guideData.price
+                        ) : (
+                          <p style={{ color: 'red' }}>Please add price</p>
+                        )}
+                      </h6>
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
+
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Languages</MDBCardText>
+                  </MDBCol>
+
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      <div>
+                        {guideData.Language && guideData.Language.length > 0 ? (
+                          guideData.Language.map((language, index) => (
+                            <Chip
+                              key={index}
+                              label={language}
+                              className={
+                                index < guideData.Language.length - 1
+                                  ? 'mr-2'
+                                  : ''
+                              }
+                            />
+                          ))
+                        ) : (
+                          <p style={{ color: 'red' }}>
+                            Complete your profile by adding languages.
+                          </p>
+                        )}
+                      </div>
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Description</MDBCardText>
+                  </MDBCol>
+
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      {guideData.Description ? (
+                        guideData.Description
+                      ) : (
+                        <p style={{ color: 'red' }}>
+                          Please add Description activate your account
+                        </p>
+                      )}
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+
+                <Button
+                  onClick={ActivateHandler}
+                  className="btn btn-primary"
+                  style={{
+                    backgroundColor: guideData.isActive ? '#cf1515' : 'green',
+                    
+                    marginTop: '30px',
+                  }}
+                >
+                  {guideData.isActive
+                    ? 'Deactivate Your Account'
+                    : 'Activate Your Account'}
+                </Button>
               </MDBCardBody>
             </MDBCard>
-            <MDBRow className="mt-4">
-              {/* Languages */}
-              <MDBCol md="6">
-                <MDBCard className="mb-4 mb-md-0">
-                  <MDBCardBody>
-                    <MDBCardText className="mb-4">
-                      <span className="text-primary font-italic me-1"></span>
-                      <h6>Added Languages</h6>
-                    </MDBCardText>
-                    {guideData.Language ? (
-                      <>
-                        <li>{guideData.Language[0]}</li>
-                        <li>{guideData.Language[1]}</li>
-                        <li>{guideData.Language[2]}</li>
-                      </>
-                    ) : (
-                      <li>Update your profile</li>
-                    )}
-                  </MDBCardBody>
-                </MDBCard>
-              </MDBCol>
-
-              {/* Activities */}
-
-              {/* Current Price per Day */}
-              <MDBCol md="6">
-                <MDBCard className="mb-4 mb-md-0">
-                  <MDBCardBody>
-                    <MDBCardText className="mb-4">
-                      <span className="text-primary font-italic me-1"></span>{" "}
-                      <h6>Your Charge Per Day</h6>
-                    </MDBCardText>
-                    <MDBCardText
-                      style={{ fontSize: "2rem", paddingLeft: "20px" }}
-                    >
-                      <h6>
-                        ₹
-                        {guideData.price
-                          ? guideData.price
-                          : "Update your profile"}
-                      </h6>
-                    </MDBCardText>
-                  </MDBCardBody>
-                </MDBCard>
-              </MDBCol>
-            </MDBRow>
+            <MDBRow className="mt-4"></MDBRow>
           </MDBCol>
         </MDBRow>
       </MDBContainer>
 
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      {/* <div className="d-flex justify-content-between align-items-center mb-4">
         <MDBCardText className="lead fw-normal mb-0">
           Recent Travel Pictures & Experience
         </MDBCardText>
@@ -249,9 +299,9 @@ export default function GuideHome() {
             Show all
           </a>
         </MDBCardText>
-      </div>
+      </div> */}
 
-      <MDBRow>
+      {/* <MDBRow>
         <MDBCol md="4" className="mb-4">
           <MDBCardImage
             src="https://images.unsplash.com/photo-1496566084516-c5b96fcbd5c8?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -276,7 +326,7 @@ export default function GuideHome() {
           />
           <MDBCardText className="mt-2">All time best</MDBCardText>
         </MDBCol>
-      </MDBRow>
+      </MDBRow> */}
     </>
-  );
+  )
 }

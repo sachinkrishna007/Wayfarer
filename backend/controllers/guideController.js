@@ -2,6 +2,8 @@ import asyncHandler from "express-async-handler";
 
 import guideGenerateToken from "../utils/guideGenerateToken.js";
 import Guide from "../models/guideModel.js";
+import Booking from "../models/bookingModel.js";
+import User from "../models/userModel.js";
 import cloudinary from "../config/cloudinary.js";
 const authGuide = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -94,8 +96,24 @@ const registerGuide = asyncHandler(async (req, res) => {
   }
 });
 
+const getBookingData = asyncHandler(async (req, res) => {
+  const { id } = req.query;
+console.log(id);
+  const booking = await Booking.find({ guideid: id })
+  const user = await User.find({email:booking.userEmail})
+
+  
+  if (booking,user) {
+    res.status(200).json({ booking });
+  } else {
+    res.status(404);
+
+    throw new Error("Users data fetch failed.");
+  }
+});
+
 const guideLogout = asyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
+  res.cookie("Guidejwt", "", {
     httpOnly: true,
     expires: new Date(0),
   });
@@ -104,27 +122,27 @@ const guideLogout = asyncHandler(async (req, res) => {
 
 const guideAddLanguage = asyncHandler(async (req, res) => {
   const { Lan, guideId } = req.body;
-
+  console.log(req.body);
   const guide = await Guide.findOne({ email: guideId });
 
   if (!guide) {
     res.status(400);
     throw new Error("Data fetch failed.");
   }
-
-  if (guide.Language.length >= 3) {
-    console.log("jj");
+  if (guide.Language.includes(Lan)) {
+    console.log('jb');
     res.status(400);
-    throw new Error("Max limit is 3.");
-  } else {
-    guide.Language.push(Lan);
-    await guide.save();
+    throw new Error("Language already exists.");
+  }
+  
+  guide.Language.push(Lan);
+  const saved = await guide.save();
+  if (saved) {
     res
       .status(200)
       .json({ success: true, message: "Language added successfully", guide });
   }
 });
-
 
 const guideAddPrice = asyncHandler(async (req, res) => {
   const { price, guideId } = req.body;
@@ -177,8 +195,48 @@ const getGuideData = asyncHandler(async (req, res) => {
   }
 });
 
-const changePassword = asyncHandler(async (req, res) => {
+const deleteLanguage = asyncHandler(async(req,res)=>{
+  const{guideId,lan}=req.body
+  console.log(req.body);
+const guide = await Guide.findOneAndUpdate(
+  { _id: guideId },
+  { $pull: { Language: lan } },
+  { new: true }
+);
+return res.status(200).json({ message: "Language deleted successfully" });
+})
 
+const GuideActivateAccount = asyncHandler(async (req, res) => {
+  console.log(req.body);
+
+  const guideId = req.body.guideId;
+
+
+    const guide = await Guide.findById(guideId);
+
+    if (!guide) {
+      res.status(404);
+
+      throw new Error(" failed.");
+    }
+
+ if (!guide.Language || !guide.price || !guide.Description) {
+   res.status(400);
+   throw new Error(
+     "Guide must have Language, price, and Description before activation."
+   );
+ }
+
+    guide.isActive = !guide.isActive;
+    const updatedGuide = await guide.save();
+
+    res.status(200).json({ success: true, guide: updatedGuide });
+  
+   
+});
+
+
+const changePassword = asyncHandler(async (req, res) => {
   const { guideId, oldPassword, password } = req.body;
 
   const guide = await Guide.findOne({ email: guideId });
@@ -210,4 +268,7 @@ export {
   getGuideData,
   guideAddDescription,
   changePassword,
+  getBookingData,
+  deleteLanguage,
+  GuideActivateAccount
 };

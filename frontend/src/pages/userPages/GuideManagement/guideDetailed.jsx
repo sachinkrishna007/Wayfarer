@@ -1,19 +1,23 @@
-import NavBar from "../../../components/userComponents/navBar/navBar";
-import "./guideDetailed.css";
-import Footer from "../../../components/userComponents/footer/footer";
-import DatePicker from "react-datepicker";
-import { Calendar } from "primereact/calendar";
-import { useState, useEffect } from "react";
-import "react-datepicker/dist/react-datepicker.css";
-import Loader from "../../../components/userComponents/loading";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Button } from "primereact/button";
-import { Chip } from "primereact/chip";
-import { Knob } from "primereact/knob";
-import { Sidebar } from "primereact/sidebar";
-import { Link } from "react-router-dom";
- import { useGetRatingsMutation } from "../../../redux/slices/userApiSlice";
+import NavBar from '../../../components/userComponents/navBar/navBar'
+import './guideDetailed.css'
+import Footer from '../../../components/userComponents/footer/footer'
+import DatePicker from 'react-datepicker'
+import { Calendar } from 'primereact/calendar'
+import { useState, useEffect } from 'react'
+import 'react-datepicker/dist/react-datepicker.css'
+import Loader from '../../../components/userComponents/loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { Button } from 'primereact/button'
+import { Chip } from 'primereact/chip'
+import { Knob } from 'primereact/knob'
+import { Sidebar } from 'primereact/sidebar'
+import { Link } from 'react-router-dom'
+import { useGetRatingsMutation } from '../../../redux/slices/userApiSlice'
+import {
+  useCheckAvilablityGuideMutation,
+  useGetBookedDatesMutation,
+} from '../../../redux/slices/userApiSlice'
 
 import {
   MDBCol,
@@ -26,94 +30,136 @@ import {
   MDBBtn,
   MDBTypography,
   MDBIcon,
-} from "mdb-react-ui-kit";
-import { useGetSingleGuideMutation } from "../../../redux/slices/userApiSlice";
-import { toast } from "react-toastify";
-export default function EditButton() {
-  const [loading, setLoading] = useState(true);
-  const [startDate, setStartDate] = useState("");
-  const [availabilityStatus, setAvailabilityStatus] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const id = location.pathname.split("/")[2];
-  const [guideSingleDataFromAPI] = useGetSingleGuideMutation();
-  const [getRatings] = useGetRatingsMutation()
- 
-  const [guideData, setGuideData] = useState("");
-  const [rating, setGuiderating] = useState("");
-  const { userInfo } = useSelector((state) => state.auth);
-  const [value, setValue] = useState(67);
-  const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
+} from 'mdb-react-ui-kit'
+import { useGetSingleGuideMutation } from '../../../redux/slices/userApiSlice'
 
+import { toast } from 'react-toastify'
+export default function EditButton() {
+  const [loading, setLoading] = useState(true)
+  const [ratingLoading, setRatingLoading] = useState(true)
+  const [startDate, setStartDate] = useState('')
+  const [availabilityStatus, setAvailabilityStatus] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const id = location.pathname.split('/')[2]
+  const [guideSingleDataFromAPI] = useGetSingleGuideMutation()
+  const [overlappingDates] = useCheckAvilablityGuideMutation()
+  const [getRatings] = useGetRatingsMutation()
+  
+  const [averageRating, setAverageRating] = useState(0)
+
+  const [guideData, setGuideData] = useState('')
+  const [rating, setGuiderating] = useState('')
+  const { userInfo } = useSelector((state) => state.auth)
+  const [booking, setBooking] = useState('')
+  const [bookingCount, setBookingCount] = useState(0)
+  const navigate = useNavigate()
+  const [visible, setVisible] = useState(false)
+  const [bookedDates, setBookedDates] = useState([])
   useEffect(() => {
     try {
       const fetchData = async () => {
         const responseFromApiCall = await guideSingleDataFromAPI({
           guideId: id,
-        });
+        })
 
-        const guide = await responseFromApiCall.data.guideData;
-      
-        setGuideData(guide);
-        setLoading(false);
-      };
+        const guide = await responseFromApiCall.data.guideData
 
-      fetchData();
+        setGuideData(guide)
+        setLoading(false)
+      }
+
+      fetchData()
     } catch (error) {
-      toast.error(error);
+      toast.error(error)
 
-      console.error("Error fetching users:", error);
+      console.error('Error fetching users:', error)
     }
-  }, []);
+  }, [])
+
+
 
   useEffect(() => {
     try {
       const fetchRating = async () => {
         const responseFromApiCall = await getRatings({
           guideId: id,
-        });
+        })
 
-      
-        console.log("ratings", responseFromApiCall);
-        // setGuiderating(rating);
-      
-      };
+        const rating = await responseFromApiCall.data.comment
+        const bookingCount = await responseFromApiCall.data.booking
+        setGuiderating(rating)
+        setBooking(bookingCount)
+        setRatingLoading(false)
 
-      fetchRating();
+        if (rating.length > 0) {
+          const totalRating = rating.reduce(
+            (sum, comment) => sum + comment.rating,
+            0,
+          )
+          const avgRating = totalRating / rating.length
+          setAverageRating(avgRating)
+        }
+      }
+
+      fetchRating()
     } catch (error) {
-      toast.error(error);
+      toast.error(error)
 
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error)
     }
-  }, []);
+  }, [])
 
-  
+  useEffect(() => {
+    if (booking.length > 0) {
+      const totalBooking = booking.length
+      setBookingCount(totalBooking)
+    }
+  })
 
   if (loading) {
-    return <Loader></Loader>;
+    return <Loader></Loader>
+  }
+  if (ratingLoading) {
+    return <Loader></Loader>
   }
 
-  const checkAvailability = () => {
+  const checkAvailability = async () => {
     if (!startDate || !endDate) {
-      toast.warning("Please add dates");
-      return;
+      toast.warning('Please add dates')
+      return
     }
-    const bookingData = {
-      startDate,
-      endDate,
-      guideName: `${guideData.firstname} ${guideData.Lastname}`,
-      guideId: guideData._id,
-      userId: userInfo._id,
-      userEmail: userInfo.email,
-      guidePrice: guideData.price,
-      guideLocation: guideData.Location,
-      guideProfile: guideData.profileImage,
-    };
+    try {
+      const availabilityStatus = await overlappingDates({
+        startDate,
+        endDate,
+        guideId: guideData._id,
+      }).unwrap()
 
-    localStorage.setItem("bookingData", JSON.stringify(bookingData));
+      if (availabilityStatus) {
+        const bookingData = {
+          startDate,
+          endDate,
+          guideName: `${guideData.firstname} ${guideData.Lastname}`,
+          guideId: guideData._id,
+          userId: userInfo._id,
+          userEmail: userInfo.email,
+          guidePrice: guideData.price,
+          guideLocation: guideData.Location,
+          guideProfile: guideData.profileImage,
+        }
 
-    navigate("/bookingPage");
-  };
+        localStorage.setItem('bookingData', JSON.stringify(bookingData))
+
+        navigate('/bookingPage')
+      }
+    } catch (err) {
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error('An error occurred. Please try again.')
+      }
+    }
+  }
 
   return (
     <div>
@@ -126,7 +172,7 @@ export default function EditButton() {
                 <div className="rounded-top text-dark d-flex flex-row">
                   <div
                     className="ms-4 mt-5 d-flex flex-column"
-                    style={{ width: "150px" }}
+                    style={{ width: '150px' }}
                   >
                     <MDBCardImage
                       src={guideData.profileImage}
@@ -135,9 +181,9 @@ export default function EditButton() {
                       fluid
                     />
                   </div>
-                  <div className="ms-3" style={{ marginTop: "130px" }}>
+                  <div className="ms-3" style={{ marginTop: '130px' }}>
                     <MDBTypography tag="h2" className="guideName">
-                      {" "}
+                      {' '}
                       {guideData.firstname} {guideData.Lastname}
                     </MDBTypography>
                     <MDBCardText className="guideLoc" tag="h6">
@@ -145,13 +191,30 @@ export default function EditButton() {
                     </MDBCardText>
                   </div>
                   <div className="justify-content-center knob1">
-                    <Knob value={value} />
-                    <h6>Rating </h6>
+                    {averageRating > 0 ? (
+                      <Knob
+                        value={Math.round(averageRating)} // Rounded value
+                        max={10}
+                        valueColor={averageRating > 5 ? '#228B22' : '#FF5733'}
+                      />
+                    ) : (
+                      <p>Not Rated</p>
+                    )}
+                    <h6 style={{ paddingLeft: '25px' }}>Rating</h6>
+                  </div>
+
+                  <div className=" knob2">
+                    {bookingCount > 0 ? (
+                      <Knob value={bookingCount} />
+                    ) : (
+                      <p>0</p>
+                    )}
+                    <h6 style={{ paddingLeft: '1px' }}>Completed trips </h6>
                   </div>
                 </div>
                 <div
                   className="p-4 text-black"
-                  style={{ backgroundColor: "#f8f9fa" }}
+                  style={{ backgroundColor: '#f8f9fa' }}
                 >
                   <div className="d-flex justify-content-end text-center py-1">
                     <div></div>
@@ -185,7 +248,7 @@ export default function EditButton() {
                           key={index}
                           label={language}
                           className={
-                            index < guideData.Language.length - 1 ? "mr-2" : ""
+                            index < guideData.Language.length - 1 ? 'mr-2' : ''
                           }
                         />
                       ))}
@@ -238,98 +301,96 @@ export default function EditButton() {
                     </div>
                   </li>
                   <div className="mb-2">
-                    <Button onClick={checkAvailability}>
+                    <Button
+                      onClick={checkAvailability}
+                      severity="success"
+                      raised
+                    >
                       Continue Booking
                     </Button>
 
                     <span className="ml-2">{availabilityStatus}</span>
-                   
-                      <Button
-                        onClick={() => setVisible(true)}
-                        style={{ float: "right" }}
-                      >
-                        View Reviews
-                      </Button>
-                  
+
+                    <Button
+                      onClick={() => setVisible(true)}
+                      style={{ float: 'right' }}
+                    >
+                      View Reviews
+                    </Button>
                   </div>
 
                   <li>
                     <div className=" justify-content-center">
                       <Sidebar
                         visible={visible}
-                        style={{ width: "70%" }}
+                        style={{ width: '70%' }}
                         position="right"
                         onHide={() => setVisible(false)}
                       >
-                        <section>
-                          <MDBContainer
-                            className="py--5"
-                            style={{ maxWidth: "1000px" }}
-                          >
-                            <MDBRow className="justify-content-center">
-                              <MDBCol md="12" lg="10">
-                                <MDBCard className="text-dark">
-                                  <MDBCardBody>
-                                    <MDBTypography tag="h0" className="mb-0">
-                                      Recent comments
-                                    </MDBTypography>
-                                    <p className="fw-light mb-4 pb-2">
-                                      Latest Comments section by users
-                                    </p>
-
-                                    <div className="d-flex flex-start">
-                                      <MDBCardImage
-                                        className="rounded-circle shadow-1-strong me-3"
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
-                                        alt="avatar"
-                                        width="60"
-                                        height="60"
-                                      />
-                                      <div>
-                                        <MDBTypography
-                                          tag="h6"
-                                          className="fw-bold mb-1"
-                                        >
-                                          Maggie Marsh
-                                        </MDBTypography>
-                                        <div className="d-flex align-items-center mb-3">
-                                          <p className="mb-0">
-                                            March 07, 2021
-                                            <span className="badge bg-primary">
-                                              Pending
-                                            </span>
-                                          </p>
-                                          <a href="#!" className="link-muted">
-                                            <MDBIcon
-                                              fas
-                                              icon="pencil-alt ms-2"
+                        {rating.length === 0 ? (
+                          <section>
+                            <p>No reviews available.</p>
+                          </section>
+                        ) : (
+                          <>
+                            <MDBTypography tag="h0" className="mb-0">
+                              Recent comments
+                            </MDBTypography>
+                            <p className="fw-light mb-4 pb-2">
+                              Latest Comments section by users
+                            </p>
+                            {rating.map((data) => (
+                              <section key={data._id}>
+                                <MDBContainer
+                                  className="py-5"
+                                  style={{ maxWidth: '1000px' }}
+                                >
+                                  <MDBRow className="justify-content-center">
+                                    <MDBCol md="12" lg="10">
+                                      <MDBCard className="text-dark">
+                                        <MDBCardBody>
+                                          <div className="d-flex flex-start">
+                                            <MDBCardImage
+                                              className="rounded-circle shadow-1-strong me-3"
+                                              src={
+                                                data.userImage
+                                                  ? data.userImage
+                                                  : 'https://cdn-icons-png.flaticon.com/512/1253/1253756.png'
+                                              }
+                                              alt="avatar"
+                                              width="60"
+                                              height="60"
                                             />
-                                          </a>
-                                          <a href="#!" className="link-muted">
-                                            <MDBIcon fas icon="redo-alt ms-2" />
-                                          </a>
-                                          <a href="#!" className="link-muted">
-                                            <MDBIcon fas icon="heart ms-2" />
-                                          </a>
-                                        </div>
-                                        <p className="mb-0">
-                                          Lorem Ipsum is simply dummy text of
-                                          the printing and typesetting industry.
-                                          Lorem Ipsum has been the industry's
-                                          standard dummy text ever since the
-                                          1500s, when an unknown printer took a
-                                          galley of type and scrambled it.
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </MDBCardBody>
-
-                                  <hr className="my-0" />
-                                </MDBCard>
-                              </MDBCol>
-                            </MDBRow>
-                          </MDBContainer>
-                        </section>
+                                            <div>
+                                              <MDBTypography
+                                                tag="h6"
+                                                className="fw-bold mb-1"
+                                              >
+                                                {data.userName}
+                                              </MDBTypography>
+                                              <div className="d-flex align-items-center mb-3">
+                                                <p className="mb-0">
+                                                  {new Date(
+                                                    data.createdAt,
+                                                  ).toLocaleDateString()}
+                                                </p>
+                                                {/* Add your other icons and actions here */}
+                                              </div>
+                                              <p className="mb-0">
+                                                {data.comment}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </MDBCardBody>
+                                        <hr className="my-0" />
+                                      </MDBCard>
+                                    </MDBCol>
+                                  </MDBRow>
+                                </MDBContainer>
+                              </section>
+                            ))}
+                          </>
+                        )}
                       </Sidebar>
                     </div>
                   </li>
@@ -342,5 +403,5 @@ export default function EditButton() {
       <div></div>
       <Footer></Footer>
     </div>
-  );
+  )
 }

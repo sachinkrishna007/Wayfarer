@@ -1,7 +1,8 @@
-import { useStripeBookingMutation } from "../redux/slices/userApiSlice";
-import { useGetBookingMutation } from "../redux/slices/userApiSlice";
-import React from "react";
-const url = "/api/stripe/create-checkout-session";
+import { Button } from 'primereact/button'
+import { useStripeBookingMutation } from '../redux/slices/userApiSlice'
+import { useGetBookingMutation } from '../redux/slices/userApiSlice'
+import React from 'react'
+const url = '/api/stripe/create-checkout-session'
 const PayButton = ({
   userid,
   guideid,
@@ -12,13 +13,13 @@ const PayButton = ({
   guideName,
   Days,
   totalAmount,
-  guideImage
+  guideImage,
+  userName
 }) => {
-  const [Stripe, { isLoading }] = useStripeBookingMutation();
-   const [createBooking] = useGetBookingMutation();
+  const [Stripe, { isLoading }] = useStripeBookingMutation()
+  const [createBooking] = useGetBookingMutation()
   const handleCheckout = async () => {
     try {
-     
       const responseFromApiCall = await Stripe({
         userid,
         guideid,
@@ -29,49 +30,50 @@ const PayButton = ({
         guideName,
         Days,
         totalAmount,
-        
-      });
-      console.log(responseFromApiCall);
-      
-       const response = await createBooking({
-         userid,
-         guideid,
-         Location,
-         startDate,
-         endDate,
-         userEmail,
-         guideName,
-         Days,
-         totalAmount,
-         guideImage
-       });
-       if(response){
+        userName
+      })
+      console.log(responseFromApiCall)
 
-           localStorage.removeItem("bookingData");
-           window.location.href = responseFromApiCall.data.url;
-       }
+      const response = await createBooking({
+        userid,
+        guideid,
+        Location,
+        startDate,
+        endDate,
+        userEmail,
+        guideName,
+        Days,
+        totalAmount,
+        guideImage,
+        userName
+      })
+      if (response) {
+        localStorage.removeItem('bookingData')
+        window.location.href = responseFromApiCall.data.url
+      }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
   return (
     <div>
-      <button
+      <Button
         style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          backgroundColor: "#4CAF50" /* Green */,
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
+          padding: '10px 20px',
+          fontSize: '16px',
+        
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
         }}
+        severity="success"
         onClick={() => handleCheckout()}
       >
         CheckOut
-      </button>
+      </Button>
     </div>
-  );
-};
+  )
+}
 
-export default PayButton;
+export default PayButton

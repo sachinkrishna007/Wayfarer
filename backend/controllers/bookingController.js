@@ -7,6 +7,46 @@ import { ObjectId } from "mongodb";
 import Booking from "../models/bookingModel.js";
 
 
+const createBooking = asyncHandler(async (req, res) => {
+  const {
+    userid,
+    userName,
+    guideid,
+    Location,
+    startDate,
+    endDate,
+    Days,
+    totalAmount,
+    userEmail,
+    guideName,
+    guideImage,
+  } = req.body;
+  console.log(req.body, "jg");
+  try {
+    const newBooking = await Booking.create({
+      userEmail: userEmail,
+      userid: userid,
+      userName: userName,
+      guidename: guideName,
+      guideid: guideid,
+      location: Location,
+      startDate: startDate,
+      endDate: endDate,
+      totalDays: Days,
+      totalAmount: totalAmount,
+      guideImage: guideImage,
+      status: "Pending",
+    });
+
+    res.status(201).json({ success: true, data: newBooking });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+});
+
+
+
 
 const getSingleBooking = asyncHandler(async (req, res) => {
   const { id } = req.query;
@@ -26,5 +66,5 @@ const getSingleBooking = asyncHandler(async (req, res) => {
 });
 
 export {
-    getSingleBooking
+    getSingleBooking,createBooking
 }

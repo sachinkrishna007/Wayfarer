@@ -3,38 +3,30 @@
   display: flex;
   justify-content: space-between; /* Adjust as needed */
   flex-wrap: wrap;
-   padding: 0 10px ; /* Add padding to both sides of the container */
-   padding-top: 4%;
-   
-
+  padding: 0 10px; /* Add padding to both sides of the container */
+  padding-top: 4%;
 }
-.w-full{
-    margin-left: 7%;
+.w-full {
+  margin-left: 7%;
 }
 .card-item {
   flex: 1;
   margin: 0 200px; /* Adjust the margin as needed for spacing */
-  
-  
 }
-.mobileop{
+.mobileop {
   font-family: 'Poppins', sans-serif;
   color: rgb(61, 34, 211);
-margin-top: -5%;
- 
+  margin-top: -5%;
 }
-.title{
-font-size: 20px;
-text-transform: uppercase;
-color: rgb(0, 0, 0);
-font-family: 'Poppins', sans-serif;
-
- 
+.title {
+  font-size: 20px;
+  text-transform: uppercase;
+  color: rgb(0, 0, 0);
+  font-family: 'Poppins', sans-serif;
 }
-.subtitle{
-color: rgb(207, 46, 46);
-font-family: 'Poppins', sans-serif;;
-
+.subtitle {
+  color: rgb(207, 46, 46);
+  font-family: 'Poppins', sans-serif;
 }
 .guideimage {
   border-radius: 7%;
@@ -43,22 +35,20 @@ font-family: 'Poppins', sans-serif;;
   object-fit: cover; /* Maintain aspect ratio and cover the area */
 }
 
-
 .small-card {
-  width: calc(30.33% ); /* Adjust the width and margin as needed */
+  width: calc(30.33%); /* Adjust the width and margin as needed */
   padding: 20px 40px;
 
   height: 500px;
- 
+
   margin: 0 10px 60px 10px;
-   transition: transform 0.9s ease;
- 
+  transition: transform 0.9s ease;
 }
-.heading{
-    align-items: center;
-    font-size: large;
-    padding-left: 9rem;
-    font-family: 'Poppins', sans-serif;
+.heading {
+  align-items: center;
+  font-size: large;
+  padding-left: 9rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Adjust the breakpoint to your desired screen size */
@@ -66,19 +56,16 @@ font-family: 'Poppins', sans-serif;;
   .card-container {
     flex-direction: column; /* Stack cards vertically */
   }
-.small-card {
-  width: calc(80.33% - 1px); /* Adjust the width and margin as needed */
-  padding: 20px 40px;
+  .small-card {
+    width: calc(80.33% - 1px); /* Adjust the width and margin as needed */
+    padding: 20px 40px;
 
-  height: 600px;
- 
-  margin: 0 10px 60px 10px;
-   transition: transform 0.9s ease;
- 
+    height: 600px;
+
+    margin: 0 10px 60px 10px;
+    transition: transform 0.9s ease;
+  }
 }
-
-}
-
 
 .zoom-in-card:hover {
   transform: scale(1.1); /* Adjust the scale factor as needed */
@@ -86,28 +73,41 @@ font-family: 'Poppins', sans-serif;;
   box-shadow: 0 4px 8px rgba(88, 68, 68, 0.2);
 }
 
-.cardBtn{
-  background-color:#387F8E;
-  
+.cardBtn {
+  background-color: #387f8e;
+
   align-items: center;
 }
 
-.guideHeading{
-    font-family: 'Poppins', sans-serif;
-    margin-left: 50px;
-    padding: 1%;
-    color: #000000;
-    font-size: 1.5rem;
-    margin-top: 6%;
+.guideHeading {
+  font-family: 'Poppins', sans-serif;
+  margin-left: 50px;
+  padding: 1%;
+  color: #000000;
+  font-size: 1.5rem;
+  margin-top: 6%;
 }
 
-.guidebtn{
+.guidebtn {
   border-radius: 20px;
-  background-color: #387F8E;
+  background-color: #387f8e;
   margin-top: 20px;
 }
 
-.searchguide{
-padding-left: 5%;
+.searchguide {
+  padding-left: 5%;
+}
 
+
+.search-guide-container {
+  display: flex;
+  padding-left: 7%;
+}
+
+.search-input-container {
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+.calendar-container {
+  flex: 1; /* Takes the remaining space */
 }

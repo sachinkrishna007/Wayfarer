@@ -1,6 +1,6 @@
-import "./footer.css";
+import './footer.css'
 
-import "primeicons/primeicons.css";
+import 'primeicons/primeicons.css'
 
 const Footer = () => {
   return (
@@ -64,7 +64,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Footer

@@ -1,10 +1,10 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import NavBar from "../../../components/userComponents/navBar/navBar";
+import React from 'react'
+import { useState, useEffect } from 'react'
+import NavBar from '../../../components/userComponents/navBar/navBar'
 
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { useVerifyOtpMutation } from "../../../redux/slices/userApiSlice";
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import { useVerifyOtpMutation } from '../../../redux/slices/userApiSlice'
 import {
   MDBBtn,
   MDBCard,
@@ -15,55 +15,53 @@ import {
   MDBInput,
   MDBValidation,
   MDBValidationItem,
-} from "mdb-react-ui-kit";
+} from 'mdb-react-ui-kit'
 
-import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import { Link, useNavigate } from "react-router-dom";
+import 'mdb-react-ui-kit/dist/css/mdb.min.css'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Verifyotp = () => {
-  const [otp, setOtp] = useState("");
-   const [verifyOtp] = useVerifyOtpMutation()
-  const { guideInfo } = useSelector((state) => state.guideAuth);
+  const [otp, setOtp] = useState('')
+  const [verifyOtp] = useVerifyOtpMutation()
+  const { guideInfo } = useSelector((state) => state.guideAuth)
 
-   const email = sessionStorage.getItem("forgotPasswordEmail");
-//    const email = localStorage.getItem("forgotPasswordEmail");
-  const navigate = useNavigate();
+  const email = sessionStorage.getItem('forgotPasswordEmail')
+  //    const email = localStorage.getItem("forgotPasswordEmail");
+  const navigate = useNavigate()
 
   const submitHandler = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       if (!otp) {
-        toast.error(" enter otp");
+        toast.error(' enter otp')
       } else {
+        const responseFromApiCall = await verifyOtp({ otp, email })
 
-        const responseFromApiCall = await verifyOtp({otp,email})
-       
         if (responseFromApiCall) {
-        
-          navigate("/changePassword");
+          navigate('/changePassword')
         }
       }
     } catch (err) {
       if (err.data && err.data.message) {
-        toast.error(err.data.message);
+        toast.error(err.data.message)
       } else {
-        toast.error("An error occurred. Please try again.");
+        toast.error('An error occurred. Please try again.')
       }
     }
-  };
+  }
 
   return (
-    <div className="character" style={{ backgroundColor: "#fffff" }}>
+    <div className="character" style={{ backgroundColor: '#fffff' }}>
       <NavBar></NavBar>
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
         }}
       >
-        <div style={{ flex: 1, maxWidth: "450px", margin: "0 15px" }}>
+        <div style={{ flex: 1, maxWidth: '450px', margin: '0 15px' }}>
           <MDBCard alignment="center" className="mb-5">
             <MDBIcon fas icon="user-circle" className="fa-3x " />
             <h5>Enter Your OTP</h5>
@@ -95,10 +93,10 @@ const Verifyotp = () => {
                 <div className="col-12">
                   <MDBBtn
                     style={{
-                      width: "100%",
-                      borderRadius: "50px",
-                      backgroundColor: "#387F8E",
-                      color: "white",
+                      width: '100%',
+                      borderRadius: '50px',
+                      backgroundColor: '#387F8E',
+                      color: 'white',
                     }}
                     className="mt-2"
                   >
@@ -107,13 +105,13 @@ const Verifyotp = () => {
                 </div>
               </MDBValidation>
             </MDBCardBody>
-            <p style={{ textAlign: "center" }}></p>
+            <p style={{ textAlign: 'center' }}></p>
             <MDBCardFooter className="mb-2"></MDBCardFooter>
           </MDBCard>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Verifyotp;
+export default Verifyotp

@@ -9,12 +9,11 @@
 
 .divider:after,
 .divider:before {
-  content: "";
+  content: '';
   flex: 1;
   height: 1px;
   background: #eee;
 }
-
 
 /* Add this to your userChat.css or your stylesheet */
 
@@ -22,16 +21,16 @@
   overflow-y: auto; /* Enable vertical scrollbar */
 }
 
-.receive{
-    background-color: blueviolet;
+.receive {
+  background-color: blueviolet;
 }
 
 .user-message {
-  background-color: #2196F3; /* Set the background color for user messages */
+  background-color: #2196f3; /* Set the background color for user messages */
   color: #fff; /* Set the text color for user messages */
 }
 
 .guide-message {
-  background-color: #4CAF50; /* Set the background color for guide messages */
+  background-color: #4caf50; /* Set the background color for guide messages */
   color: #fff; /* Set the text color for guide messages */
 }

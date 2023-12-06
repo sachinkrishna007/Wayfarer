@@ -1,9 +1,8 @@
-import { Spinner } from "react-bootstrap";
+import { Spinner } from 'react-bootstrap'
 
 const Loader = () => {
   return (
     <>
-    
       <Spinner animation="border" variant="primary" />
 
       <Spinner animation="grow" variant="danger" />
@@ -12,7 +11,7 @@ const Loader = () => {
       <Spinner animation="grow" variant="light" />
       <Spinner animation="grow" variant="dark" />
     </>
-  );
-};
+  )
+}
 
-export default Loader;
+export default Loader

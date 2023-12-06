@@ -4,6 +4,7 @@ import asyncHandler from "express-async-handler";
 import AdmingenarateToken from "../utils/adminGenerateToken.js";
 import User from "../models/userModel.js";
 import Booking from "../models/bookingModel.js";
+
 const adminAuth = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -78,7 +79,7 @@ const acceptGuide = asyncHandler(async (req, res) => {
   }
 });
 const adminLogout = asyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
+  res.cookie("Adminjwt", "", {
     httpOnly: true,
     expires: new Date(0),
   });
@@ -165,6 +166,136 @@ const getAdminBookingData = asyncHandler(async (req, res) => {
   }
 });
 
+const loadDashboard = asyncHandler(async (req, res) => {
+  const currentDate = new Date();
+  const startOfDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate(),
+    0,
+    0,
+    0
+  );
+  const endOfDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() + 1,
+    0,
+    0,
+    0
+  );
+
+   const startOfWeek = new Date(
+     currentDate.getFullYear(),
+     currentDate.getMonth(),
+     currentDate.getDate() - currentDate.getDay(), // Start of the current week
+     0,
+     0,
+     0
+   );
+   const endOfWeek = new Date(
+     currentDate.getFullYear(),
+     currentDate.getMonth(),
+     currentDate.getDate() - currentDate.getDay() + 7, // End of the current week
+     0,
+     0,
+     0
+   );
+
+  const BookingAmount = await Booking.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalAmountSum: { $sum: { $toInt: "$totalAmount" } },
+      },
+    },
+  ]);
+
+  const BookingSales = await Booking.aggregate([
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            // Group by the date part of createdAt field
+            format: "%Y-%m-%d",
+            date: "$createdAt",
+          },
+        },
+        bookingCount: { $sum: 1 }, // Calculate the count of orders per date
+      },
+    },
+    {
+      $sort: {
+        _id: 1, // Sort the results by date in ascending order
+      },
+    },
+  ]);
+
+  const bookingSalesData = await Booking.aggregate([
+    {
+      $group: {
+        _id: {
+          $dateToString: {
+            // Group by the date part of createdAt field
+            format: "%Y-%m-%d",
+            date: "$createdAt",
+          },
+        },
+        dailyBooking: { $sum: { $toInt: "$totalAmount" } }, // Calculate the daily sales
+      },
+    },
+    {
+      $sort: {
+        _id: 1, // Sort the results by date in ascending order
+      },
+    },
+  ]);
+  const TotalBookings = await Booking.find({}).count();
+  const TotalGuides = await Guide.find({}).count();
+  const TotalUsers = await User.find({}).count();
+
+  const currentDayBooking = await Booking.find({
+    createdAt: { $gte: startOfDay, $lt: endOfDay },
+  }).count();
+
+ 
+  const loggedInUsers = await User.find({
+    createdAt: { $gte: startOfDay, $lt: endOfDay },
+  }).count();
+
+  
+
+  const guidesRegistered = await Guide.find({
+    createdAt: { $gte: startOfDay, $lt: endOfDay },
+  }).count();
+
+   const weeklyBookingAmountChange = await Booking.aggregate([
+     {
+       $match: {
+         createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+       },
+     },
+     {
+       $group: {
+         _id: null,
+         totalAmountSum: { $sum: { $toInt: "$totalAmount" } },
+       },
+     },
+   ]);
+  res.status(200).json({
+    BookingAmount,
+    BookingSales,
+    bookingSalesData,
+    TotalBookings,
+    TotalGuides,
+    TotalUsers,
+    guidesRegistered,
+    loggedInUsers,
+    currentDayBooking,
+    weeklyBookingAmountChange,
+  });
+});
+
 export {
   adminAuth,
   registerAdmin,
@@ -177,4 +308,5 @@ export {
   BlockGuide,
   UnBlockGuide,
   getAdminBookingData,
+  loadDashboard,
 };
