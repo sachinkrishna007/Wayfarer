@@ -24,6 +24,11 @@
   height: 6rem;
   object-fit: cover;
 }
+.coverUser {
+  width: 100%;
+  height: 10rem;
+  object-fit: cover;
+}
 .textcover {
   position: absolute;
   top: 55%;

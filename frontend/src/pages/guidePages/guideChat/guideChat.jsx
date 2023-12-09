@@ -68,12 +68,12 @@ export default function GuideChat() {
     }
   }
   useEffect(() => {
-   const fetchRoom = async () => {
-     let res = await getRoom({ guideId: guideInfo.data._id })
+    const fetchRoom = async () => {
+      let res = await getRoom({ guideId: guideInfo.data._id })
 
-     if (res) {
-       console.log(res)
-       setRooms(res.data)
+      if (res) {
+        console.log(res)
+        setRooms(res.data)
 
         const messagesPromises = res.data.map(async (room) => {
           const messages = await getChat({ chatId: room._id })
@@ -81,18 +81,18 @@ export default function GuideChat() {
           return { roomId: room._id, lastMessage }
         })
 
-      const messages = await Promise.all(messagesPromises)
-      const lastMessagesMap = messages.reduce(
-        (acc, { roomId, lastMessage }) => {
-          acc[roomId] = lastMessage
-          return acc
-        },
-        {},
-      )
+        const messages = await Promise.all(messagesPromises)
+        const lastMessagesMap = messages.reduce(
+          (acc, { roomId, lastMessage }) => {
+            acc[roomId] = lastMessage
+            return acc
+          },
+          {},
+        )
 
-       setLastMessages(lastMessagesMap)
-     }
-   }
+        setLastMessages(lastMessagesMap)
+      }
+    }
 
     fetchRoom()
   }, [guideInfo])

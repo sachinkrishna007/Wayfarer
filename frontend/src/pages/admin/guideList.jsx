@@ -120,20 +120,19 @@ const GuideData = () => {
         <Table striped bordered hover responsive>
           <thead>
             <tr>
-             
               <th>Profile</th>
               <th> Name</th>
               <th>Email</th>
               <th>Location</th>
               <th>Charge</th>
               <th>Verified</th>
+              <th>Account Status</th>
               <th>Block</th>
             </tr>
           </thead>
           <tbody>
             {filteredGuides.slice(first, first + rows).map((user, index) => (
               <tr key={index}>
-              
                 <td>
                   <img
                     src={user.profileImage}
@@ -156,6 +155,9 @@ const GuideData = () => {
                 <td>{user.price ? user.price : 'not added'}</td>
                 <td style={{ color: user.isAuthorized ? 'green' : 'red' }}>
                   {user.isAuthorized ? 'verified' : 'false'}
+                </td>
+                <td style={{ color: user.isActive ? 'green' : 'red' }}>
+                  {user.isActive ? 'Active' : 'Deactive'}
                 </td>
 
                 <td>

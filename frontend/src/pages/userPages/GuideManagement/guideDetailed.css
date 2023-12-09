@@ -15,11 +15,29 @@
 }
 
 .knob1 {
-  padding: 10%;
+  padding: 10% 0%;
+  padding-left: 15%;
  
 }
 .knob2 {
- padding-left: 1%;
+ padding-left: 5%;
  padding-top: 10%;
   
+}
+.knob3 {
+ padding-left: 3%;
+ padding-top: 10%;
+  
+}
+.follower-count {
+
+  padding: 1px; /* Adjust the padding as needed */
+  border-radius: 8px; /* Optional: Add rounded corners */
+  margin-top: 10px; /* Optional: Adjust the top margin */
+  
+}
+
+.follower-count h6 {
+  margin: 0; /* Remove default margin */
+  color: #000000; /* Set your desired text color */
 }

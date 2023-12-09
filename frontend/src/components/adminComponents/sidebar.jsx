@@ -84,6 +84,16 @@ export default function AdminSidebar() {
             Bookings Details
           </Link>
         </div>
+        <div className="admin-sidebar-content">
+          <Link to={'/Category'} className="sidebarOptions">
+            <i
+              className="pi pi-calendar
+"
+              style={{ fontSize: '1.2rem', padding: '20px' }}
+            ></i>
+            Category
+          </Link>
+        </div>
 
         {/* Add the "Logout" link here */}
         <div className="admin-sidebar-content">
@@ -104,7 +114,6 @@ export default function AdminSidebar() {
         icon="pi pi-align-justify "
         onClick={() => setVisible(true)}
         className="admin-button"
-        
       ></Button>
 
       <span style={{ paddingLeft: '20px', fontSize: '20px' }}>

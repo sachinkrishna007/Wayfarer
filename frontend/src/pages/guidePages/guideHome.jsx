@@ -254,6 +254,36 @@ try {
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
+                    <MDBCardText>Activities</MDBCardText>
+                  </MDBCol>
+
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      <div>
+                        {guideData.category && guideData.category.length > 0 ? (
+                          guideData.category.map((cat, index) => (
+                            <Chip
+                              key={index}
+                              label={cat}
+                              className={
+                                index < guideData.category.length - 1
+                                  ? 'mr-2'
+                                  : ''
+                              }
+                            />
+                          ))
+                        ) : (
+                          <p style={{ color: 'red' }}>
+                            Complete your profile by adding Activites.
+                          </p>
+                        )}
+                      </div>
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
                     <MDBCardText>Description</MDBCardText>
                   </MDBCol>
 
@@ -275,7 +305,7 @@ try {
                   className="btn btn-primary"
                   style={{
                     backgroundColor: guideData.isActive ? '#cf1515' : 'green',
-                    
+
                     marginTop: '30px',
                   }}
                 >

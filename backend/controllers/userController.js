@@ -7,7 +7,7 @@ import nodeMailer from "nodemailer";
 import Booking from "../models/bookingModel.js";
 import otpGenerator from "generate-otp";
 import OTP from "../models/OtpModel.js";
-
+import cloudinary from "../config/cloudinary.js";
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -28,9 +28,10 @@ const authUser = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       firstName: user.firstName,
+      lastName: user.LastName,
       email: user.email,
       mobile: user.mobile,
-      image: user.ProfileImage,
+      image: user.ProfileImageName,
     });
   } else {
     res.status(400);
@@ -73,8 +74,9 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       firstName: user.firstName,
       email: user.email,
-      lastName: user.LastName,
+      LastName: user.LastName,
       mobile: user.mobile,
+      profileImageName: profileImageName,
     });
   } else {
     res.status(400);
@@ -93,6 +95,8 @@ const googleRegister = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: userExists._id,
       firstName: userExists.firstName,
+      lastName: userExists.LastName,
+      mobile: userExists.mobile,
       email: userExists.email,
 
       profileImageName: profileImageName,
@@ -112,8 +116,10 @@ const googleRegister = asyncHandler(async (req, res) => {
         _id: user._id,
         firstName: user.firstName,
         email: user.email,
-        lastName: user.LastName,
+
         profileImageName: user.profileImageName,
+        LastName: user.LastName,
+        mobile: user.mobile,
       });
     } else {
       res.status(400);
@@ -124,7 +130,24 @@ const googleRegister = asyncHandler(async (req, res) => {
 
 //Load the guide data to display
 const getGuide = asyncHandler(async (req, res) => {
-  const guideData = await Guide.find({ isAuthorized: true, isBlocked: false,isActive:true });
+  const searchName = req.body.Searchquery;
+  const activityFilter = req.body.activityFilter;
+  // const priceRangeFilter = req.body.priceRangeFilter;
+  let query = { isAuthorized: true, isBlocked: false, isActive: true };
+  if (searchName) {
+    query.$or = [
+      { firstname: { $regex: new RegExp(searchName, "i") } },
+      { Lastname: { $regex: new RegExp(searchName, "i") } },
+      { Location: { $regex: new RegExp(searchName, "i") } },
+    ];
+  }
+  if (activityFilter) {
+    query.category = { $in: [activityFilter] };
+  }
+  // if (priceRangeFilter) {
+  //   query.price = { $gte: priceRangeFilter[0], $lte: priceRangeFilter[1] };
+  // }
+  const guideData = await Guide.find(query);
   if (guideData) {
     res.status(200).json({ guideData });
   } else {
@@ -133,6 +156,7 @@ const getGuide = asyncHandler(async (req, res) => {
     throw new Error("Users data fetch failed.");
   }
 });
+
 const getSingleGuide = asyncHandler(async (req, res) => {
   const { id } = req.query;
 
@@ -151,25 +175,23 @@ const getSingleGuide = asyncHandler(async (req, res) => {
 });
 
 const checkAvailablity = asyncHandler(async (req, res) => {
-  console.log("here");
   const { startDate, endDate, guideId } = req.body;
   const currentDate = new Date();
-  console.log(currentDate);
+
   const startDateObj = new Date(startDate);
   const endDateObj = new Date(endDate);
   if (
     startDateObj.getTime() < currentDate.getTime() ||
     endDateObj.getTime() < currentDate.getTime()
   ) {
-   
     res.status(400);
     throw new Error("Start date or end date is in the past");
   }
 
-   if (endDateObj.getTime() < startDateObj.getTime()) {
-     res.status(400);
-     throw new Error("End date cannot be before the start date");
-   }
+  if (endDateObj.getTime() < startDateObj.getTime()) {
+    res.status(400);
+    throw new Error("End date cannot be before the start date");
+  }
 
   const overlappingBookings = await Booking.find({
     guideid: guideId,
@@ -184,6 +206,15 @@ const checkAvailablity = asyncHandler(async (req, res) => {
     throw new Error("GUIDE IS NOT AVAILABLE IN THESE DATES");
   } else {
     return res.status(200).json({ available: true });
+  }
+});
+
+const getBookingDatesGuide = asyncHandler(async (req, res) => {
+  const { guideId } = req.body;
+
+  const bookings = await Booking.find({ guideid: guideId });
+  if (bookings) {
+    res.status(200).json({ bookings });
   }
 });
 
@@ -205,7 +236,6 @@ const GetGuidesOnDates = asyncHandler(async (req, res) => {
       },
     ],
   });
-  console.log(overlappingBookings);
 
   const bookedGuideIds = overlappingBookings.map((booking) => booking.guideid);
 
@@ -214,11 +244,9 @@ const GetGuidesOnDates = asyncHandler(async (req, res) => {
   });
 
   const availableGuideIds = availableGuides.map((guide) => guide._id);
-  console.log(availableGuideIds);
 
   res.status(200).json({ availableGuideIds });
 });
-
 
 const createBooking = asyncHandler(async (req, res) => {
   const {
@@ -234,7 +262,7 @@ const createBooking = asyncHandler(async (req, res) => {
     guideName,
     guideImage,
   } = req.body;
-  console.log(req.body, "jg");
+
   try {
     const newBooking = await Booking.create({
       userEmail: userEmail,
@@ -281,7 +309,7 @@ const getUserData = asyncHandler(async (req, res) => {
 const getBookingData = asyncHandler(async (req, res) => {
   const { id } = req.query;
 
-  const booking = await Booking.find({ userEmail: id });
+  const booking = await Booking.find({ userEmail: id }).sort({ createdAt: -1 });
   if (booking) {
     res.status(200).json({ booking });
   } else {
@@ -293,8 +321,6 @@ const getBookingData = asyncHandler(async (req, res) => {
 
 //forgot password verify email function
 const forgotPassword = asyncHandler(async (req, res) => {
-  console.log(req.body);
-
   const { email } = req.body;
 
   // Check if the user with the given email exists
@@ -310,7 +336,6 @@ const forgotPassword = asyncHandler(async (req, res) => {
     upperCase: false,
     specialChars: false,
   });
-  console.log(otp);
 
   const transporter = nodeMailer.createTransport({
     service: "gmail",
@@ -374,7 +399,6 @@ const verifyAndChangePassword = asyncHandler(async (req, res) => {
 
 //update the newpassword
 const changePassword = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -392,6 +416,49 @@ const changePassword = asyncHandler(async (req, res) => {
     .json({ success: true, message: "Password updated successfully" });
 });
 
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const { email, firstName, LastName, profileImage, mobile } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    user.firstName = firstName || user.firstName;
+    user.LastName = LastName || user.LastName;
+
+    user.mobile = mobile || user.mobile;
+
+    if (profileImage) {
+      const result = await cloudinary.uploader.upload(profileImage, {
+        folder: "profilepic",
+      });
+
+      user.profileImageName = result.secure_url || user.profileImageName;
+    }
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      profileImageName: updatedUser.profileImageName,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const getProfile = asyncHandler(async (req, res) => {
+  console.log(req.query.email);
+  const { email } = req.query;
+
+  const user = await User.findOne({ email });
+  if (user) {
+    res.status(200).json({user});
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -406,5 +473,8 @@ export {
   changePassword,
   getBookingData,
   checkAvailablity,
-  GetGuidesOnDates
+  GetGuidesOnDates,
+  getBookingDatesGuide,
+  updateUserProfile,
+  getProfile,
 };

@@ -34,3 +34,16 @@
   background-color: #4caf50; /* Set the background color for guide messages */
   color: #fff; /* Set the text color for guide messages */
 }
+.notifications-container {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+.notification {
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}

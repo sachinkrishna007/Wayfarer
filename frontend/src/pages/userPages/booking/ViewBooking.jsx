@@ -101,7 +101,7 @@ const ViewBooking = () => {
             <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
               <div className="text-500 w-6 md:w-2 font-medium">End Date</div>
               <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                {moment(BookingData.endtDate).format('LL')}
+                {moment(BookingData.endDate).format('LL')}
               </div>
             </li>
             <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">

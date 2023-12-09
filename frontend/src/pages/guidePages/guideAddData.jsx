@@ -8,9 +8,16 @@ import {
   MDBInput,
   MDBRow,
 } from 'mdb-react-ui-kit'
+import { Dropdown } from 'primereact/dropdown'
 import { useState, useEffect } from 'react'
-import { useGuideAddLanguageMutation,useGuideDeleteLangMutation } from '../../redux/slices/guideSlice/guideApiSlice'
-import { useGuideAddPriceMutation } from '../../redux/slices/guideSlice/guideApiSlice'
+import {
+  useGuideAddLanguageMutation,
+  useGuideDeleteLangMutation,
+} from '../../redux/slices/guideSlice/guideApiSlice'
+import {
+  useGuideAddPriceMutation,
+  useGetCategoryMutation,
+} from '../../redux/slices/guideSlice/guideApiSlice'
 import { useGuideAddDescMutation } from '../../redux/slices/guideSlice/guideApiSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../components/userComponents/loading'
@@ -18,7 +25,10 @@ import NavBar from '../../components/guideComponents/navbar/GuideNavbar'
 
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { useGuideGetDataMutation } from '../../redux/slices/guideSlice/guideApiSlice'
+import {
+  useGuideGetDataMutation,
+  useGuideAddCatagoryMutation,
+} from '../../redux/slices/guideSlice/guideApiSlice'
 const GuideAddData = () => {
   const { guideInfo } = useSelector((state) => state.guideAuth)
   const [price, setPrice] = useState('')
@@ -26,12 +36,17 @@ const GuideAddData = () => {
   const [Desciption, setDescription] = useState('')
 
   const [addLanguage, { isLoading }] = useGuideAddLanguageMutation()
+  const [getCategory, { isCategoryLoading }] = useGetCategoryMutation()
   const [addPrice, { isPriceLoading }] = useGuideAddPriceMutation()
   const [addDescription] = useGuideAddDescMutation()
+  const [addCategory] = useGuideAddCatagoryMutation()
   const navigate = useNavigate()
   const [guideData, setGuideData] = useState([])
+  const [Category, setCategory] = useState('')
+  const [listCategory, setCategorylist] = useState([])
   const [guideDataFromAPI] = useGuideGetDataMutation()
   const [guideDelete] = useGuideDeleteLangMutation()
+  const [dropdownValue, setDropdownValue] = useState(null)
   useEffect(
     () => {
       try {
@@ -39,6 +54,9 @@ const GuideAddData = () => {
           const responseFromApiCall = await guideDataFromAPI({
             guideId: guideInfo.data.email,
           })
+          const category = await getCategory()
+          const categoryArray = category.data.categoriesData
+          setCategorylist(categoryArray)
 
           const guideArray = responseFromApiCall.data.guideData
 
@@ -58,10 +76,31 @@ const GuideAddData = () => {
     [],
     guideData,
   )
+
+  const handleSubmitCategory = async (e) => {
+    e.preventDefault()
+    try {
+      console.log('herheheheh')
+      const responseFromApiCall = await addCategory({
+        guideId: guideInfo.data.email,
+        catagory: dropdownValue,
+      }).unwrap()
+      if (responseFromApiCall) {
+        toast.success('sucessfully added')
+      navigate('/guideHome')
+      }
+    } catch (err) {
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error('An error occurred. Please try again.') // Generic error message
+      }
+    }
+  }
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-        const capitalizedLanguage = Language.toUpperCase()
+      const capitalizedLanguage = Language.toUpperCase()
       const responseFromApiCall = await addLanguage({
         guideId: guideInfo.data.email,
         Lan: capitalizedLanguage,
@@ -119,22 +158,25 @@ const GuideAddData = () => {
 
   const handleDeleteLanguage = async (lan) => {
     try {
-      const response = await guideDelete({lan,guideId:guideInfo.data._id}).unwrap()
-      if(response){
+      const response = await guideDelete({
+        lan,
+        guideId: guideInfo.data._id,
+      }).unwrap()
+      if (response) {
         toast.success('Language deleted')
       }
-       setGuideData((prevData) => {
-         const updatedLanguages = prevData.Language.filter(
-           (lang) => lang !== lan,
-         )
-         return { ...prevData, Language: updatedLanguages }
-       })
+      setGuideData((prevData) => {
+        const updatedLanguages = prevData.Language.filter(
+          (lang) => lang !== lan,
+        )
+        return { ...prevData, Language: updatedLanguages }
+      })
     } catch (error) {
-       if (err.data && err.data.message) {
-         toast.error(err.data.message)
-       } else {
-         toast.error('An error occurred. Please try again.') // Generic error message
-       }
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error('An error occurred. Please try again.') // Generic error message
+      }
     }
   }
   return (
@@ -143,6 +185,7 @@ const GuideAddData = () => {
         <NavBar></NavBar>
         {isLoading && <Loader></Loader>}
         {isPriceLoading && <Loader></Loader>}
+
         <MDBContainer className="py-5">
           <MDBRow>
             <MDBCol className="px-3" lg="6">
@@ -189,8 +232,63 @@ const GuideAddData = () => {
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>
-
             <MDBCol className="px-3" lg="6">
+              <MDBCard>
+                <MDBCardBody>
+                  <MDBCardTitle className="text-center m-4">
+                    Add Category
+                  </MDBCardTitle>
+                  <form onSubmit={handleSubmitCategory}>
+                    <Dropdown
+                      style={{ width: '30rem' }}
+                      value={dropdownValue}
+                      onChange={(e) => setDropdownValue(e.value)}
+                      options={listCategory}
+                      optionLabel="name"
+                      placeholder="Select"
+                    />
+                    {/* Remove the input field for category */}
+                    {/* <MDBInput
+                      required
+                      label="Add Category"
+                      value={Language}
+                      onChange={(e) => setCategory(e.target.value)}
+                    /> */}
+                    <div className="m-2 text-center">
+                      <MDBBtn type="submit" className=" ">
+                        {' '}
+                        Add Category
+                      </MDBBtn>
+                    </div>
+                  </form>
+                  <div>
+                    <strong>Existing Category:</strong>
+                    <ul>
+                      {guideData.category &&
+                        guideData.category.map((lang, index) => (
+                          <li
+                            key={index}
+                            className="d-flex justify-content-between align-items-center"
+                          >
+                            <span>{lang}</span>{' '}
+                            <MDBBtn
+                              color="danger"
+                              size="sm"
+                              onClick={() => handleDeleteLanguage(lang)}
+                            >
+                              Delete
+                            </MDBBtn>
+                          </li>
+                        ))}
+
+                     
+                    </ul>
+                  </div>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+
+            <MDBCol className="px-3 py-8" lg="6">
               <MDBCard>
                 <MDBCardBody>
                   <MDBCardTitle className="text-center m-4">
@@ -214,10 +312,7 @@ const GuideAddData = () => {
                 </MDBCardBody>
               </MDBCard>
             </MDBCol>
-          </MDBRow>
-
-          <MDBRow className="">
-            <MDBCol className="px-3 py-5" lg="20">
+            <MDBCol className="px-3 py-8" lg="6">
               <MDBCard>
                 <MDBCardBody>
                   <MDBCardTitle className="text-center m-4">

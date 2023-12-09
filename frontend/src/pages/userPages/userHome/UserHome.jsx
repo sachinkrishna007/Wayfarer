@@ -1,4 +1,5 @@
 import React from 'react'
+import PrimeLoader from '../../../components/userComponents/primeLoading'
 import Navbars from '../../../components/userComponents/navBar/navBar'
 import Hero from '../../../components/userComponents/hero/hero'
 import Destination from '../../../components/userComponents/hero/destinaion/destination'
@@ -10,7 +11,7 @@ import { useState, useEffect } from 'react'
 import ChatBot from '../../../components/chatBot'
 const UserHome = () => {
   const [loading, setLoading] = useState(true)
-const [showChatbot, setShowChatbot] = useState(false)
+  const [showChatbot, setShowChatbot] = useState(false)
   useEffect(() => {
     setLoading(false)
   })
@@ -19,13 +20,12 @@ const [showChatbot, setShowChatbot] = useState(false)
   }
   return (
     <div>
-      <Navbars />
+      < Navbars />
       <Cover></Cover>
       <ChatBot></ChatBot>
       <Destination></Destination>
       <PopularGuides></PopularGuides>
       <Footer></Footer>
-    
     </div>
   )
 }

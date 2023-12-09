@@ -111,3 +111,21 @@
 .calendar-container {
   flex: 1; /* Takes the remaining space */
 }
+
+/* Add this style in your CSS file */
+.activity-chip {
+  margin-right: 1px; /* Adjust the margin as needed */
+  margin-bottom: 5px; /* Adjust the margin as needed */
+  background-color: #298ca0;
+  color: #fff;
+    font-family: 'Poppins', sans-serif;
+}
+.gradient-button {
+  background: rgb(252, 252, 252); /* Change the colors as needed */
+  border-radius: 18px;
+  height: 40px;
+  margin-top: 1%;
+  color: #000000; /* Change the text color as needed */
+    font-family: 'Poppins', sans-serif;
+
+}

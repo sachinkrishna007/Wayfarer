@@ -76,9 +76,17 @@ export const userSlice = userApiSlice.injectEndpoints({
     }),
 
     getGuideData: builder.mutation({
-      query: () => ({
+      query: (data) => ({
         url: `${USERS_URL}/getGuide`,
-        method: 'GET',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    SearchGuide: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/getGuide`,
+        method: 'POST',
+        body: data,
       }),
     }),
     getRatings: builder.mutation({
@@ -104,6 +112,13 @@ export const userSlice = userApiSlice.injectEndpoints({
       query: () => ({
         url: `${USERS_URL}/getUserData`,
         method: 'GET',
+      }),
+    }),
+    getGuideBookingDates: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/getGuidesBookingDates`,
+        method: 'POST',
+        body: data,
       }),
     }),
     getBookingData: builder.mutation({
@@ -155,6 +170,26 @@ export const userSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    addFollowGuide: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/follow  `,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    updateProfile: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/updateProfile  `,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    getProfile: builder.mutation({
+      query: (query) => ({
+        url: `${USERS_URL}/getProfile?email=${query.email}`,
+        method: 'GET',
+      }),
+    }),
 
     logout: builder.mutation({
       query: () => ({
@@ -188,5 +223,9 @@ export const {
   useGetRatingsMutation,
   useCheckAvilablityGuideMutation,
   useGetBookedDatesMutation,
-  useGetFilteredGuidesMutation
+  useGetFilteredGuidesMutation,
+  useGetGuideBookingDatesMutation,
+ useAddFollowGuideMutation,
+ useUpdateProfileMutation,
+ useGetProfileMutation
 } = userSlice

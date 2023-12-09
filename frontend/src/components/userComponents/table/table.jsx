@@ -81,6 +81,12 @@ export default function BookingTable({ booking }) {
           header="Amount"
           style={{ width: '10%' }}
         ></Column>
+        <Column
+          field="createdAt"
+          header="Booking Date"
+          style={{ width: '10%' }}
+          body={(rowData) => formatDate(rowData.createdAt)}
+        ></Column>
 
         <Column
           header="Action"

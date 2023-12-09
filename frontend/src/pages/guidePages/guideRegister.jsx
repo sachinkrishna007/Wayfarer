@@ -358,7 +358,7 @@ const GuideRegister = () => {
                     onClick={HandleSubmit}
                     disabled={waitLoading}
                   >
-                    {waitLoading ? <GuideLoading></GuideLoading> : 'Register'}
+                    {waitLoading ? '..Loading ' : 'Register'}
                   </MDBBtn>
                 </div>
               </MDBValidation>

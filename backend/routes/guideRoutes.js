@@ -12,7 +12,9 @@ import {
   changePassword,
   getBookingData,
   deleteLanguage,
-  GuideActivateAccount
+  GuideActivateAccount,
+  getCategory,
+  guideAddCategory
 } from "../controllers/guideController.js";
 
 import {
@@ -37,5 +39,7 @@ router.post("/Activate", protect, GuideActivateAccount);
 router.post("/guidesendchat", chatSend);
 router.post("/guidegetmessages", getMessages);
 router.post("/getguiderooms", getGuideRooms);
+router.get('/getCategory',protect,getCategory)
+router.post('/AddCategory',protect,guideAddCategory)
 
 export default router;

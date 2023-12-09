@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../../../redux/slices/guideSlice/guideAuthSlice'
 import { useGuideLogoutMutation } from '../../../redux/slices/guideSlice/guideApiSlice'
-
+import { Badge } from 'primereact/badge'
 import React, { useState, useEffect } from 'react'
 import { Menubar } from 'primereact/menubar'
 import { InputText } from 'primereact/inputtext'
@@ -77,14 +77,18 @@ export default function NavBar() {
     },
     {
       label: (
-        <Link
-          to="/GuideChat"
-          style={{ textDecoration: 'none', color: 'inherit' }}
-        >
-          Messages
-        </Link>
+        <div>
+          <Link
+            to="/GuideChat"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            Messages
+          </Link>
+          {/* <Badge value="0"></Badge> */}
+        </div>
       ),
       icon: 'pi pi-fw pi-users custom-icon',
+
       // Add a link to the guides page
     },
     {
@@ -97,7 +101,7 @@ export default function NavBar() {
               to="/GuideHome"
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
-             Profile
+              Profile
             </Link>
           ),
           icon: 'pi pi-fw pi-users custom-icon',

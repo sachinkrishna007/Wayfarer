@@ -36,7 +36,7 @@ const GuideListing = () => {
     <div>
       <NavBar></NavBar>
 
-      {isLoading ? <Loader /> : <GuideList guide={guideData} />}
+      {isLoading ? <Loader /> : <GuideList  />}
       <Footer></Footer>
     </div>
   )

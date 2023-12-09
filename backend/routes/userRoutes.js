@@ -14,7 +14,10 @@ import {
   verifyAndChangePassword,
   changePassword,
   checkAvailablity,
-  GetGuidesOnDates
+  GetGuidesOnDates,
+  getBookingDatesGuide,
+  updateUserProfile,
+  getProfile
 } from "../controllers/userController.js";
 import {
   getRooms,
@@ -24,11 +27,11 @@ import {
 } from "../controllers/chatController.js";
 
 import { getSingleBooking ,createBooking} from "../controllers/bookingController.js";
-import { AddRating, findRating } from "../controllers/ratingController.js";
+import { AddRating, findRating, followGuide } from "../controllers/ratingController.js";
 
 router.post("/auth", authUser);
 router.post("/register", registerUser);
-router.get("/getGuide", getGuide);
+router.post("/getGuide", getGuide);
 router.post("/googleRegister", googleRegister);
 router.post("/createBooking", protect, createBooking);
 router.get("/getSingleGuide",protect,getSingleGuide);
@@ -43,7 +46,10 @@ router.post("/addRating",protect, AddRating);
 router.post("/getRatings",protect, findRating);
 router.post("/checkAvailablity",protect, checkAvailablity);
 router.post("/filterGuides",protect, GetGuidesOnDates);
-
+router.post('/getGuidesBookingDates',getBookingDatesGuide)
+router.post('/follow',followGuide)
+router.post('/updateProfile',protect,updateUserProfile)
+router.get('/getProfile',protect,getProfile)
 router.get("/logout", logout);
 
 //chat routes

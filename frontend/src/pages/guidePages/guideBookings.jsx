@@ -48,7 +48,7 @@ const GuideBookingData = () => {
   }
   return (
     <div>
-  <NavBar></NavBar>
+      <NavBar></NavBar>
       <div>
         <h3 className="Heading">Bookings</h3>
       </div>
@@ -69,23 +69,23 @@ const GuideBookingData = () => {
           <Column
             field="userName"
             header="Name"
-            style={{ width: '15%' }}
+            style={{ width: '10%' }}
           ></Column>
           <Column
             field="location"
             header="Location"
-            style={{ width: '15%' }}
+            style={{ width: '10%' }}
           ></Column>
           <Column
             field="startDate"
             header="Start Date"
-            style={{ width: '15%' }}
+            style={{ width: '10%' }}
             body={(rowData) => formatDate(rowData.startDate)}
           ></Column>
           <Column
             field="endDate"
             header="End Date"
-            style={{ width: '15%' }}
+            style={{ width: '10%' }}
             body={(rowData) => formatDate(rowData.endDate)}
           ></Column>
           <Column
@@ -97,6 +97,12 @@ const GuideBookingData = () => {
             field="status"
             header="Status"
             style={{ width: '10%' }}
+          ></Column>
+          <Column
+            field="createdAt"
+            header="Booking Date"
+            style={{ width: '10%' }}
+            body={(rowData) => formatDate(rowData.createdAt)}
           ></Column>
           <Column
             field="totalAmount"

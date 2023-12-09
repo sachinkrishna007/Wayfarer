@@ -1,8 +1,28 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
+import { useNavigate } from 'react-router-dom'
+import debounce from 'lodash/debounce'
 import './cover.css'
 const Cover = () => {
+  const navigate = useNavigate()
+  const [searchQuery, setSearchQuery] = useState('')
+  const searchHandler = (event) => {
+    const { value } = event.target
+    debouncedSearchHandler(value)
+  }
+
+
+    const debouncedSearchHandler = debounce((value) => {
+      setSearchQuery(value)
+    }, 400)
+
+    useEffect(() => {
+      // Navigate when the state has been updated
+      if (searchQuery.trim() !== '') {
+        navigate(`/guideList`)
+      }
+    }, [searchQuery, navigate])
   return (
     <div>
       <div className="grid grid-nogutter surface-0 text-800">
@@ -28,7 +48,10 @@ const Cover = () => {
             />
             <span className="p-input-icon-left">
               <i className="pi pi-search SearchCover" />
-              <InputText placeholder="Search Your Location" />
+              <InputText
+                placeholder="Search Your Location"
+                onChange={searchHandler}
+              />
             </span>
           </section>
         </div>
@@ -41,7 +64,6 @@ const Cover = () => {
           />
         </div>
       </div>
-     
     </div>
   )
 }

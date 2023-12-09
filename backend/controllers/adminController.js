@@ -4,7 +4,7 @@ import asyncHandler from "express-async-handler";
 import AdmingenarateToken from "../utils/adminGenerateToken.js";
 import User from "../models/userModel.js";
 import Booking from "../models/bookingModel.js";
-
+import Category from "../models/categoryModels.js";
 const adminAuth = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -156,7 +156,7 @@ const listGuide = asyncHandler(async (req, res) => {
 
 const getAdminBookingData = asyncHandler(async (req, res) => {
   console.log("here");
-  const booking = await Booking.find({});
+  const booking = await Booking.find({}).sort({ createdAt: -1 });
   if (booking) {
     res.status(200).json({ booking });
   } else {
@@ -185,22 +185,22 @@ const loadDashboard = asyncHandler(async (req, res) => {
     0
   );
 
-   const startOfWeek = new Date(
-     currentDate.getFullYear(),
-     currentDate.getMonth(),
-     currentDate.getDate() - currentDate.getDay(), // Start of the current week
-     0,
-     0,
-     0
-   );
-   const endOfWeek = new Date(
-     currentDate.getFullYear(),
-     currentDate.getMonth(),
-     currentDate.getDate() - currentDate.getDay() + 7, // End of the current week
-     0,
-     0,
-     0
-   );
+  const startOfWeek = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() - currentDate.getDay(), // Start of the current week
+    0,
+    0,
+    0
+  );
+  const endOfWeek = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() - currentDate.getDay() + 7, // End of the current week
+    0,
+    0,
+    0
+  );
 
   const BookingAmount = await Booking.aggregate([
     {
@@ -258,30 +258,27 @@ const loadDashboard = asyncHandler(async (req, res) => {
     createdAt: { $gte: startOfDay, $lt: endOfDay },
   }).count();
 
- 
   const loggedInUsers = await User.find({
     createdAt: { $gte: startOfDay, $lt: endOfDay },
   }).count();
-
-  
 
   const guidesRegistered = await Guide.find({
     createdAt: { $gte: startOfDay, $lt: endOfDay },
   }).count();
 
-   const weeklyBookingAmountChange = await Booking.aggregate([
-     {
-       $match: {
-         createdAt: { $gte: startOfWeek, $lt: endOfWeek },
-       },
-     },
-     {
-       $group: {
-         _id: null,
-         totalAmountSum: { $sum: { $toInt: "$totalAmount" } },
-       },
-     },
-   ]);
+  const weeklyBookingAmountChange = await Booking.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: startOfWeek, $lt: endOfWeek },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalAmountSum: { $sum: { $toInt: "$totalAmount" } },
+      },
+    },
+  ]);
   res.status(200).json({
     BookingAmount,
     BookingSales,
@@ -294,6 +291,25 @@ const loadDashboard = asyncHandler(async (req, res) => {
     currentDayBooking,
     weeklyBookingAmountChange,
   });
+});
+
+const createCategory = asyncHandler(async (req, res) => {
+  console.log(req.body);
+  const { CategoryName } = req.body;
+  const existingCategory = await Category.findOne({ CategoryName });
+
+  if (existingCategory) {
+    res.status(400);
+
+    throw new Error("Category Already Exists");
+  }
+
+  const newCategory = new Category({
+    name:CategoryName
+  });
+
+  await newCategory.save();
+  res.status(200).json({ newCategory });
 });
 
 export {
@@ -309,4 +325,5 @@ export {
   UnBlockGuide,
   getAdminBookingData,
   loadDashboard,
+  createCategory,
 };

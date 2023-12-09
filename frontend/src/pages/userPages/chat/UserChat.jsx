@@ -38,10 +38,10 @@ export default function UserChat() {
 
   const { id } = useParams()
 
-   const formatTime = (timestamp) => {
-     const options = { hour: 'numeric', minute: 'numeric' }
-     return new Date(timestamp).toLocaleTimeString('en-US', options)
-   }
+  const formatTime = (timestamp) => {
+    const options = { hour: 'numeric', minute: 'numeric' }
+    return new Date(timestamp).toLocaleTimeString('en-US', options)
+  }
 
   useEffect(() => {
     socket = io(ENDPOINT)
@@ -97,21 +97,20 @@ export default function UserChat() {
   }, [chatId, messageSent])
 
   useEffect(() => {
-
-      const scrollToBottom = () => {
-        const chatBody = document.getElementById('chat-body')
-        if (chatBody) {
-          chatBody.scrollTop = chatBody.scrollHeight
-        }
+    const scrollToBottom = () => {
+      const chatBody = document.getElementById('chat-body')
+      if (chatBody) {
+        chatBody.scrollTop = chatBody.scrollHeight
       }
+    }
 
-      // Scroll to bottom when component mounts
-      scrollToBottom()
+    // Scroll to bottom when component mounts
+    scrollToBottom()
     socket.on('message received', (newMessageReceived) => {
       if (!selectedChatCompare || chatId !== newMessageReceived.room._id) {
       } else {
         setChats([...chats, newMessageReceived])
-          scrollToBottom()
+        scrollToBottom()
       }
     })
   })
@@ -173,7 +172,9 @@ export default function UserChat() {
 
                 <MDBCardFooter className="text-muted d-flex justify-content-start align-items-center p-3">
                   <img
-                    src={userInfo.profileImageName}
+                    src={
+                      userInfo.profileImageName ? userInfo.profileImageName : ''
+                    }
                     alt=""
                     style={{ width: '45px', height: '100%' }}
                   />

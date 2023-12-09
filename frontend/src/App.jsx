@@ -26,16 +26,18 @@ import AdminLogin from './pages/admin/Adminlogin'
 import AdminHome from './pages/admin/adminHome'
 import Userlist from './pages/admin/userList'
 import GuideData from './pages/admin/guideList'
+import Category from './pages/admin/Category'
 
 import 'react-toastify/dist/ReactToastify.css'
 import PrivateRoute from './components/userComponents/privateRoute'
 import AdminBookingData from './pages/admin/Booking'
-import AdminDashboard from './pages/admin/adminDAshboard'
+import AdminDashboard from './pages/admin/adminDashboard'
 import GuidePrivateRoute from './components/guideComponents/guidePrivateRoute'
 import AdminPrivateRoute from './components/adminComponents/AdminCard/AdminPrivateRoute'
 import ChangePassword from './pages/guidePages/passwordPages/ChangePassword'
 import UserChat from './pages/userPages/chat/UserChat'
 import GuideChat from './pages/guidePages/guideChat/guideChat'
+import UserProfile from './pages/userPages/UserProfile/userProfile'
 const App = () => {
   return (
     <div style={{ position: 'relative' }}>
@@ -66,6 +68,8 @@ const App = () => {
         <Route path="/Bookings" element={<BookingData />} />
         <Route path="/ViewBooking/:bookingId" element={<ViewBooking />} />
         <Route path="/UserChat/:id" element={<UserChat />} />
+        <Route path="/Profile" element={<UserProfile />} />
+
 
         <Route
           path="/guideDetailedView/:userId"
@@ -120,6 +124,10 @@ const App = () => {
         <Route
           path="/AdminBookingData"
           element={<AdminPrivateRoute element={<AdminBookingData />} />}
+        />
+        <Route
+          path="/Category"
+          element={<AdminPrivateRoute element={<Category />} />}
         />
       </Routes>
     </div>

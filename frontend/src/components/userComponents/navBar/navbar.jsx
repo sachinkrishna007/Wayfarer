@@ -83,8 +83,16 @@ export default function NavBar() {
       icon: 'pi pi-fw pi-user custom-icon',
       items: [
         {
-          label: 'profile',
-          icon: 'pi pi-fw pi-user ',
+          label: (
+            <Link
+              to="/Profile"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+             Profile
+            </Link>
+          ),
+          icon: 'pi pi-fw pi-users custom-icon',
+          // Add a link to the guides page
         },
       ],
     },

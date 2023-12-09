@@ -78,6 +78,13 @@ export const adminSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    CreateCategory: builder.mutation({
+      query: (data) => ({
+        url: `${ADMIN_URL}/category`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 })
 
@@ -92,5 +99,6 @@ export const {
   useUnBlockGuideMutation,
   useListGuideMutation,
   useGetAdminBookingDataMutation,
-  useGetAdminDAshboardMutation
+  useGetAdminDAshboardMutation,
+  useCreateCategoryMutation
 } = adminSlice

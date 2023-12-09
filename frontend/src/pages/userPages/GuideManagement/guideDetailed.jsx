@@ -2,6 +2,10 @@ import NavBar from '../../../components/userComponents/navBar/navBar'
 import './guideDetailed.css'
 import Footer from '../../../components/userComponents/footer/footer'
 import DatePicker from 'react-datepicker'
+import React, { lazy, Suspense } from 'react'
+const FullCalendar = lazy(() => import('@fullcalendar/react'))
+import dayGridPlugin from '@fullcalendar/daygrid'
+import { Dialog } from 'primereact/dialog'
 import { Calendar } from 'primereact/calendar'
 import { useState, useEffect } from 'react'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -12,11 +16,16 @@ import { Button } from 'primereact/button'
 import { Chip } from 'primereact/chip'
 import { Knob } from 'primereact/knob'
 import { Sidebar } from 'primereact/sidebar'
+
 import { Link } from 'react-router-dom'
-import { useGetRatingsMutation } from '../../../redux/slices/userApiSlice'
+import {
+  useGetRatingsMutation,
+  useGetGuideBookingDatesMutation,
+} from '../../../redux/slices/userApiSlice'
 import {
   useCheckAvilablityGuideMutation,
   useGetBookedDatesMutation,
+  useAddFollowGuideMutation
 } from '../../../redux/slices/userApiSlice'
 
 import {
@@ -40,21 +49,29 @@ export default function EditButton() {
   const [startDate, setStartDate] = useState('')
   const [availabilityStatus, setAvailabilityStatus] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [averageRating, setAverageRating] = useState(0)
+  const [CalenderDates, setCalenderDates] = useState([])
+  const [guideData, setGuideData] = useState('')
+  const [rating, setGuiderating] = useState('')
+  const [visible, setVisible] = useState(false)
+  const [visibleCalander, setVisibleCalender] = useState(false)
+  const [bookedDates, setBookedDates] = useState([])
+  const [booking, setBooking] = useState('')
+  const [bookingCount, setBookingCount] = useState(0)
+ 
   const id = location.pathname.split('/')[2]
   const [guideSingleDataFromAPI] = useGetSingleGuideMutation()
   const [overlappingDates] = useCheckAvilablityGuideMutation()
   const [getRatings] = useGetRatingsMutation()
-  
-  const [averageRating, setAverageRating] = useState(0)
+  const [getGuideBookingDates] = useGetGuideBookingDatesMutation()
+  const [followGuide] = useAddFollowGuideMutation()
 
-  const [guideData, setGuideData] = useState('')
-  const [rating, setGuiderating] = useState('')
   const { userInfo } = useSelector((state) => state.auth)
-  const [booking, setBooking] = useState('')
-  const [bookingCount, setBookingCount] = useState(0)
+    //  const initialIsFollowing = guideData.followers
+    //    ? guideData.followers.includes(userInfo._id)
+    //    : false
+     const [isFollowing, setIsFollowing] = useState('')
   const navigate = useNavigate()
-  const [visible, setVisible] = useState(false)
-  const [bookedDates, setBookedDates] = useState([])
   useEffect(() => {
     try {
       const fetchData = async () => {
@@ -65,6 +82,7 @@ export default function EditButton() {
         const guide = await responseFromApiCall.data.guideData
 
         setGuideData(guide)
+         setIsFollowing(guide.followers.includes(userInfo._id))
         setLoading(false)
       }
 
@@ -74,9 +92,32 @@ export default function EditButton() {
 
       console.error('Error fetching users:', error)
     }
+  }, [guideData])
+
+  const handleFollow = async () => {
+    console.log('sdsgfsdgvgsd');
+    const responseFromApiCall = await followGuide({ userId: userInfo._id, guideId: id }).unwrap()
+    if (responseFromApiCall) {
+      console.log(responseFromApiCall);
+         setIsFollowing(responseFromApiCall.message)
+     console.log(responseFromApiCall);
+    //  toast.success(responseFromApiCall.message)
+    }
+  }
+
+  useEffect(() => {
+    try {
+      const fetchBookedDates = async () => {
+        const responseFromApiCall = await getGuideBookingDates({ guideId: id })
+        const BookedDates = await responseFromApiCall.data.bookings
+        console.log(BookedDates)
+        setCalenderDates(BookedDates)
+      }
+      fetchBookedDates()
+    } catch (error) {
+      toast.error(error)
+    }
   }, [])
-
-
 
   useEffect(() => {
     try {
@@ -189,7 +230,42 @@ export default function EditButton() {
                     <MDBCardText className="guideLoc" tag="h6">
                       {guideData.Location}
                     </MDBCardText>
+                    <div className="follower-count">
+                      <h6>Followers: {guideData.followers.length}</h6>
+                    </div>
+
+                    <div className="card flex flex-wrap justify-content-center gap-3">
+                      {guideData.followers.includes(userInfo._id) ? (
+                        <Button
+                          label={'Following'}
+                          severity="success"
+                          text
+                          raised
+                          rounded
+                          onClick={handleFollow}
+                        />
+                      ) : (
+                        <Button
+                          label={'Follow'}
+                          severity="warning"
+                          text
+                          raised
+                          rounded
+                          onClick={handleFollow}
+                        />
+                      )}
+
+                      {/* <Button
+                        label={isFollowing ? 'Following' : 'Follow Guide'}
+                        severity="help"
+                        text
+                        raised
+                        rounded
+                        onClick={handleFollow}
+                      /> */}
+                    </div>
                   </div>
+
                   <div className="justify-content-center knob1">
                     {averageRating > 0 ? (
                       <Knob
@@ -212,6 +288,7 @@ export default function EditButton() {
                     <h6 style={{ paddingLeft: '1px' }}>Completed trips </h6>
                   </div>
                 </div>
+
                 <div
                   className="p-4 text-black"
                   style={{ backgroundColor: '#f8f9fa' }}
@@ -255,6 +332,22 @@ export default function EditButton() {
                     </div>
                   </li>
                   <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                    <div className="text-500 w-6 md:w-2 font-medium">
+                      Activities
+                    </div>
+                    <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                      {guideData.category.map((cat, index) => (
+                        <Chip
+                          key={index}
+                          label={cat}
+                          className={
+                            index < guideData.category.length - 1 ? 'mr-2' : ''
+                          }
+                        />
+                      ))}
+                    </div>
+                  </li>
+                  <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
                     <div className="text-500 w-6 md:w-2 font-medium">Email</div>
                     <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                       {guideData.email}
@@ -272,6 +365,7 @@ export default function EditButton() {
                     <div className="text-500 w-6 md:w-2 font-medium">
                       Start Date
                     </div>
+
                     <div className="mb-2">
                       <DatePicker
                         selected={startDate}
@@ -282,6 +376,52 @@ export default function EditButton() {
                         dateFormat="dd/MM/yyyy"
                         className="form-control"
                       />
+                    </div>
+                    <div className="card flex justify-content-center">
+                      <Button
+                        label="Availablity"
+                        icon="pi pi-external-link"
+                        onClick={() => setVisibleCalender(true)}
+                        style={{
+                          paddingLeft: '20px',
+                          marginLeft: '30px',
+                          height: '40px',
+                        }}
+                      />
+                      <Dialog
+                        header="Calender"
+                        visible={visibleCalander}
+                        style={{ width: '60vw' }}
+                        onHide={() => setVisibleCalender(false)}
+                      >
+                        <Suspense fallback={<Loader />}>
+                          <div>
+                            <FullCalendar
+                              style={{ width: '50px' }}
+                              plugins={[dayGridPlugin]}
+                              initialView="dayGridMonth"
+                              events={CalenderDates.map((booking) => ({
+                                title: 'not available',
+                                start: new Date(booking.startDate),
+                                end: new Date(booking.endDate),
+                                color: '#FFA500',
+                              }))}
+                              eventContent={(eventInfo) => {
+                                return (
+                                  <div
+                                    style={{
+                                      backgroundColor:
+                                        eventInfo.event.backgroundColor,
+                                    }}
+                                  >
+                                    {'Not Available'}
+                                  </div>
+                                )
+                              }}
+                            />
+                          </div>
+                        </Suspense>
+                      </Dialog>
                     </div>
                   </li>
                   <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
@@ -300,6 +440,7 @@ export default function EditButton() {
                       />
                     </div>
                   </li>
+
                   <div className="mb-2">
                     <Button
                       onClick={checkAvailability}
@@ -323,7 +464,7 @@ export default function EditButton() {
                     <div className=" justify-content-center">
                       <Sidebar
                         visible={visible}
-                        style={{ width: '70%' }}
+                        style={{ width: '40%' }}
                         position="right"
                         onHide={() => setVisible(false)}
                       >
@@ -333,17 +474,16 @@ export default function EditButton() {
                           </section>
                         ) : (
                           <>
-                            <MDBTypography tag="h0" className="mb-0">
-                              Recent comments
-                            </MDBTypography>
-                            <p className="fw-light mb-4 pb-2">
-                              Latest Comments section by users
-                            </p>
+                            <MDBTypography
+                              tag="h0"
+                              className="mb-0"
+                            ></MDBTypography>
+                            <h4 className="">Recent Feedbacks</h4>
                             {rating.map((data) => (
                               <section key={data._id}>
                                 <MDBContainer
                                   className="py-5"
-                                  style={{ maxWidth: '1000px' }}
+                                  style={{ maxWidth: '1500px' }}
                                 >
                                   <MDBRow className="justify-content-center">
                                     <MDBCol md="12" lg="10">
@@ -401,6 +541,7 @@ export default function EditButton() {
         </MDBContainer>
       </div>
       <div></div>
+
       <Footer></Footer>
     </div>
   )
