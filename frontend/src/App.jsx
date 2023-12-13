@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Register from './pages/userPages/register'
-import { Flip, ToastContainer } from 'react-toastify'
+import { Bounce, Flip, ToastContainer, Zoom } from 'react-toastify'
 
 import Login from './pages/userPages/login/login'
 import UserHome from './pages/userPages/userHome/UserHome'
@@ -38,15 +38,20 @@ import ChangePassword from './pages/guidePages/passwordPages/ChangePassword'
 import UserChat from './pages/userPages/chat/UserChat'
 import GuideChat from './pages/guidePages/guideChat/guideChat'
 import UserProfile from './pages/userPages/UserProfile/userProfile'
+import GuideBlog from './pages/guidePages/blog/guideBlog'
+import UserBlog from './pages/userPages/blogs/userBlog'
+import GuideViewBlog from './pages/guidePages/blog/viewBlogs'
+import Following from './pages/followers'
+
 const App = () => {
   return (
     <div style={{ position: 'relative' }}>
       <ToastContainer
         position="top-right"
-        transition={Flip}
-        autoClose={5000}
+        transition={Zoom}
+        autoClose={6000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
@@ -69,7 +74,8 @@ const App = () => {
         <Route path="/ViewBooking/:bookingId" element={<ViewBooking />} />
         <Route path="/UserChat/:id" element={<UserChat />} />
         <Route path="/Profile" element={<UserProfile />} />
-
+        <Route path="/blogs" element={<UserBlog />} />
+        <Route path="/Following" element={<Following />} />
 
         <Route
           path="/guideDetailedView/:userId"
@@ -100,6 +106,14 @@ const App = () => {
         <Route
           path="/GuideBookings"
           element={<GuidePrivateRoute element={<GuideBookingData />} />}
+        />
+        <Route
+          path="/GuideBlogs"
+          element={<GuidePrivateRoute element={<GuideBlog />} />}
+        />
+        <Route
+          path="/GuideViewBlogs"
+          element={<GuidePrivateRoute element={<GuideViewBlog />} />}
         />
 
         {/* --------------------Admin Routes----------------------------------------- */}

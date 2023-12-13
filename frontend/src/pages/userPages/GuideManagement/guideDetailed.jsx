@@ -226,6 +226,10 @@ export default function EditButton() {
                     <MDBTypography tag="h2" className="guideName">
                       {' '}
                       {guideData.firstname} {guideData.Lastname}
+                      <i
+                        style={{ paddingLeft: '20px ', color: 'blue' }}
+                        className="pi pi-verified"
+                      ></i>
                     </MDBTypography>
                     <MDBCardText className="guideLoc" tag="h6">
                       {guideData.Location}
@@ -493,8 +497,8 @@ export default function EditButton() {
                                             <MDBCardImage
                                               className="rounded-circle shadow-1-strong me-3"
                                               src={
-                                                data.userImage
-                                                  ? data.userImage
+                                                data.userId.profileImageName
+                                                  ? data.userId.profileImageName
                                                   : 'https://cdn-icons-png.flaticon.com/512/1253/1253756.png'
                                               }
                                               alt="avatar"
@@ -506,7 +510,8 @@ export default function EditButton() {
                                                 tag="h6"
                                                 className="fw-bold mb-1"
                                               >
-                                                {data.userName}
+                                                {data.userId.firstName}{' '}
+                                                {data.userId.LastName}
                                               </MDBTypography>
                                               <div className="d-flex align-items-center mb-3">
                                                 <p className="mb-0">

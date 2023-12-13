@@ -123,7 +123,7 @@ export const userSlice = userApiSlice.injectEndpoints({
     }),
     getBookingData: builder.mutation({
       query: (params) => ({
-        url: `${USERS_URL}/getBookingData?id=${params.email}`,
+        url: `${USERS_URL}/getBookingData?id=${params.email}&status=${params.status}`,
         method: 'GET',
       }),
     }),
@@ -186,7 +186,28 @@ export const userSlice = userApiSlice.injectEndpoints({
     }),
     getProfile: builder.mutation({
       query: (query) => ({
-        url: `${USERS_URL}/getProfile?email=${query.email}`,
+        url: `${USERS_URL}/getProfile?email=${query.email}&userId=${query.userId}`,
+
+        method: 'GET',
+      }),
+    }),
+    getFollowing: builder.mutation({
+      query: (query) => ({
+        url: `${USERS_URL}/getFollowing?userId=${query.userId}`,
+
+        method: 'GET',
+      }),
+    }),
+    CancelBooking: builder.mutation({
+      query: (query) => ({
+        url: `${USERS_URL}/CancelBooking?BookingId=${query.bookingId}&userId=${query.userId}`,
+
+        method: 'GET',
+      }),
+    }),
+    getBlogs: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/getBlog`,
         method: 'GET',
       }),
     }),
@@ -227,5 +248,8 @@ export const {
   useGetGuideBookingDatesMutation,
  useAddFollowGuideMutation,
  useUpdateProfileMutation,
- useGetProfileMutation
+ useGetProfileMutation,
+ useGetBlogsMutation,
+ useGetFollowingMutation,
+ useCancelBookingMutation
 } = userSlice

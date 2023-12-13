@@ -23,6 +23,7 @@ import {
   getGuideRooms,
 } from "../controllers/chatController.js";
 import { protect } from "../middleware/guideAuthMiddlware.js";
+import { GuidedeleteBlog, GuidegetBlogs, createBlog } from "../controllers/blogController.js";
 
 router.post("/authGuide", authGuide);
 router.post("/registerGuide", registerGuide);
@@ -41,5 +42,8 @@ router.post("/guidegetmessages", getMessages);
 router.post("/getguiderooms", getGuideRooms);
 router.get('/getCategory',protect,getCategory)
 router.post('/AddCategory',protect,guideAddCategory)
+router.post('/createBlog',protect,createBlog)
+router.get('/guideGetBlogs',protect,GuidegetBlogs)
+router.delete('/deleteBlog',protect,GuidedeleteBlog)
 
 export default router;

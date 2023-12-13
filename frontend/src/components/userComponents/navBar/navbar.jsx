@@ -64,6 +64,14 @@ export default function NavBar() {
       ),
       icon: 'pi pi-fw pi-users custom-icon',
     },
+    {
+      label: (
+        <Link to="/blogs" style={{ textDecoration: 'none', color: 'inherit' }}>
+          Blogs
+        </Link>
+      ),
+      icon: 'pi pi-id-card',
+    },
 
     {
       label: (
@@ -88,7 +96,7 @@ export default function NavBar() {
               to="/Profile"
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
-             Profile
+              Profile
             </Link>
           ),
           icon: 'pi pi-fw pi-users custom-icon',

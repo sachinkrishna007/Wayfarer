@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Card } from 'primereact/card'
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
@@ -6,13 +6,14 @@ import './admincard.css'
 import { toast } from 'react-toastify'
 import { PROFILE_IMAGE_DIR_PATH } from '../../../utils/constances'
 import { useGuideAcceptRequestMutation } from '../../../redux/slices/adminSlice/adminApiSlice'
-export default function AdminCard({ guide }) {
-  console.log(guide)
+import { useGuideRequestMutation } from '../../../redux/slices/adminSlice/adminApiSlice'
+export default function AdminCard() {
+ 
   const [visible, setVisible] = useState(false)
-
+ const [guide, setGuideData] = useState([])
   const [selectedGuide, setSelectedGuide] = useState(null)
   const [guideId, setacceptReqGuide] = useState(null)
-
+const [guideDataFromAPI] = useGuideRequestMutation()
   const [showModal, setShowModal] = useState(false) // State for the update modal
   const [acceptGuide, { isLoading }] = useGuideAcceptRequestMutation()
   console.log(selectedGuide)
@@ -23,6 +24,21 @@ export default function AdminCard({ guide }) {
 
   const footer = <></>
 
+    const fetchData = async () => {
+      const responseFromApiCall = await guideDataFromAPI()
+
+      const guideArray = responseFromApiCall.data.guideData
+
+      setGuideData(guideArray)
+    }
+
+ 
+    useEffect(() => {
+      
+      fetchData()
+     
+    }, [])
+
   const handleAgree = async () => {
     try {
       console.log(guideId)
@@ -30,10 +46,11 @@ export default function AdminCard({ guide }) {
       const responseFromApiCall = await acceptGuide({ userId: guideId })
       if (responseFromApiCall) {
         toast.success('User accepted Successfully.')
-        const updatedGuides = guide.filter((item) => item.id !== guideId)
+        fetchData()
+     
         setacceptReqGuide(null) 
         setShowModal(false)
-        setGuide(updatedGuides)
+        
       }
     } catch (err) {}
   }

@@ -147,7 +147,7 @@ const getGuide = asyncHandler(async (req, res) => {
   // if (priceRangeFilter) {
   //   query.price = { $gte: priceRangeFilter[0], $lte: priceRangeFilter[1] };
   // }
-  const guideData = await Guide.find(query);
+  const guideData = await Guide.find(query).sort({ createdAt: -1 })
   if (guideData) {
     res.status(200).json({ guideData });
   } else {
@@ -212,7 +212,7 @@ const checkAvailablity = asyncHandler(async (req, res) => {
 const getBookingDatesGuide = asyncHandler(async (req, res) => {
   const { guideId } = req.body;
 
-  const bookings = await Booking.find({ guideid: guideId });
+  const bookings = await Booking.find({ guideid: guideId, status: "Accepted" });
   if (bookings) {
     res.status(200).json({ bookings });
   }
@@ -307,9 +307,10 @@ const getUserData = asyncHandler(async (req, res) => {
   }
 });
 const getBookingData = asyncHandler(async (req, res) => {
-  const { id } = req.query;
-
-  const booking = await Booking.find({ userEmail: id }).sort({ createdAt: -1 });
+  console.log(req.query);
+  const { id ,} = req.query;
+let query = {  };
+  const booking = await Booking.find({ userEmail: id, }).sort({ createdAt: -1 });
   if (booking) {
     res.status(200).json({ booking });
   } else {
@@ -450,14 +451,28 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 const getProfile = asyncHandler(async (req, res) => {
-  console.log(req.query.email);
-  const { email } = req.query;
+  
+  const { email,userId } = req.query;
 
   const user = await User.findOne({ email });
+  // const guide = await Guide.findOne({ followers: userId })
+  //   .populate("followers")
+  //   .exec();
+  //   console.log('g');
   if (user) {
     res.status(200).json({user});
   }
 });
+
+const getFollowing = asyncHandler(async(req,res)=>{
+  console.log(req.query);
+  const {userId} = req.query
+  const following = await Guide.find({followers:userId}).sort({createdAt:-1})
+  if(following){
+    
+    res.status(200).json({following})
+  }
+})
 
 export {
   authUser,
@@ -477,4 +492,5 @@ export {
   getBookingDatesGuide,
   updateUserProfile,
   getProfile,
+  getFollowing,
 };

@@ -12,20 +12,8 @@ const BookingData = () => {
   const [mail, setEmail] = useState('')
   const { userInfo } = useSelector((state) => state.auth)
 
-  useEffect(() => {
-    fetchData()
-  }, [])
 
-  const fetchData = async () => {
-    const responseFromApiCall = await bookingDataFromAPI({
-      email: userInfo.email,
-    })
-    console.log(responseFromApiCall)
-
-    const bookingData = responseFromApiCall.data.booking
-
-    setData(bookingData)
-  }
+ 
   return (
     <div>
       <NavBar />
@@ -38,7 +26,7 @@ const BookingData = () => {
       />
 
       <div className="userTable">
-        <BookingTable className="tble" booking={Data} />
+        <BookingTable className="tble" />
       </div>
     </div>
   )

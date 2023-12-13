@@ -1,9 +1,35 @@
 import React from 'react'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
+import { Dropdown } from 'primereact/dropdown'
 import './userTable.css'
+import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useGetBookingDataMutation } from '../../../redux/slices/userApiSlice'
 import { Link } from 'react-router-dom'
-export default function BookingTable({ booking }) {
+export default function BookingTable() {
+  const { userInfo } = useSelector((state) => state.auth)
+  const [bookingDataFromAPI, { isLoading }] = useGetBookingDataMutation()
+    const [activityFilter, setActivityFilter] = useState('')
+  const [Data, setData] = useState([])
+  const fetchData = async () => {
+    const responseFromApiCall = await bookingDataFromAPI({
+      email: userInfo.email,
+      status: activityFilter,
+    })
+    console.log(responseFromApiCall)
+
+    const bookingData = responseFromApiCall.data.booking
+
+    setData(bookingData)
+  }
+    const handleActivityFilter = (event) => {
+      const { value } = event.target
+      setActivityFilter(value)
+    }
+  useEffect(() => {
+    fetchData()
+  }, [])
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString()
@@ -31,8 +57,18 @@ export default function BookingTable({ booking }) {
 
   return (
     <div className="card">
+      {/* <span className="p-float-label  p-input-icon-left p-input-group">
+        <Dropdown
+          value={activityFilter}
+          options={['Accepted', 'Cancelled']} // Add your activity options
+          onChange={handleActivityFilter}
+          option="Activity"
+          placeholder="Select an activity"
+        />
+        <label htmlFor="activityFilter">Filter by Activity</label>
+      </span> */}
       <DataTable
-        value={booking}
+        value={Data}
         paginator
         rows={5}
         rowsPerPageOptions={[5, 10, 25, 50]}

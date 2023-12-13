@@ -109,6 +109,26 @@ export const guideSlice = userApiSlice.injectEndpoints({
         method: 'GET',
       }),
     }),
+
+    deleteBlog: builder.mutation({
+      query: (query) => ({
+        url: `${GUIDE_URL}/deleteBlog?blogId=${query.blogId}`,
+        method: 'Delete',
+      }),
+    }),
+    guideGetBlogs: builder.mutation({
+      query: (query) => ({
+        url: `${GUIDE_URL}/guideGetBlogs?guide=${query.guide}`,
+        method: 'GET',
+      }),
+    }),
+    createBlogs: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/createBlog`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
     GuidegetRooms: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/getguiderooms`,
@@ -135,5 +155,8 @@ export const {
   useGuideDeleteLangMutation,
   useGuideActivateMutation,
   useGetCategoryMutation,
-  useGuideAddCatagoryMutation
+  useGuideAddCatagoryMutation,
+  useCreateBlogsMutation,
+  useGuideGetBlogsMutation,
+  useDeleteBlogMutation
 } = guideSlice

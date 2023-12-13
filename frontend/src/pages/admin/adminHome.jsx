@@ -12,30 +12,13 @@ const AdminHome = () => {
   const navigate = useNavigate()
   const [guideDataFromAPI, { isLoading }] = useGuideRequestMutation()
   const { adminInfo } = useSelector((state) => state.adminAuth)
-  useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const responseFromApiCall = await guideDataFromAPI()
 
-        const guideArray = responseFromApiCall.data.guideData
-        console.log('llll', guideArray)
 
-        setGuideData(guideArray)
-      }
-
-      fetchData()
-    } catch (error) {
-      toast.error(error)
-
-      console.error('Error fetching users:', error)
-    }
-  }, [])
-  console.log(guideData)
   return (
     <div>
       <AdminSidebar></AdminSidebar>
     
-      {isLoading ? <Loader /> : <AdminCard guide={guideData} />}
+      {isLoading ? <Loader /> : <AdminCard  />}
     </div>
   )
 }

@@ -64,6 +64,36 @@ export default function NavBar() {
     //   // Add a link to the guides page
     // },
     {
+      label: 'Blogs', // Dynamically include the user name
+      icon: 'pi pi-id-card',
+      items: [
+        {
+          label: (
+            <Link
+              to="/GuideBlogs"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              Add Blogs
+            </Link>
+          ),
+          icon: 'pi pi-fw pi-users custom-icon',
+          // Add a link to the guides page
+        },
+        {
+          label: (
+            <Link
+              to="/GuideViewBlogs"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              View Blogs
+            </Link>
+          ),
+          icon: 'pi pi-fw pi-users custom-icon',
+          // Add a link to the guides page
+        },
+      ],
+    },
+    {
       label: (
         <Link
           to="/GuideBookings"

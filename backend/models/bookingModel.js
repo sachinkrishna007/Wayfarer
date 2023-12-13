@@ -9,16 +9,15 @@ const bookingSchema = new Schema(
       type: String,
       required: true,
     },
-      userid: {
-        type: String,
-        required: true,
-        ref:User
-      },
-      userName: {
-        type: String,
-        required: true,
-     
-      },
+    userid: {
+      type: String,
+      required: true,
+      ref: User,
+    },
+    userName: {
+      type: String,
+      required: true,
+    },
     guidename: {
       type: String,
       required: true,
@@ -33,11 +32,11 @@ const bookingSchema = new Schema(
     },
     startDate: {
       type: String,
-      required: true,
+    
     },
     endDate: {
       type: String,
-      required: true,
+    
     },
     totalDays: {
       type: Number,
@@ -50,7 +49,7 @@ const bookingSchema = new Schema(
     status: {
       type: String,
       required: true,
-      default: "Pending",
+      default: "Accepted",
     },
     guideImage: {
       type: String,

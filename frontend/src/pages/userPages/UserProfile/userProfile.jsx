@@ -40,37 +40,36 @@ export default function UserProfile() {
   const [profileImage, setprofileImage] = useState(null)
   const [updateProfile] = useUpdateProfileMutation()
   const [getProfile] = useGetProfileMutation()
-   const [loading, setLoading] = useState(true)
- 
+  const [loading, setLoading] = useState(true)
 
   const handleImage = (e) => {
     const file = e.target.files[0]
     setFileToBase(file)
   }
- const fetchUserProfile = async (e) => {
-
-   const responseFromApiCall = await getProfile({ email: userInfo.email })
-   if (responseFromApiCall) {
-     console.log(responseFromApiCall.data.user)
-     console.log(responseFromApiCall)
- const { firstName, LastName, email, mobile, profileImageName } =
-   responseFromApiCall.data.user
-        setUserData({
-          firstName,
-          LastName,
-          email,
-          mobile,
-          profileImageName,
-        })
-    //  setFirstName(responseFromApiCall.data.user.firstName)
-    //  setLastName(responseFromApiCall.data.user.LastName)
-    //  setMobile(responseFromApiCall.data.user.mobile)
-     setLoading(false)
-     console.log(userData)
-   }
- }
- useEffect(() => {
-  
+  const fetchUserProfile = async (e) => {
+    const responseFromApiCall = await getProfile({
+      email: userInfo.email,
+      userId: userInfo,
+    })
+    if (responseFromApiCall) {
+      const { firstName, LastName, email, mobile, profileImageName } =
+        responseFromApiCall.data.user
+      setUserData({
+        firstName,
+        LastName,
+        email,
+        mobile,
+        profileImageName,
+      })
+      setFirstName(responseFromApiCall.data.user.firstName)
+      setLastName(responseFromApiCall.data.user.LastName)
+      setMobile(responseFromApiCall.data.user.mobile)
+      setVisible(false)
+      setLoading(false)
+      console.log(userData)
+    }
+  }
+  useEffect(() => {
     fetchUserProfile()
     console.log('Component updated with new user data:', userData)
   }, [])
@@ -82,11 +81,9 @@ export default function UserProfile() {
       setprofileImage(reader.result)
     }
   }
-  const handleSubmit = async () => {
-    
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     try {
-      
-
       const response = await updateProfile({
         email: userInfo.email,
         firstName,
@@ -96,7 +93,8 @@ export default function UserProfile() {
       })
 
       if (response && response.data) {
-        // Assuming the response contains a "data" property, adjust as needed
+        fetchUserProfile()
+
         toast.success('Successfully updated')
       } else {
         toast.error('An error occurred. Please try again.') // Generic error message
@@ -109,9 +107,9 @@ export default function UserProfile() {
       }
     }
   }
-    if (loading) {
-      return <Loader></Loader>
-    }
+  if (loading) {
+    return <Loader></Loader>
+  }
 
   return (
     <>
@@ -174,18 +172,7 @@ export default function UserProfile() {
                               />
                             </div>
                           </li>
-                          {/* <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
-                          <div className="text-500 w-6 md:w-2 font-medium">
-                            email
-                          </div>
 
-                          <div className="card flex justify-content-center">
-                            <InputText
-                              value={userInfo.email}
-                              onChange={(e) => setValue(e.target.value)}
-                            />
-                          </div>
-                        </li> */}
                           <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
                             <div className="text-500 w-6 md:w-2 font-medium">
                               Update Mobile
@@ -222,8 +209,9 @@ export default function UserProfile() {
                   className="square"
                   style={{
                     width: '200px',
-                    borderRadius: '40%',
+                    borderRadius: '50%',
                     marginTop: '-100px',
+                    height: '200px',
                   }}
                   fluid
                 />
@@ -234,7 +222,7 @@ export default function UserProfile() {
                 />
               </MDBCardBody>
             </MDBCard>
-            {/* <MDBCard className="mb-4 mb-lg-0">
+            <MDBCard className="mb-4 mb-lg-0">
               <MDBCardBody className="p-0">
                 <MDBListGroup flush className="rounded-3">
                   <MDBListGroupItem className="d-flex justify-content-center align-items-center p-3">
@@ -244,33 +232,23 @@ export default function UserProfile() {
                       style={{ color: '#333333' }}
                     />
                     <Link
-                      to={'/guideAddData'}
+                      to={'/Following'}
                       className="genric-btn info w-50 mx-auto "
                     >
-                      <MDBBtn style={{ backgroundColor: '#387F8E' }}>
-                        ADD/Edit DETAILS
-                      </MDBBtn>
+                      <Button
+                        icon="pi pi-bookmark"
+                        rounded
+                        severity="primary"
+                        aria-label="Bookmark"
+                        label="Following"
+                        style={{ height: '40px', width: '150px' }}
+                      />
                     </Link>
                   </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-center align-items-center p-3 ">
-                    <MDBIcon
-                      fab
-                      icon="twitter fa-lg"
-                      style={{ color: '#55acee' }}
-                    />
-
-                    <Link
-                      to={'/guideChangePassword'}
-                      className="genric-btn info w-50 mx-auto "
-                    >
-                      <MDBBtn style={{ backgroundColor: '#387F8E' }}>
-                        ChangePassword
-                      </MDBBtn>
-                    </Link>
-                  </MDBListGroupItem>
+                  
                 </MDBListGroup>
               </MDBCardBody>
-            </MDBCard>  */}
+            </MDBCard>
           </MDBCol>
           <MDBCol lg="8">
             <MDBCard className="mb-4">
@@ -282,6 +260,11 @@ export default function UserProfile() {
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
                       {`${userData.firstName} ${userData.LastName} `}
+                      <Button
+                        icon="pi pi-user-edit"
+                        style={{ height: '1px', marginLeft: '20rem' }}
+                        onClick={() => setVisible(true)}
+                      />
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -313,44 +296,6 @@ export default function UserProfile() {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
-
-      {/* <div className="d-flex justify-content-between align-items-center mb-4">
-        <MDBCardText className="lead fw-normal mb-0">
-          Recent Travel Pictures & Experience
-        </MDBCardText>
-        <MDBCardText className="mb-0">
-          <a href="#!" className="text-muted">
-            Show all
-          </a>
-        </MDBCardText>
-      </div> */}
-
-      {/* <MDBRow>
-        <MDBCol md="4" className="mb-4">
-          <MDBCardImage
-            src="https://images.unsplash.com/photo-1496566084516-c5b96fcbd5c8?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="image 1"
-            className="w-100 rounded-3"
-          />
-          <MDBCardText className="mt-2">My recent trip</MDBCardText>
-        </MDBCol>
-        <MDBCol md="4" className="mb-4">
-          <MDBCardImage
-            src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="image 1"
-            className="w-100 rounded-3"
-          />
-          <MDBCardText className="mt-2">the best one</MDBCardText>
-        </MDBCol>
-        <MDBCol md="4" className="mb-4">
-          <MDBCardImage
-            src="https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="image 1"
-            className="w-100 rounded-3"
-          />
-          <MDBCardText className="mt-2">All time best</MDBCardText>
-        </MDBCol>
-      </MDBRow> */}
     </>
   )
 }

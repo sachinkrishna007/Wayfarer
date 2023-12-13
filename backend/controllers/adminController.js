@@ -5,6 +5,7 @@ import AdmingenarateToken from "../utils/adminGenerateToken.js";
 import User from "../models/userModel.js";
 import Booking from "../models/bookingModel.js";
 import Category from "../models/categoryModels.js";
+
 const adminAuth = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -204,6 +205,11 @@ const loadDashboard = asyncHandler(async (req, res) => {
 
   const BookingAmount = await Booking.aggregate([
     {
+      $match: {
+        status: "Accepted",
+      },
+    },
+    {
       $group: {
         _id: null,
         totalAmountSum: { $sum: { $toInt: "$totalAmount" } },
@@ -212,6 +218,11 @@ const loadDashboard = asyncHandler(async (req, res) => {
   ]);
 
   const BookingSales = await Booking.aggregate([
+    {
+      $match: {
+        status: "Accepted",
+      },
+    },
     {
       $group: {
         _id: {
@@ -233,6 +244,11 @@ const loadDashboard = asyncHandler(async (req, res) => {
 
   const bookingSalesData = await Booking.aggregate([
     {
+      $match: {
+        status: "Accepted",
+      },
+    },
+    {
       $group: {
         _id: {
           $dateToString: {
@@ -250,7 +266,7 @@ const loadDashboard = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  const TotalBookings = await Booking.find({}).count();
+  const TotalBookings = await Booking.find({status:"Accepted"}).count();
   const TotalGuides = await Guide.find({}).count();
   const TotalUsers = await User.find({}).count();
 

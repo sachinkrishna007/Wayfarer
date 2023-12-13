@@ -103,7 +103,8 @@ try {
                   src={guideData.profileImage}
                   alt="avatar"
                   className="square"
-                  style={{ width: '500px' }}
+                
+                  style={{  height:"200px" }}
                   fluid
                 />
                 {/* <p className="text-muted mb-1">{guideInfo.data.firstName}</p>

@@ -22,8 +22,8 @@ import { useGuideAddDescMutation } from '../../redux/slices/guideSlice/guideApiS
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../../components/userComponents/loading'
 import NavBar from '../../components/guideComponents/navbar/GuideNavbar'
-
-import { useNavigate } from 'react-router-dom'
+import { Button } from 'primereact/button'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import {
   useGuideGetDataMutation,
@@ -47,31 +47,28 @@ const GuideAddData = () => {
   const [guideDataFromAPI] = useGuideGetDataMutation()
   const [guideDelete] = useGuideDeleteLangMutation()
   const [dropdownValue, setDropdownValue] = useState(null)
+    const fetchData = async () => {
+      const responseFromApiCall = await guideDataFromAPI({
+        guideId: guideInfo.data.email,
+      })
+      const category = await getCategory()
+      const categoryArray = category.data.categoriesData
+      setCategorylist(categoryArray)
+
+      const guideArray = responseFromApiCall.data.guideData
+
+      setGuideData(guideArray[0])
+
+      setPrice(guideArray[0]?.price || '')
+      setDescription(guideArray[0]?.Description || '')
+    }
   useEffect(
     () => {
-      try {
-        const fetchData = async () => {
-          const responseFromApiCall = await guideDataFromAPI({
-            guideId: guideInfo.data.email,
-          })
-          const category = await getCategory()
-          const categoryArray = category.data.categoriesData
-          setCategorylist(categoryArray)
-
-          const guideArray = responseFromApiCall.data.guideData
-
-          setGuideData(guideArray[0])
-
-          setPrice(guideArray[0]?.price || '')
-          setDescription(guideArray[0]?.Description || '')
-        }
+   
+      
 
         fetchData()
-      } catch (error) {
-        toast.error(error)
-
-        console.error('Error fetching users:', error)
-      }
+    
     },
     [],
     guideData,
@@ -87,7 +84,7 @@ const GuideAddData = () => {
       }).unwrap()
       if (responseFromApiCall) {
         toast.success('sucessfully added')
-      navigate('/guideHome')
+        fetchData()
       }
     } catch (err) {
       if (err.data && err.data.message) {
@@ -107,8 +104,10 @@ const GuideAddData = () => {
       }).unwrap()
       console.log(responseFromApiCall)
       if (responseFromApiCall) {
+         fetchData()
         toast.success('Language added Successfully.')
-        navigate('/guideHome')
+        // navigate('/guideHome')
+
       }
     } catch (err) {
       if (err.data && err.data.message) {
@@ -129,7 +128,7 @@ const GuideAddData = () => {
 
       if (responseFromApiCall) {
         toast.success('Price Updated Successfully.')
-        navigate('/guideHome')
+          fetchData()
       } else {
         toast.error('error')
       }
@@ -147,7 +146,7 @@ const GuideAddData = () => {
 
       if (responseFromApiCall) {
         toast.success('Description Added Successfully.')
-        navigate('/guideHome')
+       fetchData()
       } else {
         toast.error('error adding')
       }
@@ -183,6 +182,13 @@ const GuideAddData = () => {
     <>
       <div>
         <NavBar></NavBar>
+        <Link to={'/guideHome'}>
+          <i
+            className="pi pi-times"
+            style={{ fontSize: '1.5rem', float: 'right' }}
+          ></i>
+        </Link>
+
         {isLoading && <Loader></Loader>}
         {isPriceLoading && <Loader></Loader>}
 
@@ -280,8 +286,6 @@ const GuideAddData = () => {
                             </MDBBtn>
                           </li>
                         ))}
-
-                     
                     </ul>
                   </div>
                 </MDBCardBody>
@@ -302,6 +306,7 @@ const GuideAddData = () => {
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
                     />
+
                     <div className="m-2 text-center">
                       <MDBBtn type="submit" className=" ">
                         {' '}

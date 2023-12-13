@@ -5,11 +5,9 @@ const userSchema = mongoose.Schema(
   {
     firstName: {
       type: String,
-   
     },
     LastName: {
       type: String,
-    
     },
     email: {
       type: String,
@@ -18,11 +16,9 @@ const userSchema = mongoose.Schema(
     },
     mobile: {
       type: String,
-    
     },
     password: {
       type: String,
-      
     },
     isBlocked: {
       type: Boolean,
@@ -30,6 +26,13 @@ const userSchema = mongoose.Schema(
     },
     profileImageName: {
       type: String,
+    },
+    wallet: {
+      type: Number,
+      default: 0,
+    },
+    walletTransaction: {
+      type: Array,
     },
   },
   {

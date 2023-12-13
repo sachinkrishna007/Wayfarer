@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import NavBar from '../../../components/userComponents/navBar/navBar'
-
+import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { Link, useNavigate } from 'react-router-dom'
 import moment from 'moment'
-import { Chip } from 'primereact/chip'
-import { Navigate } from 'react-router-dom'
 import 'primeflex/primeflex.css'
+import { useCancelBookingMutation } from '../../../redux/slices/userApiSlice'
+
 import {
   useGetUserBookingMutation,
   useCreateChatRoomMutation,
@@ -14,33 +14,52 @@ import {
 import { useSelector } from 'react-redux'
 import Loader from '../../../components/userComponents/loading'
 import Rating from '../Rating/Rating'
+import { toast } from 'react-toastify'
 const ViewBooking = () => {
   const [loading, setLoading] = useState(true)
   const [BookingData, setBookingData] = useState('')
   const [bookingData] = useGetUserBookingMutation()
+  const [cancelBooking, { isLoading }] = useCancelBookingMutation()
   const [createRoom, { isloading }] = useCreateChatRoomMutation()
   const id = location.pathname.split('/')[2]
+  const [showModal, setShowModal] = useState(false)
   const { userInfo } = useSelector((state) => state.auth)
   const navigate = useNavigate()
+
+  const fetchData = async () => {
+    const responseFromApiCall = await bookingData({
+      bookingId: id,
+    })
+    const booking = await responseFromApiCall.data.bookingData
+
+    setBookingData(booking)
+    setLoading(false)
+  }
   useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const responseFromApiCall = await bookingData({
-          bookingId: id,
-        })
-        const booking = await responseFromApiCall.data.bookingData
+    fetchData()
+  }, [])
 
-        setBookingData(booking)
-        setLoading(false)
-      }
-
+  const CancelBookingUser = async () => {
+    const response = await cancelBooking({
+      bookingId: BookingData._id,
+      userId:userInfo._id
+    }).unwrap()
+    if (response) {
       fetchData()
-    } catch (error) {
-      toast.error(error)
-
-      console.error('Error fetching users:', error)
+      toast('Booking successfully cancelled! The Amount will be shortly refunded to your Wallet', {
+        position: 'top-center',
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      })
+      setShowModal(false)
     }
-  })
+  }
+
   if (loading) {
     return <Loader></Loader>
   }
@@ -57,11 +76,25 @@ const ViewBooking = () => {
   return (
     <div>
       <NavBar></NavBar>
+
       <div style={{ padding: '90px' }}>
+        {BookingData.status === 'Accepted' && ( // Check the booking status here
+          <Button
+            severity="danger"
+            style={{ float: 'right', borderRadius: '20px' }}
+            onClick={(e) => {
+              setShowModal(true)
+            }}
+          >
+            Cancel Booking
+          </Button>
+        )}
+
         <div className="surface-0">
-          <div className="font-medium text-3xl text-900 mb-3">
+          <div className="font-medium text-4xl text-900 mb-3">
             Booking Details
           </div>
+
           <div className="mr-2 mb-2">
             <img
               src={
@@ -72,6 +105,11 @@ const ViewBooking = () => {
               alt="Guide"
               className="rounded-full w-1 h-9 "
             />
+            <br />
+            <br />
+            {BookingData.status === 'cancelled' && (
+              <h4 style={{ color: 'red' }}>This booking has been cancelled</h4>
+            )}
           </div>
           <ul className="list-none p-0 m-0">
             <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
@@ -121,29 +159,57 @@ const ViewBooking = () => {
                 marginBottom: '10px',
               }}
             >
-              <Button
-               
-                severity="help"
-                onClick={chatHandler}
-               
-              >Message Guide</Button>
-              <div style={{ marginLeft: '30px' }}>
-                <Rating
-                  guideId={BookingData.guideid}
-                  userId={userInfo._id}
-                  userName={userInfo.firstName}
-                  userimage={userInfo.profileImageName}
-                ></Rating>
-              </div>
+              {BookingData.status === 'Accepted' && ( // Check the booking status here
+                <Button severity="help" onClick={chatHandler}>
+                  Message Guide
+                </Button>
+              )}
+              {BookingData.status === 'Accepted' && ( // Check the booking status here
+                <div style={{ marginLeft: '30px' }}>
+                  <Rating
+                    guideId={BookingData.guideid}
+                    userId={userInfo._id}
+                    userName={userInfo.firstName}
+                    userimage={userInfo.profileImageName}
+                  ></Rating>
+                </div>
+              )}
             </div>
           </div>
 
           <div></div>
         </div>
       </div>
+      <Dialog
+        visible={showModal}
+        style={{ width: '30%' }}
+        onHide={() => setShowModal(false)}
+        header="Confirm Cancel Request"
+        modal
+        footer={
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              onClick={() => setShowModal(false)}
+              style={{ backgroundColor: '#FF5733', marginRight: '10px' }}
+            />
+            <Button
+              label="Accept"
+              icon="pi pi-check"
+              onClick={CancelBookingUser}
+              disabled={isLoading}
+              style={{ backgroundColor: '#4CAF50' }}
+            />
+          </div>
+        }
+      >
+        <p>
+          Are You Sure You Want to cancel only 50% of amount will be refunded{' '}
+        </p>
+      </Dialog>
     </div>
   )
 }
 
-
-export default ViewBooking;
+export default ViewBooking

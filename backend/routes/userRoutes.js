@@ -17,7 +17,8 @@ import {
   GetGuidesOnDates,
   getBookingDatesGuide,
   updateUserProfile,
-  getProfile
+  getProfile,
+  getFollowing
 } from "../controllers/userController.js";
 import {
   getRooms,
@@ -26,8 +27,9 @@ import {
   getMessages,
 } from "../controllers/chatController.js";
 
-import { getSingleBooking ,createBooking} from "../controllers/bookingController.js";
+import { getSingleBooking ,createBooking, UserCancelBooking} from "../controllers/bookingController.js";
 import { AddRating, findRating, followGuide } from "../controllers/ratingController.js";
+import { getBlogs } from "../controllers/blogController.js";
 
 router.post("/auth", authUser);
 router.post("/register", registerUser);
@@ -50,6 +52,9 @@ router.post('/getGuidesBookingDates',getBookingDatesGuide)
 router.post('/follow',followGuide)
 router.post('/updateProfile',protect,updateUserProfile)
 router.get('/getProfile',protect,getProfile)
+router.get("/getBlog", protect, getBlogs);
+router.get("/getFollowing", protect, getFollowing);
+router.get("/CancelBooking", protect, UserCancelBooking);
 router.get("/logout", logout);
 
 //chat routes

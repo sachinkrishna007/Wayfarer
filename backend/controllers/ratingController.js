@@ -56,7 +56,8 @@ const findRating = asyncHandler(async (req, res) => {
 
   const objectId = new ObjectId(guideId);
 
-  const comment = await Rating.find({ guideId: objectId });
+  const comment = await Rating.find({ guideId: objectId }).populate('userId').exec();
+  console.log(comment);
   const booking = await Booking.find({ guideid: objectId });
   if (comment) {
     res.status(200).json({ comment, booking });
