@@ -132,43 +132,12 @@ export default function GuideList() {
           )}
         </div>
 
-        {/* <div className="w-14rem">
-          <InputText
-            value={priceRangeFilter ? priceRangeFilter : 'Add range'}
-            className="w-full"
-          />
-          <Slider
-            value={priceRangeFilter ? priceRangeFilter : 'Add range'}
-            range
-            onChange={(e) => handlePriceRangeFilter(e.value)}
-            className="w-full"
-          />
-        </div> */}
-
-        <div className="calendar-container">
-          {/* <Calendar
-            value={Startdates}
-            onChange={(e) => {
-              setStartDates(e.target.value)
-             
-            }}
-          
-            readOnlyInput
-          />
-          <Calendar
-            value={Enddates}
-            onChange={(e) => {
-              setEndDates(e.target.value)
-              handleFilter(e)
-            }}
-          
-            readOnlyInput
-          /> */}
-        </div>
+  
+        
       </div>
 
       {guideData && guideData.length > 0 ? (
-        <div className="card-container">
+        <div className="card-container" >
           {guideData.slice(first, first + rows).map((guideInfo, index) => (
             <Card key={index} className="small-card">
               <div>

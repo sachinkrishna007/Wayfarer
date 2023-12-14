@@ -38,7 +38,7 @@ const getBlogs = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("fetch failed");
   }
-});
+});  
 const GuidegetBlogs = asyncHandler(async (req, res) => {
   console.log("sdfsdfsf");
   const { guide } = req.query;

@@ -19,9 +19,29 @@ const createBooking = asyncHandler(async (req, res) => {
     userEmail,
     guideName,
     guideImage,
+    payementType,
   } = req.body;
   console.log(req.body, "jg");
-  try {
+
+
+    if (payementType === "Wallet") {
+      const user = await User.findOne({ email: userEmail });
+   
+      const paymentAmount = totalAmount;
+      if (user.wallet < paymentAmount) {
+        res.status(400);
+        throw new Error("Insufficient Wallet Balance");
+      } else if (user.wallet >= paymentAmount) {
+        user.wallet -= paymentAmount;
+        user.walletTransaction.push({
+          type: "debit",
+          amount: paymentAmount,
+          date: new Date(),
+        });
+        await user.save();
+      }
+    }
+
     const newBooking = await Booking.create({
       userEmail: userEmail,
       userid: userid,
@@ -35,13 +55,11 @@ const createBooking = asyncHandler(async (req, res) => {
       totalAmount: totalAmount,
       guideImage: guideImage,
       status: "Accepted",
+      payementType
     });
 
     res.status(201).json({ success: true, data: newBooking });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
-  }
+
 });
 
 const getSingleBooking = asyncHandler(async (req, res) => {
@@ -78,7 +96,7 @@ const UserCancelBooking = asyncHandler(async (req, res) => {
   booking.startDate = null;
   booking.endDate = null;
   const currentWalletBalance = user.wallet || 0;
-  user.wallet = currentWalletBalance + booking.totalAmount/2;
+  user.wallet = currentWalletBalance + booking.totalAmount / 2;
   user.walletTransaction.push({
     type: "credit",
     amount: booking.totalAmount / 2,

@@ -28,7 +28,8 @@ export default function UserChat() {
 
   const { userInfo } = useSelector((state) => state.auth)
 
-  const [rooms, setRooms] = useState([])
+  const [typing, SetTyping] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
   const [chatId, setChatId] = useState('')
   const [chats, setChats] = useState([])
 
@@ -47,6 +48,8 @@ export default function UserChat() {
     socket = io(ENDPOINT)
     socket.emit('setup', userInfo)
     socket.on('connection', () => setSocketConnected(true))
+    socket.on('typing', () => setIsTyping(true))
+    socket.on('stop typing', () => setIsTyping(false))
   }, [])
 
   const sendHandler = async () => {
@@ -87,6 +90,7 @@ export default function UserChat() {
         console.log(res)
         setChats(res.data)
         setMessageSent(false)
+
         socket.emit('join chat', chatId)
       }
     }
@@ -115,6 +119,27 @@ export default function UserChat() {
     })
   })
 
+  const typingHandler = (e) => {
+    //typjng indicator
+    if (!socketConnected) return
+    console.log('sdfsd')
+    if (!typing) {
+      console.log('entered')
+      SetTyping(true)
+      socket.emit('typing', chatId)
+    }
+    let lastTypingTime = new Date().getTime()
+    let timerLength = 3000
+    setTimeout(() => {
+      let timeNow = new Date().getTime()
+      let timeDiff = timeNow - lastTypingTime
+
+      if (timeDiff >= timerLength && typing) {
+        socket.emit('stop typing', chatId)
+        SetTyping(false)
+      }
+    }, timerLength)
+  }
   return (
     <div>
       <NavBar />
@@ -178,13 +203,17 @@ export default function UserChat() {
                     alt=""
                     style={{ width: '45px', height: '100%' }}
                   />
+                  {isTyping ? <div>typing...</div> : <></>}
                   <input
                     type="text"
                     value={content}
                     class="form-control form-control-lg"
                     id="exampleFormControlInput1"
                     placeholder="Type message"
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={(e) => {
+                      setContent(e.target.value)
+                      typingHandler()
+                    }}
                   ></input>
                   <div className="w-1/12">
                     <button

@@ -113,6 +113,11 @@ export default function BookingTable() {
           style={{ width: '10%' }}
         ></Column>
         <Column
+          field="payementType"
+          header="Payment Method"
+          style={{ width: '10%' }}
+        ></Column>
+        <Column
           field="totalAmount"
           header="Amount"
           style={{ width: '10%' }}
@@ -123,6 +128,7 @@ export default function BookingTable() {
           style={{ width: '10%' }}
           body={(rowData) => formatDate(rowData.createdAt)}
         ></Column>
+       
 
         <Column
           header="Action"

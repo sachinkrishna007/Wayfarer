@@ -42,7 +42,7 @@ import GuideBlog from './pages/guidePages/blog/guideBlog'
 import UserBlog from './pages/userPages/blogs/userBlog'
 import GuideViewBlog from './pages/guidePages/blog/viewBlogs'
 import Following from './pages/followers'
-
+import Wallet from './pages/userPages/wallet/Wallet'
 const App = () => {
   return (
     <div style={{ position: 'relative' }}>
@@ -76,6 +76,8 @@ const App = () => {
         <Route path="/Profile" element={<UserProfile />} />
         <Route path="/blogs" element={<UserBlog />} />
         <Route path="/Following" element={<Following />} />
+        <Route path="/wallet" element={<Wallet />} />
+      
 
         <Route
           path="/guideDetailedView/:userId"

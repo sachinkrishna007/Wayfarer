@@ -18,6 +18,7 @@ const PayButton = ({
 }) => {
   const [Stripe, { isLoading }] = useStripeBookingMutation()
   const [createBooking] = useGetBookingMutation()
+
   const handleCheckout = async () => {
     try {
       const responseFromApiCall = await Stripe({
@@ -32,7 +33,8 @@ const PayButton = ({
         totalAmount,
         userName
       })
-      console.log(responseFromApiCall)
+     
+    
 
       const response = await createBooking({
         userid,
@@ -45,7 +47,8 @@ const PayButton = ({
         Days,
         totalAmount,
         guideImage,
-        userName
+        userName,
+        payementType:'online'
       })
       if (response) {
         localStorage.removeItem('bookingData')
@@ -70,7 +73,7 @@ const PayButton = ({
         severity="success"
         onClick={() => handleCheckout()}
       >
-        CheckOut
+        Pay Online
       </Button>
     </div>
   )

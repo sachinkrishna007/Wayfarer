@@ -32,11 +32,9 @@ const bookingSchema = new Schema(
     },
     startDate: {
       type: String,
-    
     },
     endDate: {
       type: String,
-    
     },
     totalDays: {
       type: Number,
@@ -50,6 +48,11 @@ const bookingSchema = new Schema(
       type: String,
       required: true,
       default: "Accepted",
+    },
+    payementType: {
+      type: String,
+      required: true,
+      default: "null",
     },
     guideImage: {
       type: String,

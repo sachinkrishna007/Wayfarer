@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 import {
   useGuideAddLanguageMutation,
   useGuideDeleteLangMutation,
+  useDeleteActivityMutation,
 } from '../../redux/slices/guideSlice/guideApiSlice'
 import {
   useGuideAddPriceMutation,
@@ -46,29 +47,26 @@ const GuideAddData = () => {
   const [listCategory, setCategorylist] = useState([])
   const [guideDataFromAPI] = useGuideGetDataMutation()
   const [guideDelete] = useGuideDeleteLangMutation()
+  const [DeleteActivity] = useDeleteActivityMutation()
   const [dropdownValue, setDropdownValue] = useState(null)
-    const fetchData = async () => {
-      const responseFromApiCall = await guideDataFromAPI({
-        guideId: guideInfo.data.email,
-      })
-      const category = await getCategory()
-      const categoryArray = category.data.categoriesData
-      setCategorylist(categoryArray)
+  const fetchData = async () => {
+    const responseFromApiCall = await guideDataFromAPI({
+      guideId: guideInfo.data.email,
+    })
+    const category = await getCategory()
+    const categoryArray = category.data.categoriesData
+    setCategorylist(categoryArray)
 
-      const guideArray = responseFromApiCall.data.guideData
+    const guideArray = responseFromApiCall.data.guideData
 
-      setGuideData(guideArray[0])
+    setGuideData(guideArray[0])
 
-      setPrice(guideArray[0]?.price || '')
-      setDescription(guideArray[0]?.Description || '')
-    }
+    setPrice(guideArray[0]?.price || '')
+    setDescription(guideArray[0]?.Description || '')
+  }
   useEffect(
     () => {
-   
-      
-
-        fetchData()
-    
+      fetchData()
     },
     [],
     guideData,
@@ -104,10 +102,9 @@ const GuideAddData = () => {
       }).unwrap()
       console.log(responseFromApiCall)
       if (responseFromApiCall) {
-         fetchData()
+        fetchData()
         toast.success('Language added Successfully.')
         // navigate('/guideHome')
-
       }
     } catch (err) {
       if (err.data && err.data.message) {
@@ -128,7 +125,7 @@ const GuideAddData = () => {
 
       if (responseFromApiCall) {
         toast.success('Price Updated Successfully.')
-          fetchData()
+        fetchData()
       } else {
         toast.error('error')
       }
@@ -146,7 +143,7 @@ const GuideAddData = () => {
 
       if (responseFromApiCall) {
         toast.success('Description Added Successfully.')
-       fetchData()
+        fetchData()
       } else {
         toast.error('error adding')
       }
@@ -162,15 +159,35 @@ const GuideAddData = () => {
         guideId: guideInfo.data._id,
       }).unwrap()
       if (response) {
+         fetchData()
         toast.success('Language deleted')
+      }
+     
+    } catch (error) {
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error('An error occurred. Please try again.') 
+      }
+    }
+  }
+  const HandleActivityDeleting = async (Activity) => {
+    try {
+      const response = await DeleteActivity({
+        Activity,
+        guideId: guideInfo.data._id,
+      })
+      if (response) {
+          fetchData()
+        toast.success('Activity Deleted')
       }
       setGuideData((prevData) => {
         const updatedLanguages = prevData.Language.filter(
-          (lang) => lang !== lan,
+          (Activity) => Activity !== Activity,
         )
         return { ...prevData, Language: updatedLanguages }
       })
-    } catch (error) {
+    } catch (err) {
       if (err.data && err.data.message) {
         toast.error(err.data.message)
       } else {
@@ -271,16 +288,16 @@ const GuideAddData = () => {
                     <strong>Existing Category:</strong>
                     <ul>
                       {guideData.category &&
-                        guideData.category.map((lang, index) => (
+                        guideData.category.map((Activity, index) => (
                           <li
                             key={index}
                             className="d-flex justify-content-between align-items-center"
                           >
-                            <span>{lang}</span>{' '}
+                            <span>{Activity}</span>{' '}
                             <MDBBtn
                               color="danger"
                               size="sm"
-                              onClick={() => handleDeleteLanguage(lang)}
+                              onClick={() => HandleActivityDeleting(Activity)}
                             >
                               Delete
                             </MDBBtn>

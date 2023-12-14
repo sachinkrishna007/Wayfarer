@@ -55,7 +55,7 @@ export const adminSlice = userApiSlice.injectEndpoints({
     listGuide: builder.mutation({
       query: (data) => ({
         url: `${ADMIN_URL}/listGuide`,
-        method: 'POST',
+        method: 'GET',
         body: data,
       }),
     }),
@@ -68,6 +68,12 @@ export const adminSlice = userApiSlice.injectEndpoints({
     getAdminDAshboard: builder.mutation({
       query: () => ({
         url: `${ADMIN_URL}/adminDashboard`,
+        method: 'GET',
+      }),
+    }),
+    getCategory: builder.mutation({
+      query: () => ({
+        url: `${ADMIN_URL}/getCAtegory`,
         method: 'GET',
       }),
     }),
@@ -100,5 +106,6 @@ export const {
   useListGuideMutation,
   useGetAdminBookingDataMutation,
   useGetAdminDAshboardMutation,
-  useCreateCategoryMutation
+  useCreateCategoryMutation,
+  useGetCategoryMutation
 } = adminSlice

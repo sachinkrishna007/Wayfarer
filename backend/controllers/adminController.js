@@ -328,6 +328,16 @@ const createCategory = asyncHandler(async (req, res) => {
   res.status(200).json({ newCategory });
 });
 
+const ListCategory = asyncHandler(async (req, res) => {
+  
+const category =  await Category.find({})
+
+
+
+
+  res.status(200).json({ category });
+});
+
 export {
   adminAuth,
   registerAdmin,
@@ -342,4 +352,5 @@ export {
   getAdminBookingData,
   loadDashboard,
   createCategory,
+  ListCategory
 };

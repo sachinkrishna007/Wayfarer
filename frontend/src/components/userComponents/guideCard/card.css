@@ -25,7 +25,7 @@
   font-family: 'Poppins', sans-serif;
 }
 .subtitle {
-  color: rgb(207, 46, 46);
+  color: rgb(0, 0, 0);
   font-family: 'Poppins', sans-serif;
 }
 .guideimage {
@@ -81,7 +81,7 @@
 
 .guideHeading {
   font-family: 'Poppins', sans-serif;
-  margin-left: 50px;
+  margin-left: 80px;
   padding: 1%;
   color: #000000;
   font-size: 1.5rem;

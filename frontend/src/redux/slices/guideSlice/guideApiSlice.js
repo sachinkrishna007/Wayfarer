@@ -116,6 +116,13 @@ export const guideSlice = userApiSlice.injectEndpoints({
         method: 'Delete',
       }),
     }),
+
+    deleteActivity: builder.mutation({
+      query: (query) => ({
+        url: `${GUIDE_URL}/deleteActivity?guideId=${query.guideId}&Activity=${query.Activity}`,
+        method: 'GET',
+      }),
+    }),
     guideGetBlogs: builder.mutation({
       query: (query) => ({
         url: `${GUIDE_URL}/guideGetBlogs?guide=${query.guide}`,
@@ -158,5 +165,6 @@ export const {
   useGuideAddCatagoryMutation,
   useCreateBlogsMutation,
   useGuideGetBlogsMutation,
-  useDeleteBlogMutation
+  useDeleteBlogMutation,
+  useDeleteActivityMutation
 } = guideSlice

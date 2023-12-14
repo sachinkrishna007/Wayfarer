@@ -54,6 +54,15 @@ io.on("connection", (socket) => {
     console.log("User Joined room:" + room);
   });
 
+
+  socket.on("typing", (room) => {
+    console.log('aaddas')
+  socket.in(room).emit("typing");
+  });
+  socket.on("stop typing", (room) => {
+    socket.in(room).emit("stop typing");
+  });
+
   socket.on("new message", (newMessageReceived) => {
     console.log(newMessageReceived,'bjhbjh');
     var chat = newMessageReceived.newMessage.room;
@@ -62,10 +71,7 @@ io.on("connection", (socket) => {
       return console.log("chat.users not defined");
     }
 
-   
-     
-  
-      socket.to(chat._id).emit("message received", newMessageReceived.newMessage)
+        socket.to(chat._id).emit("message received", newMessageReceived.newMessage)
   
   });
 });

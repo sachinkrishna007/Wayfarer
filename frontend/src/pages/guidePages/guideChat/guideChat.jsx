@@ -28,7 +28,8 @@ export default function GuideChat() {
   const [rooms, setRooms] = useState([])
   const [chatId, setChatId] = useState('')
   const [lastMessages, setLastMessages] = useState({})
-
+  const [typing, SetTyping] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
   const [chats, setChats] = useState([])
   const [user, setUser] = useState('')
   const [content, setContent] = useState('')
@@ -43,6 +44,8 @@ export default function GuideChat() {
     socket = io(ENDPOINT)
     socket.emit('setup', guideInfo)
     socket.on('connection', () => setSocketConnected(true))
+    socket.on('typing', () => setIsTyping(true))
+    socket.on('stop typing', () => setIsTyping(false))
   }, [])
   const sendHandler = async () => {
     if (content === '') {
@@ -132,6 +135,29 @@ export default function GuideChat() {
       }
     })
   })
+
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value)
+
+    //typjng indicator
+    if (!socketConnected) return
+
+    if (!typing) {
+      SetTyping(true)
+      socket.emit('typing', chatId)
+    }
+    let lastTypingTime = new Date().getTime()
+    let timerLength = 3000
+    setTimeout(() => {
+      let timeNow = new Date().getTime()
+      let timeDiff = timeNow - lastTypingTime
+
+      if (timeDiff >= timerLength && typing) {
+        socket.emit('stop typing', chatId)
+        SetTyping(false)
+      }
+    }, timerLength)
+  }
   return (
     <div>
       <NavBar></NavBar>
@@ -267,9 +293,13 @@ export default function GuideChat() {
                     alt="avatar 3"
                     style={{ width: '40px', height: '100%' }}
                   />
+                  {isTyping ? <div>typing...</div> : <></>}
                   <input
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={(e) => {
+                      setContent(e.target.value)
+                      typingHandler
+                    }}
                     type="text"
                     className="form-control form-control-lg"
                     id="exampleFormControlInput2"

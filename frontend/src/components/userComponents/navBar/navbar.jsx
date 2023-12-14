@@ -102,6 +102,18 @@ export default function NavBar() {
           icon: 'pi pi-fw pi-users custom-icon',
           // Add a link to the guides page
         },
+        {
+          label: (
+            <Link
+              to="/wallet"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              Wallet
+            </Link>
+          ),
+          icon: 'pi pi-wallet',
+          // Add a link to the guides page
+        },
       ],
     },
     // Other items for logged-in users

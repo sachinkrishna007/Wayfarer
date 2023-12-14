@@ -14,7 +14,8 @@ import {
   deleteLanguage,
   GuideActivateAccount,
   getCategory,
-  guideAddCategory
+  guideAddCategory,
+  deleteActivity
 } from "../controllers/guideController.js";
 
 import {
@@ -35,6 +36,7 @@ router.post("/guideAddDesc", protect, guideAddDescription)
 router.post("/getGuideData", protect, getGuideData);
 router.post("/Changepassword", protect, changePassword);
 router.post("/deleteLanguage", protect, deleteLanguage);
+router.get("/deleteActivity", protect, deleteActivity);
 router.post("/Activate", protect, GuideActivateAccount);
 
 router.post("/guidesendchat", chatSend);

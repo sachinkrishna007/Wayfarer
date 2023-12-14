@@ -4,11 +4,11 @@ import 'primeicons/primeicons.css'
 
 const Footer = () => {
   return (
-    <div className="footer">
+    <div  className="footer">
       <div className="top">
         <div>
-          <h3>WAYFARER</h3>
-          <p>Chooose your destination</p>
+          <img style={{height:"5rem"}} src="./wayfarer2.png" alt="" />
+         
         </div>
         <div>
           <a href="/">
@@ -30,10 +30,10 @@ const Footer = () => {
             ></i>
           </a>
           <a href="/">
-            <i
+            {/* <i
               className=" pi pi-twitter
 "
-            ></i>
+            ></i> */}
           </a>
         </div>
       </div>

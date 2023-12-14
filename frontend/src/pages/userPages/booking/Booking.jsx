@@ -3,6 +3,8 @@ import Heading from '../../../components/userComponents/Headings/heading'
 import NavBar from '../../../components/userComponents/navBar/navBar'
 import { useGetBookingMutation } from '../../../redux/slices/userApiSlice'
 import PayButton from '../../../components/PayButton'
+import { Dialog } from 'primereact/dialog'
+import { Button } from 'primereact/button'
 import {
   MDBCol,
   MDBContainer,
@@ -13,13 +15,18 @@ import {
   MDBCardImage,
 } from 'mdb-react-ui-kit'
 import moment from 'moment'
-import { Button } from 'react-bootstrap'
+import {
+  useGetProfileMutation,
+} from '../../../redux/slices/userApiSlice'
 import Loader from '../../../components/userComponents/loading'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
 const Booking = () => {
+  const [userData, setUserData] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  const [getProfile] = useGetProfileMutation()
   const [bookingDetails, setBookingDetails] = useState({
     startDate: '',
     endDate: '',
@@ -51,38 +58,54 @@ const Booking = () => {
 
   const { days, totalPrice } = calculateTotalPrice()
 
-  // const handleSubmit = async () => {
-  //   console.log("here");
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const responseFromApiCall = await createBooking({
+        userid: userInfo._id,
+        userName: userInfo.firstName,
+        guideid: bookingDetails.guideId,
+        Location: bookingDetails.guideLocation,
+        startDate: bookingDetails.startDate,
+        endDate: bookingDetails.endDate,
+        userEmail: bookingDetails.userEmail,
+        guideName: bookingDetails.guideName,
+        guideImage: bookingDetails.guideProfile,
+        Days: days,
+        totalAmount: totalPrice,
+        payementType: 'Wallet',
+      }).unwrap()
 
-  //   try {
-  //     const responseFromApiCall = await createBooking({
-  //       userid: userInfo._id,
-  //       guideid: bookingDetails.guideId,
-  //       Location: bookingDetails.guideLocation,
-  //       startDate: bookingDetails.startDate,
-  //       endDate: bookingDetails.endDate,
-  //       userEmail: bookingDetails.userEmail,
-  //       guideName: bookingDetails.guideName,
-  //       guideImage:bookingDetails.guideProfile,
-  //       Days: days,
-  //       totalAmount: totalPrice,
-  //     });
+      if (responseFromApiCall) {
+        toast.success('booking Successfully.')
+        localStorage.removeItem('bookingData')
+        navigate('/checkout-success')
+      }
+    } catch (err) {
+      console.log(err)
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error(' Balance')
+      }
+    }
+  }
 
-  //     if (responseFromApiCall) {
-  //       toast.success("booking Successfully.");
-  //       localStorage.removeItem("bookingData");
-  //       navigate("/Confirmation");
-  //     } else {
-  //       toast.error("error");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const fetchUserProfile = async (e) => {
+    const responseFromApiCall = await getProfile({
+      email: userInfo.email,
+    })
+    if (responseFromApiCall) {
+      setUserData(responseFromApiCall.data.user)
+    }
+  }
+
+  useEffect(() => {
+    fetchUserProfile()
+  }, [])
 
   return (
     <div>
-      c
       <NavBar />
       <Heading
         cName="hero"
@@ -208,22 +231,77 @@ const Booking = () => {
               </MDBCardBody>
             </MDBCard>
 
-            <PayButton
-              userid={userInfo._id}
-              userName={userInfo.firstName}
-              guideid={bookingDetails.guideId}
-              Location={bookingDetails.guideLocation}
-              startDate={bookingDetails.startDate}
-              endDate={bookingDetails.endDate}
-              userEmail={bookingDetails.userEmail}
-              guideName={bookingDetails.guideName}
-              guideImage={bookingDetails.guideProfile}
-              Days={days}
-              totalAmount={totalPrice}
-            />
+            <div className="d-flex justify-content-between align-items-center">
+              <PayButton
+                userid={userInfo._id}
+                userName={userInfo.firstName}
+                guideid={bookingDetails.guideId}
+                Location={bookingDetails.guideLocation}
+                startDate={bookingDetails.startDate}
+                endDate={bookingDetails.endDate}
+                userEmail={bookingDetails.userEmail}
+                guideName={bookingDetails.guideName}
+                guideImage={bookingDetails.guideProfile}
+                Days={days}
+                totalAmount={totalPrice}
+              />
+              
+              <Button
+                style={{
+                  padding: '10px 20px',
+                  fontSize: '16px',
+
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+                onClick={(e) => {
+                  setShowModal(true)
+                }}
+              >
+                Use Wallet
+              </Button>
+            </div>
           </MDBCol>
         </MDBRow>
       </MDBContainer>
+      <Dialog
+        visible={showModal}
+        style={{ width: '30%' }}
+        onHide={() => setShowModal(false)}
+        header="Confirm Cancel Request"
+        modal
+        footer={
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              label="Cancel"
+              icon="pi pi-times"
+              onClick={() => setShowModal(false)}
+              style={{ backgroundColor: '#FF5733', marginRight: '10px' }}
+            />
+            <Button
+              label="Accept"
+              icon="pi pi-check"
+              onClick={handleSubmit}
+              disabled={isLoading}
+              style={{ backgroundColor: '#4CAF50' }}
+            />
+          </div>
+        }
+      >
+        <p>Are You Sure You Want to Use Wallet </p>
+        {userData.wallet >= totalPrice ? (
+          <p style={{ color: 'red' }}>
+            You Have ₹{userData.wallet} remaining Balance use Now
+          </p>
+        ) : (
+          <p style={{ color: 'red' }}>
+           Available Balance: ₹{userData.wallet}{' '}
+
+          </p>
+        )}
+      </Dialog>
     </div>
   )
 }
