@@ -25,7 +25,7 @@ import {
 import {
   useCheckAvilablityGuideMutation,
   useGetBookedDatesMutation,
-  useAddFollowGuideMutation
+  useAddFollowGuideMutation,
 } from '../../../redux/slices/userApiSlice'
 
 import {
@@ -58,7 +58,7 @@ export default function EditButton() {
   const [bookedDates, setBookedDates] = useState([])
   const [booking, setBooking] = useState('')
   const [bookingCount, setBookingCount] = useState(0)
- 
+
   const id = location.pathname.split('/')[2]
   const [guideSingleDataFromAPI] = useGetSingleGuideMutation()
   const [overlappingDates] = useCheckAvilablityGuideMutation()
@@ -67,10 +67,10 @@ export default function EditButton() {
   const [followGuide] = useAddFollowGuideMutation()
 
   const { userInfo } = useSelector((state) => state.auth)
-    //  const initialIsFollowing = guideData.followers
-    //    ? guideData.followers.includes(userInfo._id)
-    //    : false
-     const [isFollowing, setIsFollowing] = useState('')
+  //  const initialIsFollowing = guideData.followers
+  //    ? guideData.followers.includes(userInfo._id)
+  //    : false
+  const [isFollowing, setIsFollowing] = useState('')
   const navigate = useNavigate()
   useEffect(() => {
     try {
@@ -82,7 +82,7 @@ export default function EditButton() {
         const guide = await responseFromApiCall.data.guideData
 
         setGuideData(guide)
-         setIsFollowing(guide.followers.includes(userInfo._id))
+        setIsFollowing(guide.followers.includes(userInfo._id))
         setLoading(false)
       }
 
@@ -95,13 +95,16 @@ export default function EditButton() {
   }, [guideData])
 
   const handleFollow = async () => {
-    console.log('sdsgfsdgvgsd');
-    const responseFromApiCall = await followGuide({ userId: userInfo._id, guideId: id }).unwrap()
+    console.log('sdsgfsdgvgsd')
+    const responseFromApiCall = await followGuide({
+      userId: userInfo._id,
+      guideId: id,
+    }).unwrap()
     if (responseFromApiCall) {
-      console.log(responseFromApiCall);
-         setIsFollowing(responseFromApiCall.message)
-     console.log(responseFromApiCall);
-    //  toast.success(responseFromApiCall.message)
+      console.log(responseFromApiCall)
+      setIsFollowing(responseFromApiCall.message)
+      console.log(responseFromApiCall)
+      //  toast.success(responseFromApiCall.message)
     }
   }
 
@@ -110,7 +113,7 @@ export default function EditButton() {
       const fetchBookedDates = async () => {
         const responseFromApiCall = await getGuideBookingDates({ guideId: id })
         const BookedDates = await responseFromApiCall.data.bookings
-        console.log(BookedDates)
+
         setCalenderDates(BookedDates)
       }
       fetchBookedDates()
@@ -305,10 +308,10 @@ export default function EditButton() {
                 <div className="font-medium text-3xl text-900 mb-3">
                   More Information
                 </div>
-                <div className="text-500 mb-5">
+                {/* <div className="text-500 mb-5">
                   Morbi tristique blandit turpis. In viverra ligula id nulla
                   hendrerit rutrum.
-                </div>
+                </div> */}
 
                 <ul className="list-none p-0 m-0">
                   <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
@@ -407,7 +410,7 @@ export default function EditButton() {
                               events={CalenderDates.map((booking) => ({
                                 title: 'not available',
                                 start: new Date(booking.startDate),
-                                end: new Date(booking.endDate),
+                                end: new Date(booking.endDate).addDays(1),
                                 color: '#FFA500',
                               }))}
                               eventContent={(eventInfo) => {

@@ -11,7 +11,7 @@ import { InputText } from 'primereact/inputtext'
 
 import {
   useUpdateProfileMutation,
-  useGetProfileMutation,
+ useUsergetProfileMutation
 } from '../../../redux/slices/userApiSlice'
 import {
   MDBCol,
@@ -39,7 +39,7 @@ export default function UserProfile() {
   const [email, setEmail] = useState('')
   const [profileImage, setprofileImage] = useState(null)
   const [updateProfile] = useUpdateProfileMutation()
-  const [getProfile] = useGetProfileMutation()
+  const [getProfile] = useUsergetProfileMutation()
   const [loading, setLoading] = useState(true)
 
   const handleImage = (e) => {

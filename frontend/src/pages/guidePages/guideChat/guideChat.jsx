@@ -3,8 +3,6 @@ import {
   MDBContainer,
   MDBRow,
   MDBCol,
-  MDBCard,
-  MDBCardBody,
   MDBIcon,
   MDBTypography,
   MDBInputGroup,
@@ -203,6 +201,7 @@ export default function GuideChat() {
                               alt="avatar"
                               className="d-flex align-self-center me-3"
                               width="60"
+                              style={{ borderRadius: '100px', height: '60px' }}
                             />
                             <span className="badge bg-success badge-dot"></span>
                           </div>
@@ -299,6 +298,12 @@ export default function GuideChat() {
                     onChange={(e) => {
                       setContent(e.target.value)
                       typingHandler
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault() // Prevents a newline character from being inserted
+                        sendHandler() // Call your sendHandler function when Enter is pressed
+                      }
                     }}
                     type="text"
                     className="form-control form-control-lg"

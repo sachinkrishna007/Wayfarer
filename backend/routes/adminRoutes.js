@@ -13,7 +13,8 @@ import {
   UnBlockGuide,
   getAdminBookingData,
   loadDashboard,
-  createCategory
+  createCategory,
+  ListCategory
 } from "../controllers/adminController.js";
 import { getCategory } from "../controllers/guideController.js";
 
@@ -33,5 +34,5 @@ router.get('/listGuide',listGuide)
 router.get('/adminBookingData',getAdminBookingData)
 router.get('/adminDashboard',protect,loadDashboard)
 router.post('/category',protect,createCategory)
-router.get('/getCAtegory',protect,getCategory)
+router.get('/adminGetCategory',protect,ListCategory)
 export default router;

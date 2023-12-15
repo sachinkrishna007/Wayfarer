@@ -43,6 +43,10 @@ import UserBlog from './pages/userPages/blogs/userBlog'
 import GuideViewBlog from './pages/guidePages/blog/viewBlogs'
 import Following from './pages/followers'
 import Wallet from './pages/userPages/wallet/Wallet'
+
+import CalendarGuide from './pages/guidePages/calander'
+import GuideDashBoard from './pages/guidePages/guideDashBoard'
+import GuideViewBooking from './pages/guidePages/GuideViewBookings'
 const App = () => {
   return (
     <div style={{ position: 'relative' }}>
@@ -77,7 +81,6 @@ const App = () => {
         <Route path="/blogs" element={<UserBlog />} />
         <Route path="/Following" element={<Following />} />
         <Route path="/wallet" element={<Wallet />} />
-      
 
         <Route
           path="/guideDetailedView/:userId"
@@ -116,6 +119,18 @@ const App = () => {
         <Route
           path="/GuideViewBlogs"
           element={<GuidePrivateRoute element={<GuideViewBlog />} />}
+        />
+        <Route
+          path="/Calender"
+          element={<GuidePrivateRoute element={<CalendarGuide />} />}
+        />
+        <Route
+          path="/GuideDashBoard"
+          element={<GuidePrivateRoute element={<GuideDashBoard />} />}
+        />
+        <Route
+          path="/guideViewBookings/:bookingId"
+          element={<GuidePrivateRoute element={<GuideViewBooking />} />}
         />
 
         {/* --------------------Admin Routes----------------------------------------- */}

@@ -136,6 +136,33 @@ export const guideSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    guideViewBookings: builder.mutation({
+      query: (params) => ({
+        url: `${GUIDE_URL}/guideViewBookings?id=${params.bookingId}`,
+        method: 'GET',
+      }),
+    }),
+    GuideCancelBooking: builder.mutation({
+      query: (query) => ({
+        url: `${GUIDE_URL}/guideCancelBooking?BookingId=${query.bookingId}&userId=${query.userId}`,
+
+        method: 'GET',
+      }),
+    }),
+    guidegetUserProfile: builder.mutation({
+      query: (query) => ({
+        url: `${GUIDE_URL}/getUserProfile?email=${query.email}`,
+
+        method: 'GET',
+      }),
+    }),
+    guideGetNotifications: builder.mutation({
+      query: (query) => ({
+        url: `${GUIDE_URL}/guideNotifications?receiverId=${query.receiverId}`,
+
+        method: 'GET',
+      }),
+    }),
     GuidegetRooms: builder.mutation({
       query: (data) => ({
         url: `${GUIDE_URL}/getguiderooms`,
@@ -166,5 +193,10 @@ export const {
   useCreateBlogsMutation,
   useGuideGetBlogsMutation,
   useDeleteBlogMutation,
-  useDeleteActivityMutation
+  useDeleteActivityMutation,
+  useGuideViewBookingsMutation,
+  useGuidegetUserProfileMutation,
+ useGuideCancelBookingMutation,
+useGuideGetNotificationsMutation
+
 } = guideSlice

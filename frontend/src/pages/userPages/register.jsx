@@ -287,6 +287,24 @@ const Register = () => {
           style={{ width: '550px', height: '550px', margin: '40px' }}
         />
       </div>
+      <style>
+        {`
+          @media only screen and (max-width: 768px) {
+          .character{
+            padding:90px
+          }
+            
+
+            .character img {
+              display: none;
+            }
+
+            .character .mdb-card {
+              margin-top: 20px;
+            }
+          }
+        `}
+      </style>
     </div>
   )
 }

@@ -1,20 +1,22 @@
 import React, { useEffect } from 'react'
 import { InputText } from 'primereact/inputtext'
 import AdminSidebar from '../../components/adminComponents/sidebar'
-import { useCreateCategoryMutation } from '../../redux/slices/adminSlice/adminApiSlice'
+import { useAdmingetCategoryMutation, useCreateCategoryMutation } from '../../redux/slices/adminSlice/adminApiSlice'
 import { useState } from 'react'
 import { Button } from 'primereact/button'
 import { toast } from 'react-toastify'
-import { useGetCategoryMutation } from '../../redux/slices/adminSlice/adminApiSlice'
+
 
 const Category = () => {
   const [CategoryName, setCategory] = useState('')
   const [categoryList, setCategoryList] = useState([])
   const [createCategory] = useCreateCategoryMutation()
-  const [listCategory] = useGetCategoryMutation()
+  const [listCategory] = useAdmingetCategoryMutation()
 
   const getCategory = async () => {
+
     const response = await listCategory()
+    console.log(response);
     if (response) {
       setCategoryList(response.data.categoriesData)
     }

@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import debounce from 'lodash/debounce'
 import './cover.css'
 const Cover = () => {
@@ -40,19 +40,21 @@ const Cover = () => {
               you with guides who enhance your travel experience. Explore,
               connect, and embark on your next adventure with confidence!"
             </p>
+            <Link to={'/'}>
+              <Button
+                label="Learn More"
+                type="button"
+                className="mr-3 p-button-raised LearnMoreBTn"
+              />
+            </Link>
 
-            <Button
-              label="Learn More"
-              type="button"
-              className="mr-3 p-button-raised LearnMoreBTn"
-            />
-            <span className="p-input-icon-left">
+            {/* <span className="p-input-icon-left">
               <i className="pi pi-search SearchCover" />
               <InputText
                 placeholder="Search Your Location"
                 onChange={searchHandler}
               />
-            </span>
+            </span> */}
           </section>
         </div>
         <div className="col-12 md:col-6 overflow-hidden coverimg ">

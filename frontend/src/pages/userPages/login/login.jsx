@@ -13,7 +13,7 @@ import {
   MDBValidation,
   MDBValidationItem,
 } from 'mdb-react-ui-kit'
-
+import { useGoogleRegisterMutation } from '../../../redux/slices/userApiSlice'
 import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
@@ -25,7 +25,7 @@ import { setCredentials } from '../../../redux/slices/userAuthSlice'
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
+ const [googelLogin] = useGoogleRegisterMutation()
   const [login, { isLoading }] = useLoginMutation()
   const { userInfo } = useSelector((state) => state.auth)
   const navigate = useNavigate()
@@ -51,6 +51,33 @@ const Login = () => {
   //      navigate("/");
   //    }
   //  }, [navigate, userInfo]);
+
+   const googelAuth = async (data) => {
+     try {
+       console.log(data)
+       const {
+         email,
+         family_name: lastName,
+         given_name: firstName,
+         sub: googleId,
+         picture: profileImageURL,
+       } = data
+
+       const userData = {
+         firstName,
+         lastName,
+         email,
+         googleId,
+         profileImageName: profileImageURL,
+         // Add other properties like mobile if needed
+       }
+
+       const res = await googelLogin(userData).unwrap()
+       console.log(res)
+       dispatch(setCredentials({ ...res }))
+       navigate('/')
+     } catch (err) {}
+   }
 
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -181,6 +208,7 @@ const Login = () => {
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
                       const decoded = jwtDecode(credentialResponse.credential)
+                       googelAuth(decoded)
 
                       console.log(decoded)
                     }}

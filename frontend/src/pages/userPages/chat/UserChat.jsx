@@ -198,7 +198,9 @@ export default function UserChat() {
                 <MDBCardFooter className="text-muted d-flex justify-content-start align-items-center p-3">
                   <img
                     src={
-                      userInfo.profileImageName ? userInfo.profileImageName : ''
+                      userInfo.profileImageName
+                        ? userInfo.profileImageName
+                        : 'https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg'
                     }
                     alt=""
                     style={{ width: '45px', height: '100%' }}
@@ -213,6 +215,12 @@ export default function UserChat() {
                     onChange={(e) => {
                       setContent(e.target.value)
                       typingHandler()
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault() // Prevents a newline character from being inserted
+                        sendHandler() // Call your sendHandler function when Enter is pressed
+                      }
                     }}
                   ></input>
                   <div className="w-1/12">

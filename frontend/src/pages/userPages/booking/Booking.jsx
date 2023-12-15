@@ -16,7 +16,7 @@ import {
 } from 'mdb-react-ui-kit'
 import moment from 'moment'
 import {
-  useGetProfileMutation,
+  useUsergetProfileMutation
 } from '../../../redux/slices/userApiSlice'
 import Loader from '../../../components/userComponents/loading'
 import { useNavigate } from 'react-router-dom'
@@ -26,7 +26,7 @@ import { toast } from 'react-toastify'
 const Booking = () => {
   const [userData, setUserData] = useState('')
   const [showModal, setShowModal] = useState(false)
-  const [getProfile] = useGetProfileMutation()
+  const [getProfile] = useUsergetProfileMutation()
   const [bookingDetails, setBookingDetails] = useState({
     startDate: '',
     endDate: '',

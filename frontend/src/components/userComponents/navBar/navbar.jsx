@@ -1,9 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../../../redux/slices/userAuthSlice'
-import { useLogoutMutation } from '../../../redux/slices/userApiSlice'
+import {
+  useGetNotificationsMutation,
+  useLogoutMutation,
+} from '../../../redux/slices/userApiSlice'
 import { NavLink, useLocation } from 'react-router-dom'
-
+import { Sidebar } from 'primereact/sidebar'
+import { Button } from 'primereact/button'
 import './navbar.css'
 
 import React, { useState, useEffect } from 'react'
@@ -20,16 +24,31 @@ export default function NavBar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { userInfo } = useSelector((state) => state.auth)
-
+  const [getNotifications] = useGetNotificationsMutation()
   // State variable to hold the user name
   const [userName, setUserName] = useState('')
+  const [visibleRight, setVisibleRight] = useState(false)
 
+  const [notifications, setNotifications] = useState([])
   useEffect(() => {
     // Set the user name when userInfo is available
     if (userInfo) {
       setUserName(userInfo.firstName) // Adjust the property to match your user data structure
     }
   }, [userInfo])
+
+  useEffect(() => {
+    fetchNotifications()
+  }, [])
+
+  const fetchNotifications = async () => {
+    const response = await getNotifications({ receiverId: userInfo._id })
+    if (response) {
+      console.log(response)
+      setNotifications(response.data.notifications)
+      setBadgeCount(response.data.notifications.length)
+    }
+  }
 
   const [logoutApiCall] = useLogoutMutation()
   const logoutHandler = async () => {
@@ -44,15 +63,6 @@ export default function NavBar() {
 
   // Define menu items for logged-in users
   const loggedInUserItems = [
-    {
-      label: (
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          Home
-        </Link>
-      ),
-      icon: 'pi pi-fw pi-home custom-icon',
-      // Add a link to the home page
-    },
     {
       label: (
         <Link
@@ -114,14 +124,34 @@ export default function NavBar() {
           icon: 'pi pi-wallet',
           // Add a link to the guides page
         },
+        {
+          label: 'Logout',
+          icon: 'pi pi-fw pi-power-off custom-icon',
+          command: (event) => logoutHandler(event),
+        },
       ],
     },
     // Other items for logged-in users
     {
-      label: 'Logout',
-      icon: 'pi pi-fw pi-power-off custom-icon',
-      command: (event) => logoutHandler(event),
+      label: (
+        <Button
+          icon="pi pi-bell"
+          rounded
+          severity="warning"
+          aria-label="Notification"
+          badge={notifications.length}
+          onClick={() => setVisibleRight(true)}
+          style={{
+            height: '9px',
+            color: 'blue',
+            backgroundColor: 'white',
+            border: 'none',
+          }}
+        />
+      ),
     },
+
+    // Other items for logged-in users
   ]
 
   // Define menu items for sign-up and sign-in
@@ -162,15 +192,46 @@ export default function NavBar() {
   }
 
   const start = (
-    <div style={navbarContainerStyle}>
-      <img alt="logo" src="/logos2.png" height="50" className="mr-2"></img>
-    </div>
+    <Link to={'/'}>
+      <div style={navbarContainerStyle}>
+        <img alt="logo" src="/logos2.png" height="50" className="mr-2"></img>
+      </div>
+    </Link>
   )
   const end = <InputText placeholder="Search" type="text" className="w-full" />
 
   return (
     <div className="card navbar-container">
       <Menubar model={items} start={start} style={menubarStyle} />
+      <Sidebar
+        visible={visibleRight}
+        position="right"
+        onHide={() => setVisibleRight(false)}
+      >
+        <h4>Notifications</h4>
+        <ul className="p-list">
+          {notifications.map((notification) => (
+            <li key={notification._id} className="p-mb-3">
+              <div className="p-d-flex p-ai-center">
+                <span className="p-mr-2">
+                  {/* Add icon or avatar if needed */}
+                </span>
+                <div>
+                  <h6
+                    className="p-d-block p-mb-1"
+                    style={{ font: 'Poppins', padding: '10px' }}
+                  >
+                    {notification.message}
+                  </h6>
+                  <small className="p-text-secondary">
+                    {/* Add additional details like time or sender */}
+                  </small>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Sidebar>
     </div>
   )
 }

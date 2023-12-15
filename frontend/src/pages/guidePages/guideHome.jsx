@@ -104,7 +104,7 @@ try {
                   alt="avatar"
                   className="square"
                 
-                  style={{  height:"200px" }}
+                  style={{  height:"200px", borderRadius:"20px" }}
                   fluid
                 />
                 {/* <p className="text-muted mb-1">{guideInfo.data.firstName}</p>

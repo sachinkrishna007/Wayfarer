@@ -163,6 +163,13 @@ export const userSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    GetNotifications: builder.mutation({
+      query: (query) => ({
+        url: `${USERS_URL}/UserGetNotification?receiverId=${query.receiverId}`,
+
+        method: 'GET',
+      }),
+    }),
     getFilteredGuides: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/filterGuides  `,
@@ -184,7 +191,7 @@ export const userSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    getProfile: builder.mutation({
+    UsergetProfile: builder.mutation({
       query: (query) => ({
         url: `${USERS_URL}/getProfile?email=${query.email}&userId=${query.userId}`,
 
@@ -248,8 +255,10 @@ export const {
   useGetGuideBookingDatesMutation,
  useAddFollowGuideMutation,
  useUpdateProfileMutation,
- useGetProfileMutation,
+useUsergetProfileMutation,
  useGetBlogsMutation,
  useGetFollowingMutation,
- useCancelBookingMutation
+ useCancelBookingMutation,
+ useGetNotificationsMutation
+
 } = userSlice

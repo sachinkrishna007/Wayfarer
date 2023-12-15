@@ -1,12 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../../../redux/slices/guideSlice/guideAuthSlice'
-import { useGuideLogoutMutation } from '../../../redux/slices/guideSlice/guideApiSlice'
+import { useGuideGetNotificationsMutation, useGuideLogoutMutation } from '../../../redux/slices/guideSlice/guideApiSlice'
 import { Badge } from 'primereact/badge'
 import React, { useState, useEffect } from 'react'
 import { Menubar } from 'primereact/menubar'
 import { InputText } from 'primereact/inputtext'
+import { Sidebar } from 'primereact/sidebar'
+import { Button } from 'primereact/button'
 import { Link } from 'react-router-dom'
+import { Card } from 'primereact/card'
 
 export default function NavBar() {
   const menubarStyle = {
@@ -17,17 +20,32 @@ export default function NavBar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { guideInfo } = useSelector((state) => state.guideAuth)
-  console.log(guideInfo)
 
-  // State variable to hold the user name
+  const [visibleRight, setVisibleRight] = useState(false)
+  const [notifications, setNotifications] = useState([])
+const [badgeCount, setBadgeCount] = useState(0)
   const [userName, setUserName] = useState('')
-
+  const [getNotifications] =useGuideGetNotificationsMutation()
   useEffect(() => {
-    // Set the user name when userInfo is available
     if (guideInfo) {
-      setUserName(guideInfo.data.email) // Adjust the property to match your user data structure
+      setUserName(guideInfo.data.email)
+      fetchNotifications()
+
     }
   }, [guideInfo])
+ useEffect(()=>{
+    fetchNotifications()
+ },[])
+
+  const fetchNotifications = async()=>{
+    const response = await getNotifications({receiverId:guideInfo.data._id})
+    if(response){
+      console.log(response);
+      setNotifications(response.data.notifications)
+       setBadgeCount(response.data.notifications.length)
+    }
+
+  }
 
   const [logoutApiCall] = useGuideLogoutMutation()
   const logoutHandler = async () => {
@@ -94,16 +112,34 @@ export default function NavBar() {
       ],
     },
     {
-      label: (
-        <Link
-          to="/GuideBookings"
-          style={{ textDecoration: 'none', color: 'inherit' }}
-        >
-          Bookings
-        </Link>
-      ),
-      icon: 'pi pi-fw pi-users custom-icon',
-      // Add a link to the guides page
+      label: `Booking`, // Dynamically include the user name
+      icon: 'pi pi-fw pi-user custom-icon',
+      items: [
+        {
+          label: (
+            <Link
+              to="/GuideBookings"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              Bookings
+            </Link>
+          ),
+          icon: 'pi pi-fw pi-users custom-icon',
+          // Add a link to the guides page
+        },
+        {
+          label: (
+            <Link
+              to="/Calender"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              Calender
+            </Link>
+          ),
+          icon: 'pi pi-fw pi-users custom-icon',
+          // Add a link to the guides page
+        },
+      ],
     },
     {
       label: (
@@ -137,13 +173,35 @@ export default function NavBar() {
           icon: 'pi pi-fw pi-users custom-icon',
           // Add a link to the guides page
         },
+        {
+          label: 'Logout',
+          icon: 'pi pi-fw pi-power-off custom-icon',
+          command: (event) => logoutHandler(event),
+        },
       ],
     },
-    // Other items for logged-in users
+
     {
-      label: 'Logout',
-      icon: 'pi pi-fw pi-power-off custom-icon',
-      command: (event) => logoutHandler(event),
+      label: (
+        <Button
+          icon="pi pi-bell"
+          rounded
+          severity="warning"
+          aria-label="Notification"
+          badge={badgeCount}
+          onClick={() => {
+            setVisibleRight(true)
+            // Set badge count to zero when the user clicks on the notifications button
+             setBadgeCount(0)
+          }}
+          style={{
+            height: '9px',
+            color: 'blue',
+            backgroundColor: 'white',
+            border: 'none',
+          }}
+        />
+      ),
     },
   ]
 
@@ -195,6 +253,32 @@ export default function NavBar() {
   return (
     <div className="card">
       <Menubar model={items} start={start} style={menubarStyle} />
+      <Sidebar
+        visible={visibleRight}
+        position="right"
+        onHide={() => setVisibleRight(false)}
+      >
+        <h4>Notifications</h4>
+        <ul className="p-list">
+          {notifications.map((notification) => (
+            <li key={notification._id} className="p-mb-3">
+              <div className="p-d-flex p-ai-center">
+                <span className="p-mr-2">
+                  {/* Add icon or avatar if needed */}
+                </span>
+                <div>
+                  <h6 className="p-d-block p-mb-1" style={{font:'Poppins', padding:'10px'}}>
+                    {notification.message}
+                  </h6>
+                  <small className="p-text-secondary">
+                    {/* Add additional details like time or sender */}
+                  </small>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Sidebar>
     </div>
   )
 }

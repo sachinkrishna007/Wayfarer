@@ -266,7 +266,7 @@ const loadDashboard = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  const TotalBookings = await Booking.find({status:"Accepted"}).count();
+  const TotalBookings = await Booking.find({ status: "Accepted" }).count();
   const TotalGuides = await Guide.find({}).count();
   const TotalUsers = await User.find({}).count();
 
@@ -310,7 +310,6 @@ const loadDashboard = asyncHandler(async (req, res) => {
 });
 
 const createCategory = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { CategoryName } = req.body;
   const existingCategory = await Category.findOne({ CategoryName });
 
@@ -321,7 +320,7 @@ const createCategory = asyncHandler(async (req, res) => {
   }
 
   const newCategory = new Category({
-    name:CategoryName
+    name: CategoryName,
   });
 
   await newCategory.save();
@@ -329,13 +328,9 @@ const createCategory = asyncHandler(async (req, res) => {
 });
 
 const ListCategory = asyncHandler(async (req, res) => {
-  
-const category =  await Category.find({})
+  const categoriesData = await Category.find({});
 
-
-
-
-  res.status(200).json({ category });
+  res.status(200).json({ categoriesData });
 });
 
 export {
@@ -352,5 +347,5 @@ export {
   getAdminBookingData,
   loadDashboard,
   createCategory,
-  ListCategory
+  ListCategory,
 };

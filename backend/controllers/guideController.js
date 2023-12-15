@@ -6,6 +6,8 @@ import Category from "../models/categoryModels.js";
 import Booking from "../models/bookingModel.js";
 import User from "../models/userModel.js";
 import cloudinary from "../config/cloudinary.js";
+import Notification from "../models/notifications.js";
+import mongoose from "mongoose";
 const authGuide = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -303,11 +305,47 @@ const changePassword = asyncHandler(async (req, res) => {
 });
 
 const getCategory = asyncHandler(async(req,res)=>{
-  console.log('here');
+
   const categoriesData = await Category.find({});
  
   res.status(200).json({categoriesData})
 })
+
+const getProfile = asyncHandler(async (req, res) => {
+  console.log(req.query);
+  const { email, userId } = req.query;
+
+  const user = await User.findOne({ email });
+  // const guide = await Guide.findOne({ followers: userId })
+  //   .populate("followers")
+  //   .exec();
+  //   console.log('g');
+  if (user) {
+    res.status(200).json({ user });
+  }
+});
+
+
+const getNotifications = asyncHandler(async (req, res) => {
+  console.log(req.query);
+  const { receiverId } = req.query;
+
+  try {
+    const ObjectId = new mongoose.Types.ObjectId(receiverId);
+
+    const notifications = await Notification.find({ recieverId: ObjectId }).sort({createdAt:-1})
+     
+    console.log(notifications);
+
+    if (notifications) {
+      res.status(200).json({ notifications });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 
 export {
@@ -324,5 +362,7 @@ export {
   GuideActivateAccount,
   getCategory,
   guideAddCategory,
-  deleteActivity
+  deleteActivity,
+  getProfile,
+  getNotifications
 };

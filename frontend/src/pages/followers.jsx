@@ -10,7 +10,7 @@ import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
 import { DataView } from 'primereact/dataview'
 
-import { useGetProfileMutation } from '../redux/slices/userApiSlice'
+import { useUsergetProfileMutation } from '../redux/slices/userApiSlice'
 import {
   MDBCol,
   MDBContainer,
@@ -30,7 +30,7 @@ import Loader from '../components/userComponents/loading'
 export default function Following() {
   const [userData, setUserData] = useState('')
   const { userInfo } = useSelector((state) => state.auth)
-  const [getProfile] = useGetProfileMutation()
+  const [getProfile] = useUsergetProfileMutation()
   const [loading, setLoading] = useState(true)
   const [following] = useGetFollowingMutation()
   const [followings, setFollowing] = useState([])

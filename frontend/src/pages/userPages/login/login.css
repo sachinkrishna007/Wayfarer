@@ -6,3 +6,28 @@
 .heading h5 {
   color: black;
 }
+/* Add this to your existing login.css or in your style tags */
+@media only screen and (max-width: 768px) {
+  .character {
+    padding: 20px;
+  }
+
+  /* Hide the image on smaller screens */
+  .character img {
+    display: none;
+  }
+
+  /* Add more styles as needed */
+}
+@media only screen and (max-width: 820px) {
+  .character {
+    padding: 0px 200px;
+  }
+
+  /* Hide the image on smaller screens */
+  .character img {
+    display: none;
+  }
+
+  /* Add more styles as needed */
+}

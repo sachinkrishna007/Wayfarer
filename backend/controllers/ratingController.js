@@ -4,6 +4,7 @@ import Rating from "../models/ratingModel.js";
 import asyncHandler from "express-async-handler";
 import { ObjectId } from "mongodb";
 import Booking from "../models/bookingModel.js";
+import Notification from "../models/notifications.js";
 import mongoose from "mongoose";
 
 const AddRating = asyncHandler(async (req, res) => {
@@ -68,11 +69,16 @@ const findRating = asyncHandler(async (req, res) => {
   }
 });
 
+
 const followGuide = asyncHandler(async (req, res) => {
   const { guideId, userId } = req.body;
+
   const userObjectId = new mongoose.Types.ObjectId(userId);
+  const guideObjectId = new mongoose.Types.ObjectId(guideId);
+
 
   const guide = await Guide.findOne({ _id: guideId });
+  const user = await User.findOne({ _id: userObjectId });
 
   if (!guide) {
     res.status(404);
@@ -91,8 +97,26 @@ const followGuide = asyncHandler(async (req, res) => {
     // If not following, follow
     guide.followers.push(userObjectId);
     await guide.save();
+     await createNotification({
+       senderId: userObjectId,
+       recieverId: guideObjectId,
+       message: ` ${user.firstName} started following you.`,
+     });
+
     res.status(200).json({ message: "follow" });
   }
 });
+
+const createNotification = async ({ senderId, recieverId, message }) => {
+  const notification = new Notification({
+    sender: "user", // Update with appropriate sender information
+    receiver: "guide", // Update with appropriate receiver information
+    senderId,
+    recieverId,
+    message,
+  });
+
+  await notification.save();
+};
 
 export { AddRating, findRating ,followGuide};

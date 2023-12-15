@@ -28,9 +28,6 @@ const GuideLogin = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  
- 
-
   useEffect(() => {
     if (guideInfo) {
       navigate('/guideHome')
@@ -48,7 +45,7 @@ const GuideLogin = () => {
           email,
           password,
         }).unwrap()
-       
+
         if (responseFromApiCall) {
           if (responseFromApiCall) {
             dispatch(setCredentials({ ...responseFromApiCall }))
@@ -96,7 +93,7 @@ const GuideLogin = () => {
                 style={{ height: '60px' }} // Adjust the width and height as needed
               />
             </div>
-            <h5 style={{paddingTop:"20px"}}> Guide Sign In </h5>
+            <h5 style={{ paddingTop: '20px' }}> Guide Sign In </h5>
             <MDBCardBody>
               <MDBValidation
                 onSubmit={submitHandler}

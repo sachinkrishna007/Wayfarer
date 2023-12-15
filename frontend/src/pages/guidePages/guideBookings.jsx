@@ -2,6 +2,8 @@ import React from 'react'
 import NavBar from '../../components/guideComponents/navbar/GuideNavbar'
 import { useSelector } from 'react-redux'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { Button } from 'primereact/button'
 import { useGuidegetBookingsMutation } from '../../redux/slices/guideSlice/guideApiSlice'
 
 import { DataTable } from 'primereact/datatable'
@@ -44,6 +46,14 @@ const GuideBookingData = () => {
         alt="Guide"
         style={{ width: '50px', height: '50px', borderRadius: '50%' }}
       />
+    )
+  }
+
+  const actionTemplate = (rowData) => {
+    return (
+      <Link to={`/guideViewBookings/${rowData._id}`}>
+        <button className="p-button p-button-success">View</button>
+      </Link>
     )
   }
   return (
@@ -107,6 +117,11 @@ const GuideBookingData = () => {
           <Column
             field="totalAmount"
             header="Amount"
+            style={{ width: '10%' }}
+          ></Column>
+          <Column
+            header="Action"
+            body={actionTemplate}
             style={{ width: '10%' }}
           ></Column>
         </DataTable>

@@ -7,7 +7,9 @@ import nodeMailer from "nodemailer";
 import Booking from "../models/bookingModel.js";
 import otpGenerator from "generate-otp";
 import OTP from "../models/OtpModel.js";
+import mongoose from "mongoose";
 import cloudinary from "../config/cloudinary.js";
+import Notification from "../models/notifications.js";
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -210,6 +212,7 @@ const checkAvailablity = asyncHandler(async (req, res) => {
 });
 
 const getBookingDatesGuide = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const { guideId } = req.body;
 
   const bookings = await Booking.find({ guideid: guideId, status: "Accepted" });
@@ -454,7 +457,7 @@ const getProfile = asyncHandler(async (req, res) => {
   
   const { email,userId } = req.query;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email })
   // const guide = await Guide.findOne({ followers: userId })
   //   .populate("followers")
   //   .exec();
@@ -473,6 +476,28 @@ const getFollowing = asyncHandler(async(req,res)=>{
     res.status(200).json({following})
   }
 })
+
+const userGetNotifications = asyncHandler(async (req, res) => {
+  console.log(req.query);
+  const { receiverId } = req.query;
+
+  try {
+    const ObjectId = new mongoose.Types.ObjectId(receiverId);
+
+    const notifications = await Notification.find({
+      recieverId: ObjectId,
+    }).sort({ createdAt: -1 });
+
+    console.log(notifications);
+
+    if (notifications) {
+      res.status(200).json({ notifications });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 export {
   authUser,
@@ -493,4 +518,6 @@ export {
   updateUserProfile,
   getProfile,
   getFollowing,
+  userGetNotifications
+
 };

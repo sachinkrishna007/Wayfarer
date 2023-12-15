@@ -2,19 +2,23 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import NavBar from '../../../components/userComponents/navBar/navBar'
 import { useSelector } from 'react-redux'
+import { Paginator } from 'primereact/paginator'
 import {
   useUpdateProfileMutation,
-  useGetProfileMutation,
+  useUsergetProfileMutation
 } from '../../../redux/slices/userApiSlice'
 const Wallet = ({ balance }) => {
   const [userData, setUserData] = useState({})
   const { userInfo } = useSelector((state) => state.auth)
-  const [getProfile] = useGetProfileMutation()
+  const [getProfile] = useUsergetProfileMutation()
+  const [first, setFirst] = useState(0)
+  const [rows, setRows] = useState(5) 
   const fetchUserProfile = async (e) => {
     const responseFromApiCall = await getProfile({
       email: userInfo.email
     })
     if (responseFromApiCall) {
+      
       setUserData(responseFromApiCall.data.user)
 
       console.log(responseFromApiCall.data.user)
@@ -24,7 +28,10 @@ const Wallet = ({ balance }) => {
     fetchUserProfile()
    
   }, [])
-
+  const onPaginatorChange = (event) => {
+    setFirst(event.first)
+    setRows(event.rows)
+  }
   return (
     <div>
       <NavBar />
@@ -41,20 +48,29 @@ const Wallet = ({ balance }) => {
         <div className="card-body">
           <h5 className="card-title">Transactions</h5>
           <ul>
-            {userData.walletTransaction?.map((transaction, index) => (
-              <li
-                key={index}
-                style={transaction.type === 'credit' ? creditStyle : debitStyle}
-              >
-
-                <strong>Type:</strong> {transaction.type},{' '}
-                <strong>Amount:</strong> ${transaction.amount},{' '}
-                <strong>Date:</strong>{' '}
-                {new Date(transaction.date).toLocaleString()}
-                <hr />
-              </li>
-            ))}
+            {userData.walletTransaction
+              ?.slice(first, first + rows)
+              .map((transaction, index) => (
+                <li
+                  key={index}
+                  style={
+                    transaction.type === 'credit' ? creditStyle : debitStyle
+                  }
+                >
+                  <strong>Type:</strong> {transaction.type},{' '}
+                  <strong>Amount:</strong> ${transaction.amount},{' '}
+                  <strong>Date:</strong>{' '}
+                  {new Date(transaction.date).toLocaleString()}
+                  <hr />
+                </li>
+              ))}
           </ul>
+          <Paginator
+            first={first}
+            rows={rows}
+            totalRecords={userData.walletTransaction?.length || 0}
+            onPageChange={onPaginatorChange}
+          />
         </div>
       </div>
     </div>

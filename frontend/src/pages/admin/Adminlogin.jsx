@@ -48,21 +48,25 @@ const loginScreen = () => {
     <div style={{ backgroundColor: '#fffff' }}>
       <div
         style={{
+          backgroundImage: 'url("./https://img.freepik.com/free-photo/background_53876-32169.jpg")', // Replace with the URL of your background image
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          height: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          height: '100vh',
         }}
       >
         <div></div>
         <div>
           <div>
             <img
-              src="/wayfarerlogo.png" // Use the imported variable
+              src="/adminLogo.png" // Use the imported variable
               alt="Logo"
               style={{
                 width: 'auto',
-                height: '200px',
+                height: '150px',
                 margin: '0 auto',
                 display: 'block',
               }} // Adjust the width and height as needed
@@ -74,13 +78,18 @@ const loginScreen = () => {
               color: 'black',
               textAlign: 'center',
               display: 'block',
-              fontFamily: 'Poppins', 
+              fontFamily: 'Poppins',
+              paddingLeft: '20px',
             }}
           >
-            Admin Login
+            Welcome Back Admin
           </h3>
 
-          <MDBCard alignment="center" className="mb-5">
+          <MDBCard
+            style={{ paddingLeft: '270px' }}
+            alignment=""
+            className="mb-1 character"
+          >
             <MDBIcon fas icon="user-circle" className="fa-3x" />
 
             <MDBCardBody>
@@ -89,9 +98,9 @@ const loginScreen = () => {
                 noValidate
                 className="row g-3"
               >
-                <div className="col-md-12">
+                <div className="col-md-10">
                   <MDBValidationItem
-                    className="col-md-12"
+                    className="col-md-8"
                     feedback="Please provide your email."
                     invalid
                   >
@@ -107,9 +116,9 @@ const loginScreen = () => {
                     />
                   </MDBValidationItem>
                 </div>
-                <div className="col-md-12">
+                <div className="col-md-8">
                   <MDBValidationItem
-                    className="col-md-12"
+                    className="col-md-10 "
                     feedback="Please provide a password."
                     invalid
                   >
@@ -131,7 +140,7 @@ const loginScreen = () => {
                       backgroundColor: 'black',
                       color: 'white',
                     }}
-                    className="mt-2"
+                    className="mt-5"
                   >
                     Login
                   </MDBBtn>
@@ -139,17 +148,11 @@ const loginScreen = () => {
               </MDBValidation>
             </MDBCardBody>
             <p style={{ textAlign: 'center' }}></p>
-            <MDBCardFooter className="mb-2">
-              <Link to="/register">
-                {/* <p style={{ color: "black" }}>
-                  Don't have an account?
-                  <span style={{ color: "#387F8E" }}> Sign Up </span>
-                </p> */}
-              </Link>
-            </MDBCardFooter>
+           
           </MDBCard>
         </div>
       </div>
+      
     </div>
   )
 }
