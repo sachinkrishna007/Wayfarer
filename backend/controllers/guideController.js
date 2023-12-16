@@ -346,6 +346,19 @@ const getNotifications = asyncHandler(async (req, res) => {
   }
 });
 
+const createNotification = async (req,res) => {
+
+  const notification = new Notification({
+    sender: "user",
+    receiver: "guide",
+    senderId,
+    recieverId,
+    type: "following",
+    message,
+  });
+
+  await notification.save();
+};
 
 
 export {
@@ -364,5 +377,6 @@ export {
   guideAddCategory,
   deleteActivity,
   getProfile,
-  getNotifications
+  getNotifications,
+  createNotification,
 };

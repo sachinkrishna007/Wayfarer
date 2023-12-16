@@ -1,7 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { logout } from '../../../redux/slices/guideSlice/guideAuthSlice'
-import { useGuideGetNotificationsMutation, useGuideLogoutMutation } from '../../../redux/slices/guideSlice/guideApiSlice'
+import {
+  useGuideGetNotificationsMutation,
+  useGuideLogoutMutation,
+} from '../../../redux/slices/guideSlice/guideApiSlice'
 import { Badge } from 'primereact/badge'
 import React, { useState, useEffect } from 'react'
 import { Menubar } from 'primereact/menubar'
@@ -10,7 +13,9 @@ import { Sidebar } from 'primereact/sidebar'
 import { Button } from 'primereact/button'
 import { Link } from 'react-router-dom'
 import { Card } from 'primereact/card'
-
+import io from 'socket.io-client'
+const ENDPOINT = 'http://localhost:5000'
+var socket
 export default function NavBar() {
   const menubarStyle = {
     backgroundColor: 'white', // Specify your desired background color here
@@ -20,31 +25,52 @@ export default function NavBar() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { guideInfo } = useSelector((state) => state.guideAuth)
+  const [socketConnected, setSocketConnected] = useState(false)
 
   const [visibleRight, setVisibleRight] = useState(false)
-  const [notifications, setNotifications] = useState([])
-const [badgeCount, setBadgeCount] = useState(0)
+  const [notifications, setNotifications] = useState('')
+  const [badgeCount, setBadgeCount] = useState(0)
   const [userName, setUserName] = useState('')
-  const [getNotifications] =useGuideGetNotificationsMutation()
+  const [getNotifications] = useGuideGetNotificationsMutation()
   useEffect(() => {
     if (guideInfo) {
-      setUserName(guideInfo.data.email)
+      setUserName(guideInfo.data.firstName)
       fetchNotifications()
-
     }
   }, [guideInfo])
- useEffect(()=>{
+  useEffect(() => {
     fetchNotifications()
- },[])
+  }, [])
 
-  const fetchNotifications = async()=>{
-    const response = await getNotifications({receiverId:guideInfo.data._id})
-    if(response){
-      console.log(response);
-      setNotifications(response.data.notifications)
-       setBadgeCount(response.data.notifications.length)
+  useEffect(() => {
+    socket = io(ENDPOINT)
+    socket.emit('setup', guideInfo.data)
+    socket.on('connection', () => setSocketConnected(true))
+  }, [])
+
+  useEffect(() => {
+    socket.on('new notification', (newfollowing) => {
+      console.log(newfollowing)
+      setNotifications(newfollowing)
+     setBadgeCount(notifications.length)
+      console.log(notifications);
+    })
+  })
+
+  const getNotificationImage = (notification) => {
+    if (notification.type === 'following') {
+      return 'https://media.istockphoto.com/id/1303124806/vector/vector-image-of-follower-notification-icon.jpg?s=612x612&w=0&k=20&c=16o3-156smtUxJXA0Uay47KrUy_dyiuBjrTes0LCVsY='
+    } else if (notification.type === 'NewBooking') {
+      return 'https://cdn-icons-png.flaticon.com/128/6030/6030217.png' // Replace with the default image or handle other types
     }
-
+  }
+  const fetchNotifications = async () => {
+    const response = await getNotifications({ receiverId: guideInfo.data._id })
+    if (response) {
+    
+      // setNotifications(response.data.notifications)
+     
+    }
   }
 
   const [logoutApiCall] = useGuideLogoutMutation()
@@ -192,7 +218,6 @@ const [badgeCount, setBadgeCount] = useState(0)
           onClick={() => {
             setVisibleRight(true)
             // Set badge count to zero when the user clicks on the notifications button
-             setBadgeCount(0)
           }}
           style={{
             height: '9px',
@@ -257,27 +282,46 @@ const [badgeCount, setBadgeCount] = useState(0)
         visible={visibleRight}
         position="right"
         onHide={() => setVisibleRight(false)}
+        style={{
+          margin: '30PX',
+          marginBottom: '-40px',
+          marginTop: '-29px',
+          borderRadius: '20px',
+        }}
       >
         <h4>Notifications</h4>
-        <ul className="p-list">
+        <br />
+        {/* <ul className="p-list" style={{ listStyleType: 'none', padding: 0 }}>
           {notifications.map((notification) => (
             <li key={notification._id} className="p-mb-3">
-              <div className="p-d-flex p-ai-center">
-                <span className="p-mr-2">
-                  {/* Add icon or avatar if needed */}
-                </span>
+              <div className="flex ">
+                <img
+                  src={getNotificationImage(notification)}
+                  alt="Notification Icon"
+                  style={{
+                    width: '40px',
+                    height: '45px',
+                    borderRadius: '50%',
+                    marginRight: '10px',
+                  }}
+                />
                 <div>
-                  <h6 className="p-d-block p-mb-1" style={{font:'Poppins', padding:'10px'}}>
+                  <h6
+                    className="p-d-block p-mb-1"
+                    style={{ font: 'Poppins', padding: '10px' }}
+                  >
                     {notification.message}
+                    <hr />
+                   
                   </h6>
-                  <small className="p-text-secondary">
-                    {/* Add additional details like time or sender */}
-                  </small>
+                  <small className="p-text-secondary"></small>
                 </div>
               </div>
             </li>
           ))}
-        </ul>
+        </ul> */}
+
+        {notifications}
       </Sidebar>
     </div>
   )

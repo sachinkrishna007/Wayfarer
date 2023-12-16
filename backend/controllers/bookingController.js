@@ -56,16 +56,17 @@ const createBooking = asyncHandler(async (req, res) => {
     status: "Accepted",
     payementType,
   });
-const guideNotification = new Notification({
-  sender: userName,
-  reciever: guideName,
-  senderId: userid,
-  recieverId: guideid,
-  message: `🎉 New booking from ${userName}!`,
-});
+  const guideNotification = new Notification({
+    sender: userName,
+    reciever: guideName,
+    senderId: userid,
+    recieverId: guideid,
+    type:'NewBooking',
+    message: `🎉 New booking from ${userName}!`,
+  });
 
-// Save the guide notification
-await guideNotification.save();
+  // Save the guide notification
+  await guideNotification.save();
   res.status(201).json({ success: true, data: newBooking });
 });
 
@@ -103,17 +104,18 @@ const UserCancelBooking = asyncHandler(async (req, res) => {
     throw new Error("Booking end date has passed, cancellation not allowed.");
   }
 
-    const cancellationMessage = `Booking  on ${booking.startDate} for ${booking.location}  has been cancelled by ${booking.userName}`;
-    const cancellationNotification = new Notification({
-      sender: "System", // or any other identifier for the system
-      reciever: user.email, // or any other identifier for the user
-      senderId: null, // or any other identifier for the system
-      recieverId: booking.guideid,
-      message: cancellationMessage,
-    });
+  const cancellationMessage = `Booking  on ${booking.startDate} for ${booking.location}  has been cancelled by ${booking.userName}`;
+  const cancellationNotification = new Notification({
+    sender: "System", // or any other identifier for the system
+    reciever: user.email, // or any other identifier for the user
+    senderId: null, // or any other identifier for the system
+    recieverId: booking.guideid,
+    message: cancellationMessage,
+    type: "cancel",
+  });
 
-    // Save the notification
-    await cancellationNotification.save();
+  // Save the notification
+  await cancellationNotification.save();
   booking.status = "cancelled";
 
   booking.startDate = null;
@@ -147,17 +149,18 @@ const GuideCancelBooking = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Booking end date has passed, cancellation not allowed.");
   }
-   const cancellationMessage = `Booking  on ${booking.startDate} for ${booking.location}  has been cancelled by ${booking.guidename}`;
-   const cancellationNotification = new Notification({
-     sender: "System", // or any other identifier for the system
-     reciever: user.email, // or any other identifier for the user
-     senderId: null, // or any other identifier for the system
-     recieverId: booking.userid,
-     message: cancellationMessage,
-   });
+  const cancellationMessage = `Booking  on ${booking.startDate} for ${booking.location}  has been cancelled by ${booking.guidename}`;
+  const cancellationNotification = new Notification({
+    sender: "System",
+    reciever: user.email,
+    senderId: null,
+    recieverId: booking.userid,
+    message: cancellationMessage,
+    type: "cancel",
+  });
 
-   // Save the notification
-   await cancellationNotification.save();
+  // Save the notification
+  await cancellationNotification.save();
   booking.status = "Guidecancelled";
 
   booking.startDate = null;

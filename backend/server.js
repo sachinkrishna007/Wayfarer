@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
   console.log("connected with socket io");
 
   socket.on("setup", (userData) => {
+    
     socket.join(userData._id);
     socket.emit("connected");
   });
@@ -62,6 +63,15 @@ io.on("connection", (socket) => {
   socket.on("stop typing", (room) => {
     socket.in(room).emit("stop typing");
   });
+
+
+socket.on('new follower',(newfollower)=>{
+  console.log(newfollower, "bjhbjh");
+  var notification =newfollower.guide._id
+  socket.to(notification).emit("new notification", newfollower);
+
+})
+
 
   socket.on("new message", (newMessageReceived) => {
     console.log(newMessageReceived,'bjhbjh');

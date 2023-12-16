@@ -5,6 +5,7 @@ import {
   useGetNotificationsMutation,
   useLogoutMutation,
 } from '../../../redux/slices/userApiSlice'
+
 import { NavLink, useLocation } from 'react-router-dom'
 import { Sidebar } from 'primereact/sidebar'
 import { Button } from 'primereact/button'
@@ -36,6 +37,16 @@ export default function NavBar() {
       setUserName(userInfo.firstName) // Adjust the property to match your user data structure
     }
   }, [userInfo])
+
+ const getNotificationImage = (notification) => {
+   if (notification.type === 'following') {
+     return 'https://media.istockphoto.com/id/1303124806/vector/vector-image-of-follower-notification-icon.jpg?s=612x612&w=0&k=20&c=16o3-156smtUxJXA0Uay47KrUy_dyiuBjrTes0LCVsY='
+   } else if (notification.type === 'NewBooking') {
+     return 'https://cdn-icons-png.flaticon.com/128/6030/6030217.png' // Replace with the default image or handle other types
+   }
+ }
+
+
 
   useEffect(() => {
     fetchNotifications()
@@ -143,7 +154,7 @@ export default function NavBar() {
           onClick={() => setVisibleRight(true)}
           style={{
             height: '9px',
-            color: 'blue',
+            color: '#387f8e',
             backgroundColor: 'white',
             border: 'none',
           }}
@@ -207,25 +218,38 @@ export default function NavBar() {
         visible={visibleRight}
         position="right"
         onHide={() => setVisibleRight(false)}
+        style={{
+          margin: '30PX',
+          marginBottom: '-40px',
+          marginTop: '-29px',
+          borderRadius: '20px',
+        }}
       >
         <h4>Notifications</h4>
-        <ul className="p-list">
+        <br />
+        <ul className="p-list" style={{ listStyleType: 'none', padding: 0 }}>
           {notifications.map((notification) => (
             <li key={notification._id} className="p-mb-3">
-              <div className="p-d-flex p-ai-center">
-                <span className="p-mr-2">
-                  {/* Add icon or avatar if needed */}
-                </span>
+              <div className="flex ">
+                <img
+                  src={getNotificationImage(notification)}
+                  alt="Notification Icon"
+                  style={{
+                    width: '40px',
+                    height: '45px',
+                    borderRadius: '50%',
+                    marginRight: '10px',
+                  }}
+                />
                 <div>
                   <h6
                     className="p-d-block p-mb-1"
                     style={{ font: 'Poppins', padding: '10px' }}
                   >
                     {notification.message}
+                    <hr />
                   </h6>
-                  <small className="p-text-secondary">
-                    {/* Add additional details like time or sender */}
-                  </small>
+                  <small className="p-text-secondary"></small>
                 </div>
               </div>
             </li>

@@ -1,5 +1,8 @@
 import NavBar from '../../../components/userComponents/navBar/navBar'
 import './guideDetailed.css'
+import io from 'socket.io-client'
+const ENDPOINT = 'http://localhost:5000'
+var socket
 import Footer from '../../../components/userComponents/footer/footer'
 import DatePicker from 'react-datepicker'
 import React, { lazy, Suspense } from 'react'
@@ -16,6 +19,7 @@ import { Button } from 'primereact/button'
 import { Chip } from 'primereact/chip'
 import { Knob } from 'primereact/knob'
 import { Sidebar } from 'primereact/sidebar'
+
 
 import { Link } from 'react-router-dom'
 import {
@@ -59,6 +63,8 @@ export default function EditButton() {
   const [booking, setBooking] = useState('')
   const [bookingCount, setBookingCount] = useState(0)
 
+ const [socketConnected, setSocketConnected] = useState(false)
+
   const id = location.pathname.split('/')[2]
   const [guideSingleDataFromAPI] = useGetSingleGuideMutation()
   const [overlappingDates] = useCheckAvilablityGuideMutation()
@@ -94,6 +100,14 @@ export default function EditButton() {
     }
   }, [guideData])
 
+
+   useEffect(() => {
+     socket = io(ENDPOINT)
+     socket.emit('setup', userInfo)
+     socket.on('connection', () => setSocketConnected(true))
+ 
+   }, [])
+
   const handleFollow = async () => {
     console.log('sdsgfsdgvgsd')
     const responseFromApiCall = await followGuide({
@@ -103,8 +117,9 @@ export default function EditButton() {
     if (responseFromApiCall) {
       console.log(responseFromApiCall)
       setIsFollowing(responseFromApiCall.message)
-      console.log(responseFromApiCall)
-      //  toast.success(responseFromApiCall.message)
+     
+      socket.emit('new follower', responseFromApiCall)
+    
     }
   }
 

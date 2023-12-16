@@ -11,7 +11,7 @@ import { InputText } from 'primereact/inputtext'
 
 import {
   useUpdateProfileMutation,
- useUsergetProfileMutation
+  useUsergetProfileMutation,
 } from '../../../redux/slices/userApiSlice'
 import {
   MDBCol,
@@ -245,7 +245,6 @@ export default function UserProfile() {
                       />
                     </Link>
                   </MDBListGroupItem>
-                  
                 </MDBListGroup>
               </MDBCardBody>
             </MDBCard>

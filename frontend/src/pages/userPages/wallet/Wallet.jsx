@@ -1,37 +1,45 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../../../components/userComponents/navBar/navBar'
 import { useSelector } from 'react-redux'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 import { Paginator } from 'primereact/paginator'
 import {
   useUpdateProfileMutation,
-  useUsergetProfileMutation
+  useUsergetProfileMutation,
 } from '../../../redux/slices/userApiSlice'
+
 const Wallet = ({ balance }) => {
   const [userData, setUserData] = useState({})
   const { userInfo } = useSelector((state) => state.auth)
   const [getProfile] = useUsergetProfileMutation()
   const [first, setFirst] = useState(0)
-  const [rows, setRows] = useState(5) 
-  const fetchUserProfile = async (e) => {
+  const [rows, setRows] = useState(5)
+
+  const fetchUserProfile = async () => {
     const responseFromApiCall = await getProfile({
-      email: userInfo.email
+      email: userInfo.email,
     })
     if (responseFromApiCall) {
-      
       setUserData(responseFromApiCall.data.user)
-
-      console.log(responseFromApiCall.data.user)
     }
   }
+
   useEffect(() => {
     fetchUserProfile()
-   
   }, [])
+
   const onPaginatorChange = (event) => {
     setFirst(event.first)
     setRows(event.rows)
   }
+
+  const transactionColumns = [
+    { field: 'type', header: 'Type' },
+    { field: 'amount', header: 'Amount' },
+    { field: 'date', header: 'Date' },
+  ]
+
   return (
     <div>
       <NavBar />
@@ -40,37 +48,36 @@ const Wallet = ({ balance }) => {
           <h5 className="card-title">Wallet</h5>
           <p style={{ paddingTop: '20px' }} className="card-text">
             Balance: ₹{userData.wallet || 0}
-            {console.log(userData)}
           </p>
         </div>
       </div>
-      <div className="card" style={styles.transactionCard}>
+      <div style={styles.transactionCard}>
         <div className="card-body">
           <h5 className="card-title">Transactions</h5>
-          <ul>
-            {userData.walletTransaction
-              ?.slice(first, first + rows)
-              .map((transaction, index) => (
-                <li
-                  key={index}
-                  style={
-                    transaction.type === 'credit' ? creditStyle : debitStyle
-                  }
-                >
-                  <strong>Type:</strong> {transaction.type},{' '}
-                  <strong>Amount:</strong> ${transaction.amount},{' '}
-                  <strong>Date:</strong>{' '}
-                  {new Date(transaction.date).toLocaleString()}
-                  <hr />
-                </li>
-              ))}
-          </ul>
-          <Paginator
-            first={first}
+          <DataTable
+            value={userData.walletTransaction?.slice(first, first + rows) || []}
+            paginator
             rows={rows}
             totalRecords={userData.walletTransaction?.length || 0}
-            onPageChange={onPaginatorChange}
-          />
+            onPage={onPaginatorChange}
+          >
+            {transactionColumns.map((col) => (
+              <Column
+                key={col.field}
+                field={col.field}
+                header={col.header}
+                body={(rowData) => (
+                  <span
+                    style={{
+                      color: rowData.type === 'debit' ? 'red' : 'green',
+                    }}
+                  >
+                    {rowData[col.field]}
+                  </span>
+                )}
+              ></Column>
+            ))}
+          </DataTable>
         </div>
       </div>
     </div>
@@ -93,10 +100,8 @@ const styles = {
     margin: '-350px 300px  ',
     boxShadow: '0 4px 8px rgba(0.1, 0, 0, 0.1)',
     borderRadius: '8px',
-    float:'right'
+    float: 'right',
   },
 }
-const creditStyle = { color: 'green' }
-const debitStyle = { color: 'red' }
 
 export default Wallet

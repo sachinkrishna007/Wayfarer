@@ -22,6 +22,9 @@ const notificationSchema = new mongoose.Schema({
   message: {
     type: String,
   },
+  type: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

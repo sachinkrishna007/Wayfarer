@@ -136,6 +136,13 @@ export const guideSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    createNotifications: builder.mutation({
+      query: (data) => ({
+        url: `${GUIDE_URL}/createNotifications`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
     guideViewBookings: builder.mutation({
       query: (params) => ({
         url: `${GUIDE_URL}/guideViewBookings?id=${params.bookingId}`,
@@ -197,6 +204,7 @@ export const {
   useGuideViewBookingsMutation,
   useGuidegetUserProfileMutation,
  useGuideCancelBookingMutation,
-useGuideGetNotificationsMutation
+useGuideGetNotificationsMutation, 
+useCreateNotificationsMutation
 
 } = guideSlice

@@ -92,7 +92,7 @@ const followGuide = asyncHandler(async (req, res) => {
     const followerIndex = guide.followers.indexOf(userObjectId);
     guide.followers.splice(followerIndex, 1);
     await guide.save();
-    res.status(200).json({ message: "unfollowed" });
+    res.status(200).json({ guide });
   } else {
     // If not following, follow
     guide.followers.push(userObjectId);
@@ -103,16 +103,17 @@ const followGuide = asyncHandler(async (req, res) => {
        message: ` ${user.firstName} started following you.`,
      });
 
-    res.status(200).json({ message: "follow" });
+    res.status(200).json({guide });   
   }
 });
 
 const createNotification = async ({ senderId, recieverId, message }) => {
   const notification = new Notification({
-    sender: "user", // Update with appropriate sender information
-    receiver: "guide", // Update with appropriate receiver information
+    sender: "user", 
+    receiver: "guide",
     senderId,
     recieverId,
+    type:"following",
     message,
   });
 

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from 'primereact/button'
 import { useGuidegetBookingsMutation } from '../../redux/slices/guideSlice/guideApiSlice'
-
+import { TabView, TabPanel } from 'primereact/tabview'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 
@@ -63,68 +63,154 @@ const GuideBookingData = () => {
         <h3 className="Heading">Bookings</h3>
       </div>
       <div className="userTable">
-        <DataTable
-          value={Data}
-          paginator
-          rows={5}
-          rowsPerPageOptions={[5, 10, 25, 50]}
-          tableStyle={{ minWidth: '50rem' }}
-          emptyMessage="No bookings found"
-        >
-          <Column
-            header="#"
-            body={UserImageTemplate}
-            style={{ width: '10%' }}
-          ></Column>
-          <Column
-            field="userName"
-            header="Name"
-            style={{ width: '10%' }}
-          ></Column>
-          <Column
-            field="location"
-            header="Location"
-            style={{ width: '10%' }}
-          ></Column>
-          <Column
-            field="startDate"
-            header="Start Date"
-            style={{ width: '10%' }}
-            body={(rowData) => formatDate(rowData.startDate)}
-          ></Column>
-          <Column
-            field="endDate"
-            header="End Date"
-            style={{ width: '10%' }}
-            body={(rowData) => formatDate(rowData.endDate)}
-          ></Column>
-          <Column
-            field="totalDays"
-            header="Days"
-            style={{ width: '10%' }}
-          ></Column>
-          <Column
-            field="status"
-            header="Status"
-            style={{ width: '10%' }}
-          ></Column>
-          <Column
-            field="createdAt"
-            header="Booking Date"
-            style={{ width: '10%' }}
-            body={(rowData) => formatDate(rowData.createdAt)}
-          ></Column>
-          <Column
-            field="totalAmount"
-            header="Amount"
-            style={{ width: '10%' }}
-          ></Column>
-          <Column
-            header="Action"
-            body={actionTemplate}
-            style={{ width: '10%' }}
-          ></Column>
-        </DataTable>
+        <TabView>
+          <TabPanel header="Accepted">
+            <DataTable
+              value={Data.filter((item) => item.status === 'Accepted')}
+              paginator
+              rows={5}
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              tableStyle={{ minWidth: '50rem' }}
+              emptyMessage="No bookings found"
+            >
+              <Column
+                header="#"
+                body={UserImageTemplate}
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="userName"
+                header="Name"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="location"
+                header="Location"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="startDate"
+                header="Start Date"
+                style={{ width: '10%' }}
+                body={(rowData) => formatDate(rowData.startDate)}
+              ></Column>
+              <Column
+                field="endDate"
+                header="End Date"
+                style={{ width: '10%' }}
+                body={(rowData) => formatDate(rowData.endDate)}
+              ></Column>
+              <Column
+                field="totalDays"
+                header="Days"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="status"
+                header="Status"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="createdAt"
+                header="Booking Date"
+                style={{ width: '10%' }}
+                body={(rowData) => formatDate(rowData.createdAt)}
+              ></Column>
+              <Column
+                field="totalAmount"
+                header="Amount"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                header="Action"
+                body={actionTemplate}
+                style={{ width: '10%' }}
+              ></Column>
+            </DataTable>
+          </TabPanel>
+          <TabPanel header="Cancelled">
+            <DataTable
+              value={Data.filter(
+                (item) =>
+                  item.status === 'cancelled' ||
+                  item.status === 'Guidecancelled',
+              )}
+              paginator
+              rows={5}
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              tableStyle={{ minWidth: '50rem' }}
+              emptyMessage="No bookings found"
+            >
+              <Column
+                header="#"
+                body={UserImageTemplate}
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="userName"
+                header="Name"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="location"
+                header="Location"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="startDate"
+                header="Start Date"
+                style={{ width: '10%' }}
+                body={(rowData) => formatDate(rowData.startDate)}
+              ></Column>
+              <Column
+                field="endDate"
+                header="End Date"
+                style={{ width: '10%' }}
+                body={(rowData) => formatDate(rowData.endDate)}
+              ></Column>
+              <Column
+                field="totalDays"
+                header="Days"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                field="status"
+                header="Status"
+                style={{ width: '10%' }}
+                body={(rowData) => (
+                  <span
+                    style={{
+                      color:
+                        rowData.status === 'Guidecancelled' ? '' : '',
+                       
+
+                    }}
+                  >
+                    {rowData.status === 'Guidecancelled'
+                      ? 'Guide Cancelled'
+                      : rowData.status}
+                  </span>
+                )}
+              />
+              <Column
+                field="createdAt"
+                header="Booking Date"
+                style={{ width: '10%' }}
+                body={(rowData) => formatDate(rowData.createdAt)}
+              ></Column>
+              <Column
+                field="totalAmount"
+                header="Amount"
+                style={{ width: '10%' }}
+              ></Column>
+              <Column
+                header="Action"
+                body={actionTemplate}
+                style={{ width: '10%' }}
+              ></Column>
+            </DataTable>
+          </TabPanel>
+        </TabView>
       </div>
     </div>
   )

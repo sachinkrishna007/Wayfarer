@@ -17,7 +17,8 @@ import {
   guideAddCategory,
   deleteActivity,
   getProfile,
-  getNotifications
+  getNotifications,
+  createNotification
 } from "../controllers/guideController.js";
 
 import {
@@ -53,6 +54,7 @@ router.get('/guideViewBookings',protect,getSingleBooking)
 router.get("/guideCancelBooking", protect, GuideCancelBooking);
 router.get('/getUserProfile',protect,getProfile)
 router.get('/guideNotifications',protect,getNotifications)
+router.post('createNotifications',createNotification)
 router.delete('/deleteBlog',protect,GuidedeleteBlog)
 
 export default router;
