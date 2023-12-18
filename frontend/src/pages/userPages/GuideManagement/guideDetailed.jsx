@@ -109,7 +109,6 @@ export default function EditButton() {
    }, [])
 
   const handleFollow = async () => {
-    console.log('sdsgfsdgvgsd')
     const responseFromApiCall = await followGuide({
       userId: userInfo._id,
       guideId: id,
@@ -118,7 +117,11 @@ export default function EditButton() {
       console.log(responseFromApiCall)
       setIsFollowing(responseFromApiCall.message)
      
-      socket.emit('new follower', responseFromApiCall)
+     socket.emit('new follower', {
+       responseFromApiCall,
+    
+     })
+
     
     }
   }

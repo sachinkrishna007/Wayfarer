@@ -1,3 +1,4 @@
+import path from 'path'
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
@@ -23,8 +24,14 @@ app.use("/api/guide", guideRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/stripe", stripeRoutes);
 
+if (process.env.NODE_ENV==='production'){
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname,'frontend/dist')));
+  app.get('*',(req,res)=>res.sendFile(path.resolve(__dirname,'frontend','dist','index.html')))
+}else{
 
-app.get("/", (req, res) => res.send("wayfarer is ready "));
+  app.get("/", (req, res) => res.send("wayfarer is ready "));
+}
 
 app.use(notFound);
 app.use(errorHandler);
@@ -44,7 +51,6 @@ io.on("connection", (socket) => {
   console.log("connected with socket io");
 
   socket.on("setup", (userData) => {
-    
     socket.join(userData._id);
     socket.emit("connected");
   });
@@ -55,33 +61,37 @@ io.on("connection", (socket) => {
     console.log("User Joined room:" + room);
   });
 
-
   socket.on("typing", (room) => {
-    console.log('aaddas')
-  socket.in(room).emit("typing");
+    console.log("aaddas");
+    socket.in(room).emit("typing");
   });
   socket.on("stop typing", (room) => {
     socket.in(room).emit("stop typing");
   });
 
+  socket.on("new follower", (newfollower) => {
+    const guideId = newfollower.responseFromApiCall.guide?._id;
+    const notification = newfollower.responseFromApiCall.notification;
+   
 
-socket.on('new follower',(newfollower)=>{
-  console.log(newfollower, "bjhbjh");
-  var notification =newfollower.guide._id
-  socket.to(notification).emit("new notification", newfollower);
+    if (guideId) {
+      socket.to(guideId).emit("new notification", {
+        notification,
+      });
+    }
+  });
 
-})
 
+ 
 
   socket.on("new message", (newMessageReceived) => {
-    console.log(newMessageReceived,'bjhbjh');
+    console.log(newMessageReceived, "bjhbjh");
     var chat = newMessageReceived.newMessage.room;
-    console.log('chat',chat);
+    console.log("chat", chat);
     if (!chat.user || !chat.guide) {
       return console.log("chat.users not defined");
     }
 
-        socket.to(chat._id).emit("message received", newMessageReceived.newMessage)
-  
+    socket.to(chat._id).emit("message received", newMessageReceived.newMessage);
   });
 });

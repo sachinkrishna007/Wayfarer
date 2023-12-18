@@ -67,7 +67,7 @@ const createBooking = asyncHandler(async (req, res) => {
 
   // Save the guide notification
   await guideNotification.save();
-  res.status(201).json({ success: true, data: newBooking });
+  res.status(201).json({ success: true, data: newBooking, guideNotification });
 });
 
 const getSingleBooking = asyncHandler(async (req, res) => {

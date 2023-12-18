@@ -56,8 +56,8 @@ export default function NavBar() {
     const response = await getNotifications({ receiverId: userInfo._id })
     if (response) {
       console.log(response)
-      setNotifications(response.data.notifications)
-      setBadgeCount(response.data.notifications.length)
+      // setNotifications(response.data.notifications)
+      // setBadgeCount(response.data.notifications.length)
     }
   }
 
@@ -227,7 +227,7 @@ export default function NavBar() {
       >
         <h4>Notifications</h4>
         <br />
-        <ul className="p-list" style={{ listStyleType: 'none', padding: 0 }}>
+        {/* <ul className="p-list" style={{ listStyleType: 'none', padding: 0 }}>
           {notifications.map((notification) => (
             <li key={notification._id} className="p-mb-3">
               <div className="flex ">
@@ -254,7 +254,7 @@ export default function NavBar() {
               </div>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </Sidebar>
     </div>
   )

@@ -28,7 +28,8 @@ export default function NavBar() {
   const [socketConnected, setSocketConnected] = useState(false)
 
   const [visibleRight, setVisibleRight] = useState(false)
-  const [notifications, setNotifications] = useState('')
+  const [notifications, setNotifications] = useState([])
+  const [notificationsdb, setNotificationsdb] = useState('')
   const [badgeCount, setBadgeCount] = useState(0)
   const [userName, setUserName] = useState('')
   const [getNotifications] = useGuideGetNotificationsMutation()
@@ -36,11 +37,9 @@ export default function NavBar() {
     if (guideInfo) {
       setUserName(guideInfo.data.firstName)
       fetchNotifications()
+
     }
   }, [guideInfo])
-  useEffect(() => {
-    fetchNotifications()
-  }, [])
 
   useEffect(() => {
     socket = io(ENDPOINT)
@@ -50,26 +49,25 @@ export default function NavBar() {
 
   useEffect(() => {
     socket.on('new notification', (newfollowing) => {
-      console.log(newfollowing)
-      setNotifications(newfollowing)
-     setBadgeCount(notifications.length)
-      console.log(notifications);
+      console.log('here');
+     console.log(newfollowing);
+     setNotifications(newfollowing.notification.message)
+     console.log(notifications.length);
+     setBadgeCount(notifications.length+1)
     })
   })
 
-  const getNotificationImage = (notification) => {
-    if (notification.type === 'following') {
+  const getNotificationImage = (notificationdb) => {
+    if (notificationdb.type === 'following') {
       return 'https://media.istockphoto.com/id/1303124806/vector/vector-image-of-follower-notification-icon.jpg?s=612x612&w=0&k=20&c=16o3-156smtUxJXA0Uay47KrUy_dyiuBjrTes0LCVsY='
-    } else if (notification.type === 'NewBooking') {
+    } else if (notificationdb.type === 'NewBooking') {
       return 'https://cdn-icons-png.flaticon.com/128/6030/6030217.png' // Replace with the default image or handle other types
     }
   }
   const fetchNotifications = async () => {
     const response = await getNotifications({ receiverId: guideInfo.data._id })
     if (response) {
-    
-      // setNotifications(response.data.notifications)
-     
+      setNotificationsdb(response.data.notifications)
     }
   }
 
@@ -291,37 +289,32 @@ export default function NavBar() {
       >
         <h4>Notifications</h4>
         <br />
-        {/* <ul className="p-list" style={{ listStyleType: 'none', padding: 0 }}>
-          {notifications.map((notification) => (
-            <li key={notification._id} className="p-mb-3">
-              <div className="flex ">
-                <img
-                  src={getNotificationImage(notification)}
-                  alt="Notification Icon"
-                  style={{
-                    width: '40px',
-                    height: '45px',
-                    borderRadius: '50%',
-                    marginRight: '10px',
-                  }}
-                />
-                <div>
-                  <h6
-                    className="p-d-block p-mb-1"
-                    style={{ font: 'Poppins', padding: '10px' }}
-                  >
-                    {notification.message}
-                    <hr />
-                   
-                  </h6>
-                  <small className="p-text-secondary"></small>
+        {notificationsdb && notificationsdb.length > 0 && (
+          <ul className="p-list" style={{ listStyleType: 'none', padding: 0 }}>
+            {notificationsdb.map((notification) => (
+              <li key={notification._id} className="p-mb-3">
+                <div className="flex ">
+                  <div>
+                    <h6
+                      className="p-d-block p-mb-1"
+                      style={{ font: 'Poppins', padding: '10px' }}
+                    >
+                      {notification.message}
+                    </h6>
+                    <small className="p-text-secondary"></small>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul> */}
+              </li>
+            ))}
+          </ul>
+        )}
 
-        {notifications}
+        <h6
+          className="p-d-block p-mb-1"
+          style={{ font: 'Poppins', padding: '10px' }}
+        >
+          {notifications}
+        </h6>
       </Sidebar>
     </div>
   )

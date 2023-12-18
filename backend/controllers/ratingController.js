@@ -71,6 +71,7 @@ const findRating = asyncHandler(async (req, res) => {
 
 
 const followGuide = asyncHandler(async (req, res) => {
+  console.log('jheghjgf');
   const { guideId, userId } = req.body;
 
   const userObjectId = new mongoose.Types.ObjectId(userId);
@@ -94,17 +95,18 @@ const followGuide = asyncHandler(async (req, res) => {
     await guide.save();
     res.status(200).json({ guide });
   } else {
-    // If not following, follow
     guide.followers.push(userObjectId);
     await guide.save();
-     await createNotification({
+
+    const notification = await createNotification({
        senderId: userObjectId,
        recieverId: guideObjectId,
        message: ` ${user.firstName} started following you.`,
      });
+ 
 
-    res.status(200).json({guide });   
-  }
+     res.status(200).json({ guide, notification });   
+    }
 });
 
 const createNotification = async ({ senderId, recieverId, message }) => {
@@ -118,6 +120,7 @@ const createNotification = async ({ senderId, recieverId, message }) => {
   });
 
   await notification.save();
+   return notification;
 };
 
 export { AddRating, findRating ,followGuide};

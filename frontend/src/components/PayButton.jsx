@@ -1,7 +1,10 @@
 import { Button } from 'primereact/button'
 import { useStripeBookingMutation } from '../redux/slices/userApiSlice'
 import { useGetBookingMutation } from '../redux/slices/userApiSlice'
+import { useSelector } from 'react-redux'
 import React from 'react'
+import { useEffect } from 'react'
+
 const url = '/api/stripe/create-checkout-session'
 const PayButton = ({
   userid,
@@ -17,8 +20,9 @@ const PayButton = ({
   userName
 }) => {
   const [Stripe, { isLoading }] = useStripeBookingMutation()
+    const { userInfo } = useSelector((state) => state.auth)
   const [createBooking] = useGetBookingMutation()
-
+  
   const handleCheckout = async () => {
     try {
       const responseFromApiCall = await Stripe({
@@ -33,7 +37,7 @@ const PayButton = ({
         totalAmount,
         userName
       })
-     
+    
     
 
       const response = await createBooking({
@@ -53,6 +57,8 @@ const PayButton = ({
       if (response) {
         localStorage.removeItem('bookingData')
         window.location.href = responseFromApiCall.data.url
+       
+         
       }
     } catch (error) {
       console.log(error)

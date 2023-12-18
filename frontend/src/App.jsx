@@ -47,6 +47,7 @@ import Wallet from './pages/userPages/wallet/Wallet'
 import CalendarGuide from './pages/guidePages/calander'
 import GuideDashBoard from './pages/guidePages/guideDashBoard'
 import GuideViewBooking from './pages/guidePages/GuideViewBookings'
+import NotFoundPage from './pages/404page'
 const App = () => {
   return (
     <div style={{ position: 'relative' }}>
@@ -160,6 +161,7 @@ const App = () => {
           path="/Category"
           element={<AdminPrivateRoute element={<Category />} />}
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   )

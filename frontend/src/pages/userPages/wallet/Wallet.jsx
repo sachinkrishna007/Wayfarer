@@ -14,8 +14,10 @@ const Wallet = ({ balance }) => {
   const { userInfo } = useSelector((state) => state.auth)
   const [getProfile] = useUsergetProfileMutation()
   const [first, setFirst] = useState(0)
-  const [rows, setRows] = useState(5)
-
+  const [rows, setRows] = useState(4)
+  const [totalRecords, setTotalRecords] = useState(
+    userData.walletTransaction?.length || 0,
+  )
   const fetchUserProfile = async () => {
     const responseFromApiCall = await getProfile({
       email: userInfo.email,
@@ -30,8 +32,16 @@ const Wallet = ({ balance }) => {
   }, [])
 
   const onPaginatorChange = (event) => {
+    const newTotalRecords = userData.walletTransaction?.length || 0
+
+    console.log('Paginator changed:', {
+      ...event,
+      totalRecords: newTotalRecords,
+    })
+
     setFirst(event.first)
     setRows(event.rows)
+    setTotalRecords(newTotalRecords) // Add a state variable for totalRecords
   }
 
   const transactionColumns = [
@@ -52,32 +62,34 @@ const Wallet = ({ balance }) => {
         </div>
       </div>
       <div style={styles.transactionCard}>
-        <div className="card-body">
-          <h5 className="card-title">Transactions</h5>
-          <DataTable
-            value={userData.walletTransaction?.slice(first, first + rows) || []}
-            paginator
+        <div className="card">
+          <h5 className="card-title" style={{padding:"10px 10px"}} >Transactions</h5>
+          <br />
+          <br />
+          <ul>
+            {userData.walletTransaction
+              ?.slice(first, first + rows)
+              .map((transaction, index) => (
+                <li
+                  key={index}
+                  style={
+                    transaction.type === 'credit' ? creditStyle : debitStyle
+                  }
+                >
+                  <strong>Type:</strong> {transaction.type},{' '}
+                  <strong>Amount:</strong> ${transaction.amount},{' '}
+                  <strong>Date:</strong>{' '}
+                  {new Date(transaction.date).toLocaleString()}
+                  <hr />
+                </li>
+              ))}
+          </ul>
+          <Paginator
+            first={first}
             rows={rows}
             totalRecords={userData.walletTransaction?.length || 0}
-            onPage={onPaginatorChange}
-          >
-            {transactionColumns.map((col) => (
-              <Column
-                key={col.field}
-                field={col.field}
-                header={col.header}
-                body={(rowData) => (
-                  <span
-                    style={{
-                      color: rowData.type === 'debit' ? 'red' : 'green',
-                    }}
-                  >
-                    {rowData[col.field]}
-                  </span>
-                )}
-              ></Column>
-            ))}
-          </DataTable>
+            onPageChange={onPaginatorChange}
+          />
         </div>
       </div>
     </div>
@@ -103,5 +115,7 @@ const styles = {
     float: 'right',
   },
 }
+const creditStyle = { color: 'green' }
+const debitStyle = { color: 'red' }
 
 export default Wallet
