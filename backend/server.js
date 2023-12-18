@@ -24,7 +24,7 @@ app.use("/api/guide", guideRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/stripe", stripeRoutes);
 
-if (process.env.NODE_ENV==='production'){
+if (process.env.NODE_ENV === 'production'){
   const __dirname = path.resolve();
   app.use(express.static(path.join(__dirname,'frontend/dist')));
   app.get('*',(req,res)=>res.sendFile(path.resolve(__dirname,'frontend','dist','index.html')))
