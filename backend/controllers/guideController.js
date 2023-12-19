@@ -5,9 +5,20 @@ import Guide from "../models/guideModel.js";
 import Category from "../models/categoryModels.js";
 import Booking from "../models/bookingModel.js";
 import User from "../models/userModel.js";
-import cloudinary from "../config/cloudinary.js";
+
 import Notification from "../models/notifications.js";
 import mongoose from "mongoose";
+import cloudinary from "cloudinary";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDNAME,
+  api_key: process.env.APIKEY,
+  api_secret: process.env.APISECERET,
+});
+
 const authGuide = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
