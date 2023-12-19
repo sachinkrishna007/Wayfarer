@@ -1,5 +1,5 @@
 import React from 'react'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import BookingTable from '../../../components/userComponents/table/table'
 import { useState, useEffect } from 'react'
 import { useGetBookingDataMutation } from '../../../redux/slices/userApiSlice'
