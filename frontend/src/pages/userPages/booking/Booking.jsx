@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Heading from '../../../components/userComponents/Headings/heading'
-import NavBar from '../../../components/userComponents/navBar/navBar'
-import NavBar from '../../../components/userComponents/navBar/navBar'
+import NavBar from '../../../components/userComponents/navBar/navBar.jsx'
 import { useGetBookingMutation } from '../../../redux/slices/userApiSlice'
 import PayButton from '../../../components/PayButton'
 import { Dialog } from 'primereact/dialog'
