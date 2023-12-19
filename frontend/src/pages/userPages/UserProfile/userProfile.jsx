@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import NavBar from '../../../components/userComponents/navBar/navBar'
+import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { Sidebar } from 'primereact/sidebar'
 import { useSelector } from 'react-redux'
 import Heading from '../../../components/userComponents/Headings/heading'

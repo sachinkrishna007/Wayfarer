@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import NavBar from '../../../components/userComponents/navBar/navBar'
+import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { useChangePasswordMutation } from '../../../redux/slices/userApiSlice'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'

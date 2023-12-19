@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Heading from '../../../components/userComponents/Headings/heading'
-import NavBar from '../../../components/userComponents/navBar/navBar'
 import { useGetBookingMutation } from '../../../redux/slices/userApiSlice'
+import NavBar from '../../../components/userComponents/navBar/NavBar'
 import PayButton from '../../../components/PayButton'
 import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
@@ -15,9 +15,7 @@ import {
   MDBCardImage,
 } from 'mdb-react-ui-kit'
 import moment from 'moment'
-import {
-  useUsergetProfileMutation
-} from '../../../redux/slices/userApiSlice'
+import { useUsergetProfileMutation } from '../../../redux/slices/userApiSlice'
 import Loader from '../../../components/userComponents/loading'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -245,7 +243,7 @@ const Booking = () => {
                 Days={days}
                 totalAmount={totalPrice}
               />
-              
+
               <Button
                 style={{
                   padding: '10px 20px',
@@ -296,10 +294,7 @@ const Booking = () => {
             You Have ₹{userData.wallet} remaining Balance use Now
           </p>
         ) : (
-          <p style={{ color: 'red' }}>
-           Available Balance: ₹{userData.wallet}{' '}
-
-          </p>
+          <p style={{ color: 'red' }}>Available Balance: ₹{userData.wallet} </p>
         )}
       </Dialog>
     </div>

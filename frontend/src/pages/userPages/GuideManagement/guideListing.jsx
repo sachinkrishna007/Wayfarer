@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import GuideList from '../../../components/userComponents/guideCard/Guidelist'
-import NavBar from '../../../components/userComponents/navBar/navBar'
+import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { toast } from 'react-toastify'
 import { useGetGuideDataMutation } from '../../../redux/slices/userApiSlice'
 import Loader from '../../../components/userComponents/loading'
@@ -10,8 +10,6 @@ import './guideListing.css'
 const GuideListing = () => {
   const [guideData, setGuideData] = useState([])
   const [guideDataFromAPI, { isLoading }] = useGetGuideDataMutation()
-
-   
 
   useEffect(() => {
     try {
@@ -36,7 +34,7 @@ const GuideListing = () => {
     <div>
       <NavBar></NavBar>
 
-      {isLoading ? <Loader /> : <GuideList  />}
+      {isLoading ? <Loader /> : <GuideList />}
       <Footer></Footer>
     </div>
   )

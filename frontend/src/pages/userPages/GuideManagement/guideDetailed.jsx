@@ -1,4 +1,4 @@
-import NavBar from '../../../components/userComponents/navBar/navBar'
+import NavBar from '../../../components/userComponents/navBar/NavBar'
 import './guideDetailed.css'
 import io from 'socket.io-client'
 const ENDPOINT = 'http://localhost:5000'
@@ -19,7 +19,6 @@ import { Button } from 'primereact/button'
 import { Chip } from 'primereact/chip'
 import { Knob } from 'primereact/knob'
 import { Sidebar } from 'primereact/sidebar'
-
 
 import { Link } from 'react-router-dom'
 import {
@@ -63,7 +62,7 @@ export default function EditButton() {
   const [booking, setBooking] = useState('')
   const [bookingCount, setBookingCount] = useState(0)
 
- const [socketConnected, setSocketConnected] = useState(false)
+  const [socketConnected, setSocketConnected] = useState(false)
 
   const id = location.pathname.split('/')[2]
   const [guideSingleDataFromAPI] = useGetSingleGuideMutation()
@@ -100,13 +99,11 @@ export default function EditButton() {
     }
   }, [guideData])
 
-
-   useEffect(() => {
-     socket = io(ENDPOINT)
-     socket.emit('setup', userInfo)
-     socket.on('connection', () => setSocketConnected(true))
- 
-   }, [])
+  useEffect(() => {
+    socket = io(ENDPOINT)
+    socket.emit('setup', userInfo)
+    socket.on('connection', () => setSocketConnected(true))
+  }, [])
 
   const handleFollow = async () => {
     const responseFromApiCall = await followGuide({
@@ -116,13 +113,10 @@ export default function EditButton() {
     if (responseFromApiCall) {
       console.log(responseFromApiCall)
       setIsFollowing(responseFromApiCall.message)
-     
-     socket.emit('new follower', {
-       responseFromApiCall,
-    
-     })
 
-    
+      socket.emit('new follower', {
+        responseFromApiCall,
+      })
     }
   }
 

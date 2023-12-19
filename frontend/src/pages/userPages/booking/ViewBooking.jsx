@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import NavBar from '../../../components/userComponents/navBar/navBar'
+import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { Link, useNavigate } from 'react-router-dom'
@@ -40,7 +40,6 @@ const ViewBooking = () => {
   }, [])
 
   const CancelBookingUser = async () => {
-
     try {
       const response = await cancelBooking({
         bookingId: BookingData._id,
@@ -64,13 +63,12 @@ const ViewBooking = () => {
         setShowModal(false)
       }
     } catch (err) {
-       if (err.data && err.data.message) {
-         toast.error(err.data.message)
-       } else {
-         toast.error(' Balance')
-       }
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error(' Balance')
+      }
     }
-    
   }
 
   if (loading) {
@@ -162,7 +160,9 @@ const ViewBooking = () => {
               </div>
             </li>
             <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
-              <div className="text-500 w-6 md:w-2 font-medium">Booking Status</div>
+              <div className="text-500 w-6 md:w-2 font-medium">
+                Booking Status
+              </div>
               <div className="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
                 {BookingData.status === 'cancelled'
                   ? 'User canceled'

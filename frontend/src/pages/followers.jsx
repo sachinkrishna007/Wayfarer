@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import NavBar from '../components/userComponents/navBar/navBar'
+import NavBar from '../components/userComponents/navBar/NavBar'
 import { useGetFollowingMutation } from '../redux/slices/userApiSlice'
 import { Sidebar } from 'primereact/sidebar'
 import { useSelector } from 'react-redux'
@@ -72,7 +72,9 @@ export default function Following() {
               </div>
 
               <div className="flex align-items-center gap-3">
-                <span className="flex align-items-center gap-2">{followings.Location}</span>
+                <span className="flex align-items-center gap-2">
+                  {followings.Location}
+                </span>
               </div>
             </div>
             <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
