@@ -1,7 +1,7 @@
 import React from 'react'
 import PrimeLoader from '../../../components/userComponents/primeLoading'
 // import NavBar from '../../../components/userComponents/navBar/navBar'
-import Hero from '../../../components/userComponents/hero/hero'
+
 import Destination from '../../../components/userComponents/hero/destinaion/destination'
 import PopularGuides from '../../../components/userComponents/PopularGuides/popularGuides'
 import Footer from '../../../components/userComponents/footer/footer'
