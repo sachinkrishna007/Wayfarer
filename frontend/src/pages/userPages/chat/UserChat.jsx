@@ -13,9 +13,9 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit'
 import io from 'socket.io-client'
-const ENDPOINT = 'http://localhost:5000'
+const ENDPOINT = 'http://localhost:5000'   
 var socket, selectedChatCompare
-import './userChat.css'
+import './userchat.css'
 import { useSelector } from 'react-redux'
 import {
   useSendChatMutation,
