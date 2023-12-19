@@ -19,6 +19,7 @@ import {
 
 import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 import { Link, useNavigate } from 'react-router-dom'
+import Navbar from '../../../components/Navbar/Navbar'
 const UserChangePassword = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -54,7 +55,7 @@ const UserChangePassword = () => {
 
   return (
     <div className="character" style={{ backgroundColor: '#fffff' }}>
-      {/* <NavBar></NavBar> */}
+     <Navbar></Navbar>
       <div
         style={{
           display: 'flex',

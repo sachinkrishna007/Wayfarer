@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux'
 import Loader from '../../../components/userComponents/loading'
 import Rating from '../Rating/Rating'
 import { toast } from 'react-toastify'
+import Navbar from '../../../components/Navbar/Navbar'
 const ViewBooking = () => {
   const [loading, setLoading] = useState(true)
   const [BookingData, setBookingData] = useState('')
@@ -86,7 +87,7 @@ const ViewBooking = () => {
   }
   return (
     <div>
-      {/* <NavBar></NavBar> */}
+     <Navbar></Navbar>
 
       <div style={{ padding: '90px' }}>
         {BookingData.status === 'Accepted' && ( // Check the booking status here

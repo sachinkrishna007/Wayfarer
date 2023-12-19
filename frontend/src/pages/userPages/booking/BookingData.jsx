@@ -6,6 +6,7 @@ import { useGetBookingDataMutation } from '../../../redux/slices/userApiSlice'
 import { useSelector } from 'react-redux'
 import Heading from '../../../components/userComponents/Headings/heading'
 import './BookingData.css'
+import Navbar from '../../../components/Navbar/Navbar'
 const BookingData = () => {
   const [bookingDataFromAPI, { isLoading }] = useGetBookingDataMutation()
   const [Data, setData] = useState([])
@@ -14,7 +15,7 @@ const BookingData = () => {
 
   return (
     <div>
-      {/* <NavBar /> */}
+     <Navbar></Navbar>
       <Heading
         cName="hero"
         name="htext123"

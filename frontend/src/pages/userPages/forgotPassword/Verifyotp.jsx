@@ -19,6 +19,7 @@ import {
 
 import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 import { Link, useNavigate } from 'react-router-dom'
+import Navbar from '../../../components/Navbar/Navbar'
 
 const Verifyotp = () => {
   const [otp, setOtp] = useState('')
@@ -52,7 +53,7 @@ const Verifyotp = () => {
 
   return (
     <div className="character" style={{ backgroundColor: '#fffff' }}>
-      {/* <NavBar></NavBar> */}
+     <Navbar></Navbar>
       <div
         style={{
           display: 'flex',

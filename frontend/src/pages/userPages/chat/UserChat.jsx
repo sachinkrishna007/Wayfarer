@@ -22,6 +22,7 @@ import {
   useGetMessagesMutation,
 } from '../../../redux/slices/userApiSlice'
 import { toast } from 'react-toastify'
+import Navbar from '../../../components/Navbar/Navbar'
 export default function UserChat() {
   const [sendChat] = useSendChatMutation()
   const [getChat] = useGetMessagesMutation()
@@ -142,7 +143,7 @@ export default function UserChat() {
   }
   return (
     <div>
-      {/* <NavBar /> */}
+    <Navbar></Navbar>
       <div style={{ paddingTop: '60px' }}>
         <MDBContainer
           fluid

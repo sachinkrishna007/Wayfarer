@@ -7,6 +7,7 @@ import { Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { BsCheckCircle } from 'react-icons/bs'
 import './confirmation.css'
+import Navbar from '../../../components/Navbar/Navbar'
 const Confirmation = () => {
   const [confirmBooking] = useConfirmBookingMutation()
   useEffect(() => {
@@ -36,7 +37,7 @@ const Confirmation = () => {
 
   return (
     <div>
-      {/* <NavBar></NavBar> */}
+      <Navbar></Navbar>
       <Heading
         cName="hero"
         name="htext1234"

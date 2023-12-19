@@ -20,6 +20,7 @@ import Loader from '../../../components/userComponents/loading'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import Navbar from '../../../components/Navbar/Navbar'
 
 const Booking = () => {
   const [userData, setUserData] = useState('')
@@ -104,7 +105,7 @@ const Booking = () => {
 
   return (
     <div>
-      {/* <NavBar /> */}
+<Navbar></Navbar>
       <Heading
         cName="hero"
         name="htext123"
