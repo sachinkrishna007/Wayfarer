@@ -26,6 +26,7 @@ import {
 } from 'mdb-react-ui-kit'
 import { toast } from 'react-toastify'
 import Loader from '../components/userComponents/loading'
+import Navbar from '../components/Navbar/Navbar'
 
 export default function Following() {
   const [userData, setUserData] = useState('')
@@ -58,6 +59,7 @@ export default function Following() {
   const itemTemplate = (followings) => {
     return (
       <div className="col-6">
+        <Navbar></Navbar>
         <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
           <img
             className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"

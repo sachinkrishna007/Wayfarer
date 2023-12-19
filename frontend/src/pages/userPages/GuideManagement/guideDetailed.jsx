@@ -46,6 +46,7 @@ import {
 import { useGetSingleGuideMutation } from '../../../redux/slices/userApiSlice'
 
 import { toast } from 'react-toastify'
+import Navbar from '../../../components/Navbar/Navbar'
 export default function EditButton() {
   const [loading, setLoading] = useState(true)
   const [ratingLoading, setRatingLoading] = useState(true)
@@ -219,7 +220,7 @@ export default function EditButton() {
 
   return (
     <div>
-      {/* <NavBar></NavBar> */}
+   <Navbar></Navbar>
       <div className="gradient-custom-2">
         <MDBContainer className="py-5 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">

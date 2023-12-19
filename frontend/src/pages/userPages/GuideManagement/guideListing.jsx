@@ -7,6 +7,7 @@ import Loader from '../../../components/userComponents/loading'
 import Footer from '../../../components/userComponents/footer/footer'
 
 import './guideListing.css'
+import Navbar from '../../../components/Navbar/Navbar'
 const GuideListing = () => {
   const [guideData, setGuideData] = useState([])
   const [guideDataFromAPI, { isLoading }] = useGetGuideDataMutation()
@@ -32,7 +33,7 @@ const GuideListing = () => {
 
   return (
     <div>
-      {/* <NavBar></NavBar> */}
+     <Navbar></Navbar>
 
       {isLoading ? <Loader /> : <GuideList />}
       <Footer></Footer>

@@ -8,6 +8,7 @@ import {
   useUpdateProfileMutation,
   useUsergetProfileMutation,
 } from '../../../redux/slices/userApiSlice'
+import Navbar from '../../../components/Navbar/Navbar'
 
 const Wallet = ({ balance }) => {
   const [userData, setUserData] = useState({})
@@ -52,7 +53,7 @@ const Wallet = ({ balance }) => {
 
   return (
     <div>
-      {/* <NavBar /> */}
+     <Navbar></Navbar>
       <div className="card" style={styles.card}>
         <div className="card-body">
           <h5 className="card-title">Wallet</h5>
