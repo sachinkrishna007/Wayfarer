@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import cloudinary from "cloudinary";
 import User from "../models/userModel.js";
 import Guide from "../models/guideModel.js";
 import generateToken from "../utils/userGenerateToken.js";
@@ -8,7 +9,7 @@ import Booking from "../models/bookingModel.js";
 import otpGenerator from "generate-otp";
 import OTP from "../models/OtpModel.js";
 import mongoose from "mongoose";
-import cloudinary from "../config/cloudinary.js";          
+import cloudinary from '../config/cloudinary.js'         
 import Notification from "../models/notifications.js";
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
