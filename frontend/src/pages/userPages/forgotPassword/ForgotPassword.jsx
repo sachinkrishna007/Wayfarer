@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="character" style={{ backgroundColor: '#fffff' }}>
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
       <div
         style={{
           display: 'flex',

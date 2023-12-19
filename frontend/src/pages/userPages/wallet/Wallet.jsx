@@ -52,7 +52,7 @@ const Wallet = ({ balance }) => {
 
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <div className="card" style={styles.card}>
         <div className="card-body">
           <h5 className="card-title">Wallet</h5>

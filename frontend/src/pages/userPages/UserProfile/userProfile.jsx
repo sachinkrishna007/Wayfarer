@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { Sidebar } from 'primereact/sidebar'
 import { useSelector } from 'react-redux'
 import Heading from '../../../components/userComponents/Headings/heading'
@@ -116,7 +116,7 @@ export default function UserProfile() {
       <br />
       <br />
       <br />
-      <NavBar />
+      {/* <NavBar /> */}
       <div style={{ padding: '0px 100px' }}>
         <Heading
           cName="hero"

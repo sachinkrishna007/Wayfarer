@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import NavBar from '../components/userComponents/navBar/NavBar'
+// import NavBar from '../components/userComponents/navBar/NavBar'
 import { useGetFollowingMutation } from '../redux/slices/userApiSlice'
 import { Sidebar } from 'primereact/sidebar'
 import { useSelector } from 'react-redux'
@@ -111,7 +111,7 @@ export default function Following() {
       <br />
       <br />
       <br />
-      <NavBar />
+      {/* <NavBar /> */}
       <div style={{ padding: '0px 100px' }}>
         <Heading
           cName="hero"

@@ -5,7 +5,7 @@ import { DataView } from 'primereact/dataview'
 import { Tag } from 'primereact/tag'
 import { Sidebar } from 'primereact/sidebar'
 import moment from 'moment'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 
 const UserBlog = () => {
   const [getBlogs] = useGetBlogsMutation()
@@ -80,7 +80,7 @@ const UserBlog = () => {
 
   return (
     <div>
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
 
       <div className="card">
         <DataView value={blogs} itemTemplate={itemTemplate} />

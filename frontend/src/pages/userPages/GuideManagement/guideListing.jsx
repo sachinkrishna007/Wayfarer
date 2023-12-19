@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import GuideList from '../../../components/userComponents/guideCard/Guidelist'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { toast } from 'react-toastify'
 import { useGetGuideDataMutation } from '../../../redux/slices/userApiSlice'
 import Loader from '../../../components/userComponents/loading'
@@ -32,7 +32,7 @@ const GuideListing = () => {
 
   return (
     <div>
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
 
       {isLoading ? <Loader /> : <GuideList />}
       <Footer></Footer>

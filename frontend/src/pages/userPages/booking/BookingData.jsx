@@ -14,7 +14,7 @@ const BookingData = () => {
 
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <Heading
         cName="hero"
         name="htext123"

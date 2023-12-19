@@ -1,4 +1,4 @@
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import './guideDetailed.css'
 import io from 'socket.io-client'
 const ENDPOINT = 'http://localhost:5000'
@@ -219,7 +219,7 @@ export default function EditButton() {
 
   return (
     <div>
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
       <div className="gradient-custom-2">
         <MDBContainer className="py-5 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">

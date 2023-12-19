@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { Link, useNavigate } from 'react-router-dom'
@@ -86,7 +86,7 @@ const ViewBooking = () => {
   }
   return (
     <div>
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
 
       <div style={{ padding: '90px' }}>
         {BookingData.status === 'Accepted' && ( // Check the booking status here

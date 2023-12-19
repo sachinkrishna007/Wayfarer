@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { useChangePasswordMutation } from '../../../redux/slices/userApiSlice'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -54,7 +54,7 @@ const UserChangePassword = () => {
 
   return (
     <div className="character" style={{ backgroundColor: '#fffff' }}>
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
       <div
         style={{
           display: 'flex',

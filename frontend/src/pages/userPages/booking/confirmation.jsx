@@ -36,7 +36,7 @@ const Confirmation = () => {
 
   return (
     <div>
-      <NavBar></NavBar>
+      {/* <NavBar></NavBar> */}
       <Heading
         cName="hero"
         name="htext1234"

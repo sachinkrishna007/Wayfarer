@@ -20,7 +20,7 @@ const UserHome = () => {
   }
   return (
     <div>   
-   <NavBar></NavBar>
+   {/* <NavBar></NavBar> */}
       <Cover></Cover>
       <ChatBot></ChatBot>
       <Destination></Destination>

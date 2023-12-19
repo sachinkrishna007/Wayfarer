@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import {
   MDBContainer,
   MDBRow,
@@ -142,7 +142,7 @@ export default function UserChat() {
   }
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <div style={{ paddingTop: '60px' }}>
         <MDBContainer
           fluid
