@@ -11,7 +11,8 @@ import guideRoutes from "./routes/guideRoutes.js";
 import AdminRoutes from "./routes/adminRoutes.js";
 import stripeRoutes from "./routes/stripe.js";
 import cors from "cors";
-
+const currentWorkingDir = path.resolve();
+const parentDir = path.dirname(currentWorkingDir);
 const app = express();
 connectDB();
 app.use(express.json({ limit: "30mb", extended: true }));
@@ -25,9 +26,13 @@ app.use("/api/admin", AdminRoutes);
 app.use("/api/stripe", stripeRoutes);
 
 if (process.env.NODE_ENV === 'production'){
-  const __dirname = path.resolve();
-  app.use(express.static(path.join(__dirname,'frontend/dist')));
-  app.get('*',(req,res)=>res.sendFile(path.resolve(__dirname,'frontend','dist','index.html')))
+   const __dirname = path.resolve();
+   app.use(express.static(path.join(parentDir, "/frontend/dist")));
+
+   app.get("*", (req, res) =>
+     res.sendFile(path.resolve(parentDir, "frontend", "dist", "index.html"))
+   );
+
 }else{
 
   app.get("/", (req, res) => res.send("wayfarer is ready "));
