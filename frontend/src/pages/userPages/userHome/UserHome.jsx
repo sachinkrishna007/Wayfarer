@@ -1,6 +1,6 @@
 import React from 'react'
 import PrimeLoader from '../../../components/userComponents/primeLoading'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 
 import Destination from '../../../components/userComponents/hero/destinaion/destination'
 import PopularGuides from '../../../components/userComponents/PopularGuides/popularGuides'

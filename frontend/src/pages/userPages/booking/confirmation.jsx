@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import Heading from '../../../components/userComponents/Headings/heading'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+// import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { useConfirmBookingMutation } from '../../../redux/slices/userApiSlice'
 import { Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
