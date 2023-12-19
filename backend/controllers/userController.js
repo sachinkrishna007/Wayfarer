@@ -52,6 +52,7 @@ const authUser = asyncHandler(async (req, res) => {
 
 //Register user normal
 const registerUser = asyncHandler(async (req, res) => {
+  console.log('here');
   const { firstName, LastName, email, mobile, password } = req.body;
 
   const userExists = await User.findOne({ email });
@@ -70,30 +71,94 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({
-    firstName,
-    LastName,
-    email,
-    mobile,
-    password,
-  });
+  // const user = await User.create({
+  //   firstName,
+  //   LastName,
+  //   email,
+  //   mobile,
+  //   password,
+  // });
 
-  if (user) {
-    generateToken(res, user._id);
+  // if (user) {
 
-    res.status(201).json({
-      _id: user._id,
-      firstName: user.firstName,
-      email: user.email,
-      LastName: user.LastName,
-      mobile: user.mobile,
-      profileImageName: profileImageName,
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid user data");
-  }
+  //   res.status(201).json({
+  //     _id: user._id,
+  //     firstName: user.firstName,
+  //     email: user.email,
+  //     LastName: user.LastName,
+  //     mobile: user.mobile,
+     
+  //   });
+  // } else {
+  //   res.status(400);
+  //   throw new Error("Invalid user data");
+  // }
+const otp = otpGenerator.generate(6, {
+  digits: true,
+  alphabets: false,
+  upperCase: false,
+  specialChars: false,
 });
+
+const transporter = nodeMailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASSWORD,
+  },
+});
+
+const mailOptions = {
+  from: process.env.GMAIL_USER,
+  to: email,
+  subject: "OTP for Verification",
+  text: `Your OTP for verification is: ${otp}`,
+};
+
+try {
+  await OTP.create({ email, otp });
+  const info = await transporter.sendMail(mailOptions);
+  console.log("Message sent: %s", info.messageId);
+  res.status(200).json({ success: true });
+} catch (error) {
+  console.error("Error sending email:", error);
+  res.status(500).json({ success: false, message: "Failed to send OTP" });
+}
+
+
+});
+
+const verifyRegistration = asyncHandler(async(req,res)=>{
+
+console.log('here');
+  const { firstName, LastName, email, mobile, password,otp } = req.body;
+
+ const otpDocument = await OTP.findOne({ email, otp });
+
+ if (!otpDocument) {
+ res.status(400)
+ throw new Error('invalid OTP')
+ }
+    const user = await User.create({
+      firstName,
+      LastName,
+      email,
+      mobile,
+      password,
+    });
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        firstName: user.firstName,
+        email: user.email,
+        LastName: user.LastName,
+        mobile: user.mobile,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
+})
 
 //register user using google
 const googleRegister = asyncHandler(async (req, res) => {
@@ -528,4 +593,5 @@ export {
   getProfile,
   getFollowing,
   userGetNotifications,
+  verifyRegistration
 };

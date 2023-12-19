@@ -28,7 +28,7 @@ import {
 } from 'mdb-react-ui-kit'
 import { toast } from 'react-toastify'
 import Loader from '../../../components/userComponents/loading'
-import NavBar from '../../../components/guideComponents/navbar/GuideNavbar'
+import Navbar from '../../../components/Navbar/Navbar'
 
 export default function UserProfile() {
   const [userData, setUserData] = useState('')
@@ -114,10 +114,10 @@ export default function UserProfile() {
 
   return (
     <>
+      <Navbar></Navbar>
       <br />
       <br />
       <br />
-  <NavBar></NavBar>
       <div style={{ padding: '0px 100px' }}>
         <Heading
           cName="hero"

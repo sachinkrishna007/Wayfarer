@@ -19,7 +19,8 @@ import {
   updateUserProfile,
   getProfile,
   getFollowing,
-  userGetNotifications
+  userGetNotifications,
+  verifyRegistration
 } from "../controllers/userController.js";
 import {
   getRooms,
@@ -57,6 +58,7 @@ router.get("/getBlog", protect, getBlogs);
 router.get("/getFollowing", protect, getFollowing);
 router.get("/CancelBooking", protect, UserCancelBooking);
 router.get("/UserGetNotification", protect, userGetNotifications);
+router.post('/verifyRegistration',verifyRegistration)
 router.get("/logout", logout);
 
 //chat routes

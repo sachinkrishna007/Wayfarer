@@ -18,6 +18,14 @@ export const userSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    Verifyregisteration: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/verifyRegistration`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
+
     googleRegister: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/googleRegister`,
@@ -259,6 +267,7 @@ useUsergetProfileMutation,
  useGetBlogsMutation,
  useGetFollowingMutation,
  useCancelBookingMutation,
- useGetNotificationsMutation
+ useGetNotificationsMutation,
+ useVerifyregisterationMutation
 
 } = userSlice

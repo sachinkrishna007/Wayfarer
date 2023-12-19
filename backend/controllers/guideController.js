@@ -113,11 +113,10 @@ const registerGuide = asyncHandler(async (req, res) => {
 const getBookingData = asyncHandler(async (req, res) => {
   const { id } = req.query;
 
-  const booking = await Booking.find({ guideid: id }).sort({createdAt:-1})
-  const user = await User.find({email:booking.userEmail})
+  const booking = await Booking.find({ guideid: id }).sort({ createdAt: -1 });
+  const user = await User.find({ email: booking.userEmail });
 
-  
-  if (booking,user) {
+  if ((booking, user)) {
     res.status(200).json({ booking });
   } else {
     res.status(404);
@@ -136,7 +135,7 @@ const guideLogout = asyncHandler(async (req, res) => {
 
 const guideAddLanguage = asyncHandler(async (req, res) => {
   const { Lan, guideId } = req.body;
- 
+
   const guide = await Guide.findOne({ email: guideId });
 
   if (!guide) {
@@ -144,11 +143,10 @@ const guideAddLanguage = asyncHandler(async (req, res) => {
     throw new Error("Data fetch failed.");
   }
   if (guide.Language.includes(Lan)) {
-    
     res.status(400);
     throw new Error("Language already exists.");
   }
-  
+
   guide.Language.push(Lan);
   const saved = await guide.save();
   if (saved) {
@@ -158,23 +156,20 @@ const guideAddLanguage = asyncHandler(async (req, res) => {
   }
 });
 const guideAddCategory = asyncHandler(async (req, res) => {
-
   const { catagory, guideId } = req.body;
- 
+
   const guide = await Guide.findOne({ email: guideId });
-  
-  
- const categoryId = catagory.name; 
+
+  const categoryId = catagory.name;
   if (!guide) {
     res.status(400);
     throw new Error("Data fetch failed.");
   }
   if (guide.category.includes(categoryId)) {
-   
     res.status(400);
     throw new Error("Category already exists.");
   }
-  
+
   guide.category.push(categoryId);
   const saved = await guide.save();
   if (saved) {
@@ -238,59 +233,52 @@ const getGuideData = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteLanguage = asyncHandler(async(req,res)=>{
-  
-  const{guideId,lan}=req.body
-  
-const guide = await Guide.findOneAndUpdate(
-  { _id: guideId },
-  { $pull: { Language: lan } },
-  { new: true }
-);
-return res.status(200).json({ message: "Language deleted successfully" });
-})
+const deleteLanguage = asyncHandler(async (req, res) => {
+  const { guideId, lan } = req.body;
 
-const deleteActivity = asyncHandler(async(req,res)=>{
-  console.log(req.query);
-  const{guideId,Activity}=req.query
-   const objectId = new ObjectId(guideId);
-const guide = await Guide.findOneAndUpdate(
-  { _id: objectId },
-  { $pull: { category: Activity } },
-  { new: true }
-);
-return res.status(200).json({ message: "Activity Deleted" });
-})
-
-const GuideActivateAccount = asyncHandler(async (req, res) => {
- 
-
-  const guideId = req.body.guideId;
-
-
-    const guide = await Guide.findById(guideId);
-
-    if (!guide) {
-      res.status(404);
-
-      throw new Error(" failed.");
-    }
-
- if (!guide.Language || !guide.price || !guide.Description) {
-   res.status(400);
-   throw new Error(
-     "Guide must have Language, price, and Description before activation."
-   );
- }
-
-    guide.isActive = !guide.isActive;
-    const updatedGuide = await guide.save();
-
-    res.status(200).json({ success: true, guide: updatedGuide });
-  
-   
+  const guide = await Guide.findOneAndUpdate(
+    { _id: guideId },
+    { $pull: { Language: lan } },
+    { new: true }
+  );
+  return res.status(200).json({ message: "Language deleted successfully" });
 });
 
+const deleteActivity = asyncHandler(async (req, res) => {
+  console.log(req.query);
+  const { guideId, Activity } = req.query;
+  const objectId = new ObjectId(guideId);
+  const guide = await Guide.findOneAndUpdate(
+    { _id: objectId },
+    { $pull: { category: Activity } },
+    { new: true }
+  );
+  return res.status(200).json({ message: "Activity Deleted" });
+});
+
+const GuideActivateAccount = asyncHandler(async (req, res) => {
+  const guideId = req.body.guideId;
+
+  const guide = await Guide.findById(guideId);
+
+  if (!guide) {
+    res.status(404);
+
+    throw new Error(" failed.");
+  }
+
+  if (!guide.Language || !guide.price || !guide.Description) {
+    res.status(400);
+    throw new Error(
+      "Guide must have Language, price, and Description before activation."
+    );
+  }
+
+  guide.isActive = !guide.isActive;
+  const updatedGuide = await guide.save();
+
+  res.status(200).json({ success: true, guide: updatedGuide });
+});
 
 const changePassword = asyncHandler(async (req, res) => {
   const { guideId, oldPassword, password } = req.body;
@@ -315,12 +303,11 @@ const changePassword = asyncHandler(async (req, res) => {
   }
 });
 
-const getCategory = asyncHandler(async(req,res)=>{
-
+const getCategory = asyncHandler(async (req, res) => {
   const categoriesData = await Category.find({});
- 
-  res.status(200).json({categoriesData})
-})
+
+  res.status(200).json({ categoriesData });
+});
 
 const getProfile = asyncHandler(async (req, res) => {
   console.log(req.query);
@@ -336,7 +323,6 @@ const getProfile = asyncHandler(async (req, res) => {
   }
 });
 
-
 const getNotifications = asyncHandler(async (req, res) => {
   console.log(req.query);
   const { receiverId } = req.query;
@@ -344,8 +330,10 @@ const getNotifications = asyncHandler(async (req, res) => {
   try {
     const ObjectId = new mongoose.Types.ObjectId(receiverId);
 
-    const notifications = await Notification.find({ recieverId: ObjectId }).sort({createdAt:-1})
-     
+    const notifications = await Notification.find({
+      recieverId: ObjectId,
+    }).sort({ createdAt: -1 });
+
     console.log(notifications);
 
     if (notifications) {
@@ -357,8 +345,7 @@ const getNotifications = asyncHandler(async (req, res) => {
   }
 });
 
-const createNotification = async (req,res) => {
-
+const createNotification = async (req, res) => {
   const notification = new Notification({
     sender: "user",
     receiver: "guide",
@@ -370,7 +357,6 @@ const createNotification = async (req,res) => {
 
   await notification.save();
 };
-
 
 export {
   registerGuide,

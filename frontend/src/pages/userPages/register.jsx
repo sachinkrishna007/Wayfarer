@@ -1,7 +1,8 @@
 import { React, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Loader from '../../components/userComponents/loading'
-
+import { Dialog } from 'primereact/dialog'
+import { useVerifyregisterationMutation } from '../../redux/slices/userApiSlice'
 import './login/login.css'
 import {
   MDBBtn,
@@ -28,6 +29,7 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 
 const Register = () => {
   const [email, setEmail] = useState('')
+   const [otp, setOtp] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -35,8 +37,10 @@ const Register = () => {
   const [mobile, setMobile] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
+   const [visible, setVisible] = useState(false)
   const { userInfo } = useSelector((state) => state.auth)
   const [login, { isLoading }] = useRegisterMutation()
+  const [verify] = useVerifyregisterationMutation()
   const [googelLogin] = useGoogleRegisterMutation()
   useEffect(() => {
     if (userInfo) {
@@ -70,8 +74,11 @@ const Register = () => {
           email,
           password,
         }).unwrap()
-        dispatch(setCredentials({ ...res }))
-        navigate('/')
+        if(res){
+          setVisible(true)
+        }
+       
+      
       }
     } catch (err) {
       if (err.data && err.data.message) {
@@ -80,6 +87,21 @@ const Register = () => {
         toast.error('An error occurred. Please try again.') // Generic error message
       }
     }
+  }
+
+  const otpHandler = async()=>{
+  const res = await verify({
+   firstName,
+   LastName,
+   mobile,
+   email,
+   password,
+   otp
+  }).unwrap()
+  if(res){
+  navigate('/login')
+  toast.success('registartion sucessfull')
+}
   }
 
   const googelAuth = async (data) => {
@@ -305,6 +327,71 @@ const Register = () => {
           }
         `}
       </style>
+
+      <div className="card flex justify-content-center">
+        <Dialog
+          header="Verify OTP"
+          visible={visible}
+          style={{ width: '50vw' }}
+          onHide={() => setVisible(false)}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div style={{ flex: 1, maxWidth: '450px', margin: '0 15px' }}>
+              <MDBCard alignment="center" className="mb-5">
+                <MDBIcon fas icon="user-circle" className="fa-3x " />
+
+                <MDBCardBody>
+                  <MDBValidation
+                    noValidate
+                    className="row g-3"
+                    onSubmit={otpHandler}
+                  >
+                    <div className="col-md-12">
+                      <MDBValidationItem
+                        className="col-md-12"
+                        feedback="Please Enter yout OTP"
+                        invalid
+                      >
+                        <MDBInput
+                          label=" OTP"
+                          type="password"
+                          name="password"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value)}
+                          required
+                          validation="Enter the OTP"
+                          invalid
+                        />
+                      </MDBValidationItem>
+                    </div>
+                    <div className="col-12">
+                      <MDBBtn
+                        style={{
+                          width: '100%',
+                          borderRadius: '50px',
+                          backgroundColor: '#387F8E',
+                          color: 'white',
+                        }}
+                        className="mt-2"
+                      >
+                        Verify OTP
+                      </MDBBtn>
+                    </div>
+                  </MDBValidation>
+                </MDBCardBody>
+                <p style={{ textAlign: 'center' }}></p>
+                <MDBCardFooter className="mb-2"></MDBCardFooter>
+              </MDBCard>
+            </div>
+          </div>
+        </Dialog>
+      </div>
     </div>
   )
 }
