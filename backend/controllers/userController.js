@@ -1,16 +1,24 @@
 import asyncHandler from "express-async-handler";
-import cloudinary from "cloudinary";
 import User from "../models/userModel.js";
 import Guide from "../models/guideModel.js";
 import generateToken from "../utils/userGenerateToken.js";
 import { ObjectId } from "mongodb";
+import dotenv from "dotenv";
 import nodeMailer from "nodemailer";
 import Booking from "../models/bookingModel.js";
 import otpGenerator from "generate-otp";
 import OTP from "../models/OtpModel.js";
 import mongoose from "mongoose";
-import cloudinary from '../config/cloudinary.js'         
+import cloudinary from "cloudinary";
 import Notification from "../models/notifications.js";
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDNAME,
+  api_key: process.env.APIKEY,
+  api_secret: process.env.APISECERET,
+});
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -150,7 +158,7 @@ const getGuide = asyncHandler(async (req, res) => {
   // if (priceRangeFilter) {
   //   query.price = { $gte: priceRangeFilter[0], $lte: priceRangeFilter[1] };
   // }
-  const guideData = await Guide.find(query).sort({ createdAt: -1 })
+  const guideData = await Guide.find(query).sort({ createdAt: -1 });
   if (guideData) {
     res.status(200).json({ guideData });
   } else {
@@ -312,9 +320,9 @@ const getUserData = asyncHandler(async (req, res) => {
 });
 const getBookingData = asyncHandler(async (req, res) => {
   console.log(req.query);
-  const { id ,} = req.query;
-let query = {  };
-  const booking = await Booking.find({ userEmail: id, }).sort({ createdAt: -1 });
+  const { id } = req.query;
+  let query = {};
+  const booking = await Booking.find({ userEmail: id }).sort({ createdAt: -1 });
   if (booking) {
     res.status(200).json({ booking });
   } else {
@@ -455,28 +463,28 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 const getProfile = asyncHandler(async (req, res) => {
-  
-  const { email,userId } = req.query;
+  const { email, userId } = req.query;
 
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email });
   // const guide = await Guide.findOne({ followers: userId })
   //   .populate("followers")
   //   .exec();
   //   console.log('g');
   if (user) {
-    res.status(200).json({user});
+    res.status(200).json({ user });
   }
 });
 
-const getFollowing = asyncHandler(async(req,res)=>{
+const getFollowing = asyncHandler(async (req, res) => {
   console.log(req.query);
-  const {userId} = req.query
-  const following = await Guide.find({followers:userId}).sort({createdAt:-1})
-  if(following){
-    
-    res.status(200).json({following})
+  const { userId } = req.query;
+  const following = await Guide.find({ followers: userId }).sort({
+    createdAt: -1,
+  });
+  if (following) {
+    res.status(200).json({ following });
   }
-})
+});
 
 const userGetNotifications = asyncHandler(async (req, res) => {
   console.log(req.query);
@@ -507,18 +515,17 @@ export {
   logout,
   getGuide,
   getSingleGuide,
-  createBooking, 
+  createBooking,
   getUserData,
   forgotPassword,
   verifyAndChangePassword,
   changePassword,
-  getBookingData,  
+  getBookingData,
   checkAvailablity,
   GetGuidesOnDates,
   getBookingDatesGuide,
   updateUserProfile,
   getProfile,
   getFollowing,
-  userGetNotifications
-
+  userGetNotifications,
 };
