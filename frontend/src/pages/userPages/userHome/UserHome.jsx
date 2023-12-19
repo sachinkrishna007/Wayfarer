@@ -9,7 +9,7 @@ import Loader from '../../../components/userComponents/loading'
 import Cover from '../../../components/userComponents/Cover/Cover'
 import { useState, useEffect } from 'react'
 import ChatBot from '../../../components/chatBot'
-import NavBar from '../../../components/userComponents/navBar/NavBar'
+import Navbar from '../../../components/Navbar/Navbar'
 const UserHome = () => {
   const [loading, setLoading] = useState(true)
   const [showChatbot, setShowChatbot] = useState(false)
@@ -21,7 +21,7 @@ const UserHome = () => {
   }
   return (
     <div>   
- <NavBar></NavBar>
+<Navbar></Navbar>
       <Cover></Cover>
       <ChatBot></ChatBot>
       <Destination></Destination>

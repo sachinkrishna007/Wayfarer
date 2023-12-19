@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { logout } from '../../../redux/slices/userAuthSlice'
+import { logout } from '../../redux/slices/userAuthSlice'
 import {
   useGetNotificationsMutation,
   useLogoutMutation,
-} from '../../../redux/slices/userApiSlice'
+} from '../../redux/slices/userApiSlice'
 
 import { NavLink, useLocation } from 'react-router-dom'
 import { Sidebar } from 'primereact/sidebar'
@@ -16,7 +16,7 @@ import { Menubar } from 'primereact/menubar'
 import { InputText } from 'primereact/inputtext'
 import { Link } from 'react-router-dom'
 
-export default function NavBar() {
+export default function Navbar() {
   const menubarStyle = {
     backgroundColor: 'white', // Specify your desired background color here
     justifyContent: 'space-between',
@@ -38,15 +38,13 @@ export default function NavBar() {
     }
   }, [userInfo])
 
- const getNotificationImage = (notification) => {
-   if (notification.type === 'following') {
-     return 'https://media.istockphoto.com/id/1303124806/vector/vector-image-of-follower-notification-icon.jpg?s=612x612&w=0&k=20&c=16o3-156smtUxJXA0Uay47KrUy_dyiuBjrTes0LCVsY='
-   } else if (notification.type === 'NewBooking') {
-     return 'https://cdn-icons-png.flaticon.com/128/6030/6030217.png' // Replace with the default image or handle other types
-   }
- }
-
-
+  const getNotificationImage = (notification) => {
+    if (notification.type === 'following') {
+      return 'https://media.istockphoto.com/id/1303124806/vector/vector-image-of-follower-notification-icon.jpg?s=612x612&w=0&k=20&c=16o3-156smtUxJXA0Uay47KrUy_dyiuBjrTes0LCVsY='
+    } else if (notification.type === 'NewBooking') {
+      return 'https://cdn-icons-png.flaticon.com/128/6030/6030217.png' // Replace with the default image or handle other types
+    }
+  }
 
   useEffect(() => {
     fetchNotifications()
