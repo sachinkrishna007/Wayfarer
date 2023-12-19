@@ -8,7 +8,7 @@ import Booking from "../models/bookingModel.js";
 import otpGenerator from "generate-otp";
 import OTP from "../models/OtpModel.js";
 import mongoose from "mongoose";
-import cloudinary from "../config/cloudinary.js";
+import cloudinary from "../config/cloudinary.js";          
 import Notification from "../models/notifications.js";
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
