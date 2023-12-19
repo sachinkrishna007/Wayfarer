@@ -13,7 +13,7 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit'
 import io from 'socket.io-client'
-const ENDPOINT = 'http://localhost:5000'   
+const ENDPOINT = 'https://sachinkrishna.me/'   
 var socket, selectedChatCompare
 import './userchat.css'
 import { useSelector } from 'react-redux'
