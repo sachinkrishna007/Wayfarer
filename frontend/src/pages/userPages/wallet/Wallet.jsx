@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import NavBar from '../../../components/userComponents/navBar/navBar'
+
 import { useSelector } from 'react-redux'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
