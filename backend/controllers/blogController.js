@@ -3,9 +3,18 @@ import Guide from "../models/guideModel.js";
 import Category from "../models/categoryModels.js";
 import Booking from "../models/bookingModel.js";
 import User from "../models/userModel.js";
-import cloudinary from "../config/cloudinary.js";
-import Blog from "../models/blogSchema.js";
 
+import Blog from "../models/blogSchema.js";
+import cloudinary from "cloudinary";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDNAME,
+  api_key: process.env.APIKEY,
+  api_secret: process.env.APISECERET,
+});
 const createBlog = asyncHandler(async (req, res) => {
   console.log(req.body);
   const { title, description, tags, videoUrl, image, guide, travelImages } =
