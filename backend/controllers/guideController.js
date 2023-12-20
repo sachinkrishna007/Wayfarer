@@ -358,6 +358,49 @@ const createNotification = async (req, res) => {
   await notification.save();
 };
 
+const updateGuideProfile = asyncHandler(async (req, res) => {
+  console.log('here');
+  const { email, firstName, LastName, profileImage, mobile,Coverpic } = req.body;
+
+  const guide = await Guide.findOne({ email });
+
+  if (guide) {
+    guide.LastName = LastName || guide.LastName;
+    guide.firstname = firstName || guide.firstname;
+    
+    guide.mobile = mobile || guide.mobile;
+    guide.Location = Location || guide.Location
+
+    if (profileImage) {
+      const result = await cloudinary.uploader.upload(profileImage, {
+        folder: "profilepic",
+      });
+
+      guide.profileImageName = result.secure_url || guide.profileImageName;
+    }
+    if (Coverpic) {
+      const cover = await cloudinary.uploader.upload(Coverpic, {
+        folder: "profilepic",
+      });
+
+      guide.Coverpic = cover.secure_url || cover.profileImageName;
+    }
+
+    const updatedUser = await guide.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      profileImageName: updatedUser.profileImageName,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+
 export {
   registerGuide,
   authGuide,
@@ -376,4 +419,5 @@ export {
   getProfile,
   getNotifications,
   createNotification,
+  updateGuideProfile
 };

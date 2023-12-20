@@ -50,6 +50,9 @@ const guideSchema = mongoose.Schema(
     profileImage: {
       type: String,
     },
+    Coverpic: {
+      type: String,
+    },
     Language: {
       type: [String],
     },

@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import NavBar from '../../components/guideComponents/navbar/GuideNavbar'
 import { useSelector } from 'react-redux'
-import { useGuideGetDataMutation } from '../../redux/slices/guideSlice/guideApiSlice'
+import { useGuideGetDataMutation, useGuideUpdateProfileMutation } from '../../redux/slices/guideSlice/guideApiSlice'
 import './guideHome.css'
 import Loader from '../../components/userComponents/loading'
 import Heading from '../../components/userComponents/Headings/heading'
 import { useGuideActivateMutation } from '../../redux/slices/guideSlice/guideApiSlice'
 import { Chip } from 'primereact/chip'
+import { Sidebar } from 'primereact/sidebar'
+import { InputText } from 'primereact/inputtext'
 import {
   MDBCol,
   MDBContainer,
@@ -29,54 +31,108 @@ export default function GuideHome() {
   const { guideInfo } = useSelector((state) => state.guideAuth)
   const [guideDataFromAPI] = useGuideGetDataMutation()
   const [ActivateGuide] = useGuideActivateMutation()
+  const [visible, setVisible] = useState(false)
+   const [firstName, setFirstName] = useState(guideData.firstname)
+  const [LastName, setLastName] = useState(guideData.Lastname)
+  const [mobile, setMobile] = useState(guideData.mobile)
+  const [Location,setLocation ] = useState(guideData.Location)
+  const [profileImage, setprofileImage] = useState(null)
+  const [CoverPic, setCoverPic] = useState(null)
   const [loading, setLoading] = useState(true)
-  useEffect(
-    () => {
-      try {
-        const fetchData = async () => {
-          const responseFromApiCall = await guideDataFromAPI({
-            guideId: guideInfo.data.email,
-          })
+   const [updateProfile] = useGuideUpdateProfileMutation()
 
-          const guideArray = responseFromApiCall.data.guideData
+    const fetchData = async () => {
+      const responseFromApiCall = await guideDataFromAPI({
+        guideId: guideInfo.data.email,
+      })
 
-          setGuideData(guideArray[0])
-          setLoading(false)
-        }
+      const guideArray = responseFromApiCall.data.guideData
 
-        fetchData()
-      } catch (error) {
-        toast.error(error)
+      setGuideData(guideArray[0])
+      setLoading(false)
+    }
 
-        console.error('Error fetching users:', error)
-      }
-    },
-    [],
-    guideData,
-  )
+  useEffect(()=>{
+    fetchData()
+  },[])
+  
 
+
+
+
+
+   const handleSubmit = async (e) => {
+     e.preventDefault()
+     console.log("here");
+     try {
+       const response = await updateProfile({
+         email:guideInfo.data.email,
+         firstName,
+         LastName,
+         mobile,
+         profileImage,
+         CoverPic,
+         Location
+       }).unwrap()
+
+       if (response && response.data) {
+          fetchData()
+
+         toast.success('Successfully updated')
+       } else {
+         toast.error('An error occurred. Please try again.') // Generic error message
+       }
+     } catch (err) {
+       if (err.data && err.data.message) {
+         toast.error(err.data.message)
+       } else {
+         toast.error('An error occurred. Please try again.') // Generic error message
+       }
+     }
+   }
+ const handleprofImage = (e) => {
+   const file = e.target.files[0]
+   setFileToBase1(file)
+ } 
+  const setFileToBase1 = (file) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      setprofileImage(reader.result)
+    }
+  }
+ const handlecoverImage = (e) => {
+   const file = e.target.files[0]
+   setFileToBase2(file)
+ } 
+  const setFileToBase2 = (file) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onloadend = () => {
+      setCoverPic(reader.result)
+    }
+  }
   const ActivateHandler = async () => {
-try {
-   const responseFromApiCall = await ActivateGuide({
-     guideId: guideInfo.data._id,
-   }).unwrap()
-   if (responseFromApiCall) {
-      toast.success(
-        `Successfully ${guideData.isActive ? 'deactivated' : 'activated'}`,
-      )
-      setGuideData((prevGuideData) => ({
-        ...prevGuideData,
-        isActive: !prevGuideData.isActive,
-      }))
-   }
-} catch (err) {
-   if (err.data && err.data.message) {
-     toast.error(err.data.message)
-   } else {
-     toast.error('An error occurred. Please try again.') // Generic error message
-   }
-}
-   
+    try {
+      const responseFromApiCall = await ActivateGuide({
+        guideId: guideInfo.data._id,
+      }).unwrap()
+      if (responseFromApiCall) {
+        toast.success(
+          `Successfully ${guideData.isActive ? 'deactivated' : 'activated'}`,
+        )
+        setGuideData((prevGuideData) => ({
+          ...prevGuideData,
+          isActive: !prevGuideData.isActive,
+        }))
+      }
+    } catch (err) {
+      if (err.data && err.data.message) {
+        toast.error(err.data.message)
+      } else {
+        toast.error('An error occurred. Please try again.') // Generic error message
+      }
+    }
   }
   if (loading) {
     return <Loader></Loader>
@@ -103,9 +159,18 @@ try {
                   src={guideData.profileImage}
                   alt="avatar"
                   className="square"
-                
-                  style={{  height:"200px", borderRadius:"20px" }}
+                  style={{ height: '170px', borderRadius: '20px' }}
                   fluid
+                />
+                <Button
+                  icon="pi pi-user-edit"
+                  style={{
+                    height: '10px',
+                    color: 'black',
+                    backgroundColor: 'white',
+                    border: 'none',
+                  }}
+                  onClick={() => setVisible(true)}
                 />
                 {/* <p className="text-muted mb-1">{guideInfo.data.firstName}</p>
                  */}
@@ -164,7 +229,7 @@ try {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {`${guideInfo.data.firstName} ${guideInfo.data.lastName} `}
+                      {`${guideData.firstname} ${guideData.Lastname} `}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -175,7 +240,7 @@ try {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {guideInfo.data.email}
+                      {guideData.email}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -186,7 +251,7 @@ try {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {guideInfo.data.mobile}
+                      {guideData.mobile}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -197,7 +262,7 @@ try {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {guideInfo.data.Location}
+                      {guideData.Location}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -321,43 +386,101 @@ try {
         </MDBRow>
       </MDBContainer>
 
-      {/* <div className="d-flex justify-content-between align-items-center mb-4">
-        <MDBCardText className="lead fw-normal mb-0">
-          Recent Travel Pictures & Experience
-        </MDBCardText>
-        <MDBCardText className="mb-0">
-          <a href="#!" className="text-muted">
-            Show all
-          </a>
-        </MDBCardText>
-      </div> */}
+      <div className="card flex justify-content-center ">
+        <Sidebar
+          visible={visible}
+          onHide={() => setVisible(false)}
+          fullScreen
+          style={{
+            padding: '20px ',
+            margin: '100px',
+            marginTop: '100px',
+            marginBottom: '200px',
+          }}
+        >
+          <div className="surface-0">
+            <div className="font-medium text-3xl text-900 mb-3">
+              Update Your Profile
+            </div>
+            <form onSubmit={handleSubmit}>
+              <ul className="list-none p-0 m-0">
+                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                  <div className="text-500 w-6 md:w-2 font-medium">
+                    Update First Name
+                  </div>
+                  <div className="card flex justify-content-center">
+                    <InputText
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </div>
+                </li>
+                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                  <div className="text-500 w-6 md:w-2 font-medium">
+                    Update Last Name
+                  </div>
+                  <div className="card flex justify-content-center">
+                    <InputText
+                      value={LastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </div>
+                </li>
+                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                  <div className="text-500 w-6 md:w-2 font-medium">
+                    Update Mobile
+                  </div>
+                  <div className="card flex justify-content-center">
+                    <InputText
+                      value={mobile}
+                      onChange={(e) => setMobile(e.target.value)}
+                    />
+                  </div>
+                </li>
 
-      {/* <MDBRow>
-        <MDBCol md="4" className="mb-4">
-          <MDBCardImage
-            src="https://images.unsplash.com/photo-1496566084516-c5b96fcbd5c8?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="image 1"
-            className="w-100 rounded-3"
-          />
-          <MDBCardText className="mt-2">My recent trip</MDBCardText>
-        </MDBCol>
-        <MDBCol md="4" className="mb-4">
-          <MDBCardImage
-            src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="image 1"
-            className="w-100 rounded-3"
-          />
-          <MDBCardText className="mt-2">the best one</MDBCardText>
-        </MDBCol>
-        <MDBCol md="4" className="mb-4">
-          <MDBCardImage
-            src="https://images.unsplash.com/photo-1605649487212-47bdab064df7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="image 1"
-            className="w-100 rounded-3"
-          />
-          <MDBCardText className="mt-2">All time best</MDBCardText>
-        </MDBCol>
-      </MDBRow> */}
+                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                  <div className="text-500 w-6 md:w-2 font-medium">
+                    Update Location
+                  </div>
+                  <div className="card flex justify-content-center">
+                    <InputText
+                      value={Location}
+                      onChange={(e) => setLocation(e.target.value)}
+                    />
+                  </div>
+                </li>
+                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                  <div className="text-500 w-6 md:w-2 font-medium">
+                    Update Profile Image
+                  </div>
+                  <div className="card flex justify-content-center">
+                    <input
+                      type="file"
+                      id="profileimage"
+                      accept=".jpg, .jpeg, .png, .pdf,.avif"
+                      onChange={handleprofImage}
+                    />
+                  </div>
+                </li>
+                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                  <div className="text-500 w-6 md:w-2 font-medium">
+                    Add Cover Photo
+                  </div>
+                  <div className="card flex justify-content-center">
+                    <input
+                      type="file"
+                      id="profileimage"
+                      accept=".jpg, .jpeg, .png, .pdf,.avif"
+                      onChange={handlecoverImage}
+                    />
+                  </div>
+                </li>
+              </ul>
+              <Button type="submit">Update Profile</Button>
+            </form>
+          </div>
+        </Sidebar>
+      </div>
     </>
   )
 }

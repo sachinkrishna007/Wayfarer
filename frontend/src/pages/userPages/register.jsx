@@ -90,7 +90,7 @@ const Register = () => {
   }
 
   const otpHandler = async()=>{
-  const res = await verify({
+  const responseFromApiCall = await verify({
    firstName,
    LastName,
    mobile,
@@ -98,7 +98,7 @@ const Register = () => {
    password,
    otp
   }).unwrap()
-  if(res){
+  if(responseFromApiCall){
   navigate('/login')
   toast.success('registartion sucessfull')
 }

@@ -263,6 +263,7 @@ export default function EditButton() {
                           raised
                           rounded
                           onClick={handleFollow}
+                          className='followbtn'
                         />
                       ) : (
                         <Button

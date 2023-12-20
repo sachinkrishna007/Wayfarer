@@ -18,7 +18,8 @@ import {
   deleteActivity,
   getProfile,
   getNotifications,
-  createNotification
+  createNotification,
+  updateGuideProfile
 } from "../controllers/guideController.js";
 
 import {
@@ -56,5 +57,6 @@ router.get('/getUserProfile',protect,getProfile)
 router.get('/guideNotifications',protect,getNotifications)
 router.post('createNotifications',createNotification)
 router.delete('/deleteBlog',protect,GuidedeleteBlog)
+router.post("/updateGuideProfile", updateGuideProfile);
 
 export default router;

@@ -8,7 +8,7 @@
 
 .guideLoc {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 .guideAbout {
   font-family: 'Poppins', sans-serif;
@@ -31,7 +31,7 @@
 }
 .follower-count {
 
-  padding: 1px; /* Adjust the padding as needed */
+  padding: 4px 0px; /* Adjust the padding as needed */
   border-radius: 8px; /* Optional: Add rounded corners */
   margin-top: 10px; /* Optional: Adjust the top margin */
   
@@ -40,4 +40,9 @@
 .follower-count h6 {
   margin: 0; /* Remove default margin */
   color: #000000; /* Set your desired text color */
+}
+
+.followbtn{
+  padding: 6px 9px;
+  margin:3px 0px;
 }

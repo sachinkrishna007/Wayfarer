@@ -74,69 +74,112 @@ export default function Navbar() {
   const loggedInUserItems = [
     {
       label: (
-        <Link
-          to="/guideList"
-          style={{ textDecoration: 'none', color: 'inherit' }}
-        >
-          Guides
-        </Link>
+        <Button
+          label="Guides"
+          icon="pi pi-fw pi-users custom-icon"
+          onClick={() => navigate('/guideList')}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+            border: 'none',
+            backgroundColor: 'white',
+            height: '1px',
+          }}
+        />
       ),
-      icon: 'pi pi-fw pi-users custom-icon',
     },
     {
       label: (
-        <Link to="/blogs" style={{ textDecoration: 'none', color: 'inherit' }}>
-          Blogs
-        </Link>
+        <Button
+          label="Blogs"
+          icon="pi pi-id-card custom-icon"
+          onClick={() => navigate('/blogs')}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+            border: 'none',
+            backgroundColor: 'white',
+            height: '1px',
+          }}
+        />
       ),
-      icon: 'pi pi-id-card',
     },
 
     {
       label: (
-        <Link
-          to="/Bookings"
-          style={{ textDecoration: 'none', color: 'inherit' }}
-        >
-          Bookings
-        </Link>
+        <Button
+          label="Bookings"
+          icon="pi pi-fw pi-users custom-icon"
+          onClick={() => navigate('/Bookings')}
+          style={{
+            textDecoration: 'none',
+            color: 'inherit',
+            border: 'none',
+            backgroundColor: 'white',
+            height: '1px',
+          }}
+        />
       ),
-      icon: 'pi pi-fw pi-users custom-icon',
+
       // Add a link to the guides page
     },
 
     {
-      label: ` ${userName}`, // Dynamically include the user name
+      label: <strong>{userName}</strong>, // Dynamically include the user name
       icon: 'pi pi-fw pi-user custom-icon',
       items: [
         {
           label: (
-            <Link
-              to="/Profile"
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              Profile
-            </Link>
+            <Button
+              label="Profile"
+              icon="pi pi-fw pi-users custom-icon"
+              onClick={() => navigate('/Profile')}
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                border: 'none',
+                backgroundColor: 'white',
+                height: '1px',
+              }}
+            />
           ),
-          icon: 'pi pi-fw pi-users custom-icon',
+
           // Add a link to the guides page
         },
         {
           label: (
-            <Link
-              to="/wallet"
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              Wallet
-            </Link>
+            <Button
+              label="Wallet"
+              icon="pi pi-wallet custom-icon"
+              onClick={() => navigate('/wallet')}
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                border: 'none',
+                backgroundColor: 'white',
+                height: '1px',
+               
+              }}
+            />
           ),
-          icon: 'pi pi-wallet',
+
           // Add a link to the guides page
         },
         {
-          label: 'Logout',
-          icon: 'pi pi-fw pi-power-off custom-icon',
-          command: (event) => logoutHandler(event),
+          label: (
+            <Button
+              label="Logout"
+              icon="pi pi-fw pi-power-off custom-icon"
+              onClick={logoutHandler}
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+                border: 'none',
+                backgroundColor: 'white',
+                height: '1px',
+              }}
+            />
+          ),
         },
       ],
     },

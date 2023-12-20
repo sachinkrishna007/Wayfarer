@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
 /* Change the color of custom icons in the navbar */
 .custom-icon {
-  color: #387f8e; /* Replace with your desired color code */
+  color: #1474c2; /* Replace with your desired color code */
 }
 
 .custom-text {
@@ -21,4 +21,19 @@
   border-radius: 10px; /* Rounded edges */
   background-color: white; /* Background color */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}
+
+
+/* styles.css */
+.navbar {
+  padding: 1rem;
+  color: #333;
+  background-color: #f0f0f0;
+  /* ... other common styles */
+}
+
+.navbar.dark {
+  color: #fff;
+  background-color: #333;
+  /* ... dark mode styles */
 }

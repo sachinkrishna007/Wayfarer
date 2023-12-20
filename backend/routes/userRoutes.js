@@ -33,6 +33,7 @@ import { getSingleBooking ,createBooking, UserCancelBooking} from "../controller
 import { AddRating, findRating, followGuide } from "../controllers/ratingController.js";
 import { getBlogs } from "../controllers/blogController.js";
 
+
 router.post("/auth", authUser);
 router.post("/register", registerUser);
 router.post("/getGuide", getGuide);
@@ -59,6 +60,7 @@ router.get("/getFollowing", protect, getFollowing);
 router.get("/CancelBooking", protect, UserCancelBooking);
 router.get("/UserGetNotification", protect, userGetNotifications);
 router.post('/verifyRegistration',verifyRegistration)
+
 router.get("/logout", logout);
 
 //chat routes
