@@ -32,10 +32,10 @@ export default function GuideHome() {
   const [guideDataFromAPI] = useGuideGetDataMutation()
   const [ActivateGuide] = useGuideActivateMutation()
   const [visible, setVisible] = useState(false)
-   const [firstName, setFirstName] = useState(guideData.firstname)
-  const [LastName, setLastName] = useState(guideData.Lastname)
-  const [mobile, setMobile] = useState(guideData.mobile)
-  const [Location,setLocation ] = useState(guideData.Location)
+   const [firstName, setFirstName] = useState('')
+  const [LastName, setLastName] = useState('')
+  const [mobile, setMobile] = useState('')
+  const [Location,setLocation ] = useState('')
   const [profileImage, setprofileImage] = useState(null)
   const [CoverPic, setCoverPic] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -49,8 +49,13 @@ export default function GuideHome() {
       const guideArray = responseFromApiCall.data.guideData
 
       setGuideData(guideArray[0])
+      setFirstName(guideData.firstname)
+      setLastName(guideData.LastName)
+      setLocation(guideData.Location)
+      setMobile(guideData.mobile)
       setLoading(false)
     }
+
 
   useEffect(()=>{
     fetchData()
@@ -73,20 +78,21 @@ export default function GuideHome() {
          profileImage,
          CoverPic,
          Location
-       }).unwrap()
+       })
 
-       if (response && response.data) {
+       if (response) {
+          console.log(response);
           fetchData()
 
          toast.success('Successfully updated')
        } else {
-         toast.error('An error occurred. Please try again.') // Generic error message
+         toast.error('An error occurred. Please try againn.') // Generic error message
        }
      } catch (err) {
        if (err.data && err.data.message) {
          toast.error(err.data.message)
        } else {
-         toast.error('An error occurred. Please try again.') // Generic error message
+         toast.error('An error occurred. Please try again.')
        }
      }
    }
@@ -462,7 +468,7 @@ export default function GuideHome() {
                     />
                   </div>
                 </li>
-                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                {/* <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
                   <div className="text-500 w-6 md:w-2 font-medium">
                     Add Cover Photo
                   </div>
@@ -474,7 +480,7 @@ export default function GuideHome() {
                       onChange={handlecoverImage}
                     />
                   </div>
-                </li>
+                </li> */}
               </ul>
               <Button type="submit">Update Profile</Button>
             </form>

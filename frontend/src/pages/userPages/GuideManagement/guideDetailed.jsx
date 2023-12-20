@@ -220,13 +220,16 @@ export default function EditButton() {
 
   return (
     <div>
-   <Navbar></Navbar>
-      <div className="gradient-custom-2">
+      <Navbar></Navbar>
+      <div className="gradient-custom-2" >
         <MDBContainer className="py-5 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">
-            <MDBCol lg="12" xl="12">
+            <MDBCol lg="12" xl="12" >
               <MDBCard>
-                <div className="rounded-top text-dark d-flex flex-row">
+                <div
+                  className="rounded-top text-dark d-flex flex-row"
+                  
+                >
                   <div
                     className="ms-4 mt-5 d-flex flex-column"
                     style={{ width: '150px' }}
@@ -263,7 +266,7 @@ export default function EditButton() {
                           raised
                           rounded
                           onClick={handleFollow}
-                          className='followbtn'
+                          className="followbtn"
                         />
                       ) : (
                         <Button

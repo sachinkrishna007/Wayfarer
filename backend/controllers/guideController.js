@@ -324,7 +324,7 @@ const getProfile = asyncHandler(async (req, res) => {
 });
 
 const getNotifications = asyncHandler(async (req, res) => {
-  console.log(req.query);
+ 
   const { receiverId } = req.query;
 
   try {
@@ -334,7 +334,7 @@ const getNotifications = asyncHandler(async (req, res) => {
       recieverId: ObjectId,
     }).sort({ createdAt: -1 });
 
-    console.log(notifications);
+
 
     if (notifications) {
       res.status(200).json({ notifications });
@@ -359,13 +359,14 @@ const createNotification = async (req, res) => {
 };
 
 const updateGuideProfile = asyncHandler(async (req, res) => {
-  console.log('here');
-  const { email, firstName, LastName, profileImage, mobile,Coverpic ,Location} = req.body;
+ 
+  console.log(req.body)
+  const { email, firstName, LastName, profileImage, mobile,CoverPic ,Location} = req.body;
 
   const guide = await Guide.findOne({ email });
 
   if (guide) {
-    guide.LastName = LastName || guide.LastName;
+    guide.Lastname = LastName || guide.Lastname;
     guide.firstname = firstName || guide.firstname;
     
     guide.mobile = mobile || guide.mobile;
@@ -376,10 +377,10 @@ const updateGuideProfile = asyncHandler(async (req, res) => {
         folder: "profilepic",
       });
 
-      guide.profileImageName = result.secure_url || guide.profileImageName;
+      guide.profileImage = result.secure_url || guide.profileImage;
     }
-    if (Coverpic) {
-      const cover = await cloudinary.uploader.upload(Coverpic, {
+    if (CoverPic) {
+      const cover = await cloudinary.uploader.upload(CoverPic, {
         folder: "profilepic",
       });
 
@@ -390,9 +391,7 @@ const updateGuideProfile = asyncHandler(async (req, res) => {
 
     res.status(200).json({
       _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      profileImageName: updatedUser.profileImageName,
+   
     });
   } else {
     res.status(404);
