@@ -360,7 +360,7 @@ const createNotification = async (req, res) => {
 
 const updateGuideProfile = asyncHandler(async (req, res) => {
   console.log('here');
-  const { email, firstName, LastName, profileImage, mobile,Coverpic } = req.body;
+  const { email, firstName, LastName, profileImage, mobile,Coverpic ,Location} = req.body;
 
   const guide = await Guide.findOne({ email });
 
