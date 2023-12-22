@@ -196,6 +196,12 @@ const Login = () => {
                   <span style={{ color: '#387F8E' }}> Sign Up </span>
                 </p>
               </Link>
+              <Link to="/guideregister">
+                <p style={{ color: 'black' }}>
+                  Are you a guide?
+                  <span style={{ color: '#387F8E' }}> Sign Up </span>
+                </p>
+              </Link>
               <Link to="/forgotPassword">
                 <p style={{ color: 'black' }}>
                   <span style={{ color: '#387F8E' }}> Forgot passsword? </span>
@@ -208,7 +214,7 @@ const Login = () => {
                   <GoogleLogin
                     onSuccess={(credentialResponse) => {
                       const decoded = jwtDecode(credentialResponse.credential)
-                       googelAuth(decoded)
+                      googelAuth(decoded)
 
                       console.log(decoded)
                     }}
@@ -217,6 +223,7 @@ const Login = () => {
                     }}
                   />
                 </GoogleOAuthProvider>
+               
               </div>
             </MDBCardFooter>
           </MDBCard>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
-
+import Navbar from '../../components/Navbar/Navbar'
 import GuideLoading from '../../components/guideComponents/guideLoading'
 import {
   MDBBtn,
@@ -162,20 +162,33 @@ const GuideRegister = () => {
   }
 
   return (
-    <div style={{ display: 'flex' }}>
+
+    <div
+      style={{
+        backgroundImage: `url('https://wallpapercave.com/wp/wp9022469.jpg')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh', // Set minimum height to cover the entire screen
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+      }}
+    >
+      <Navbar></Navbar>
+     
       {/* Left Side (Form and Logo) */}
       <div style={{ flex: 1 }}>
         <div style={{ maxWidth: '450px', margin: 'auto' }}>
           {/* Your logo */}
-          <div style={{ paddingLeft: '120px' }}>
-            <img
-              src="/wayfarerlogo.png"
-              alt="Logo"
-              style={{ width: '200px', height: '200px' }}
-            />
-          </div>
+          <br />
+          <br />
 
-          <MDBCard alignment="center" className="mb-5">
+          <MDBCard
+            alignment="center"
+            className="mb-5"
+            style={{ padding: '30px 0px ', marginTop:"40px" }}
+          >
             <MDBIcon fas icon="user-circle" className="fa-3x" />
             <h3>Guide Sign Up</h3>
             <MDBCardBody>
@@ -341,7 +354,6 @@ const GuideRegister = () => {
                       id="profileimage"
                       accept=".jpg, .jpeg, .png, .pdf,.avif"
                       onChange={handleImage2}
-                      
                     />
                   </MDBValidationItem>
                 </div>
@@ -365,7 +377,7 @@ const GuideRegister = () => {
             </MDBCardBody>
             <p style={{ textAlign: 'center' }}></p>
             <MDBCardFooter className="mb-2">
-              <Link to="/">
+              <Link to="/guideLogin">
                 <p style={{ color: 'black' }}>
                   Already registered?
                   <span style={{ color: '#387F8E' }}> Sign in </span>

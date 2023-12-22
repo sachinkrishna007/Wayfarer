@@ -218,18 +218,29 @@ export default function EditButton() {
     }
   }
 
+  const backgroundStyle = {
+    backgroundImage: `url(${guideData.Coverpic?guideData.Coverpic:'https://png.pngtree.com/thumb_back/fh260/background/20200731/pngtree-blue-carbon-background-with-sport-style-and-golden-light-image_371487.jpg'})`,
+
+    // Set the height to 50% of the viewport height
+    position: 'absolute',
+    top: 0,
+    left: 117,
+    right: 117,
+    bottom: '89%', // Set the bottom to 50% of the viewport height
+    zIndex: 1,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }
   return (
     <div>
+      <div style={backgroundStyle}></div>
       <Navbar></Navbar>
-      <div className="gradient-custom-2" >
+      <div className="gradient-custom-2" style={{paddingTop:"px "}}>
         <MDBContainer className="py-5 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">
-            <MDBCol lg="12" xl="12" >
+            <MDBCol lg="12" xl="12">
               <MDBCard>
-                <div
-                  className="rounded-top text-dark d-flex flex-row"
-                  
-                >
+                <div className="rounded-top text-dark d-flex flex-row" style={{height:'fit-content'}}>
                   <div
                     className="ms-4 mt-5 d-flex flex-column"
                     style={{ width: '150px' }}
@@ -239,9 +250,10 @@ export default function EditButton() {
                       alt="Generic placeholder image"
                       className="mt-6  img-thumbnail guideimage"
                       fluid
+                      style={{zIndex:'1'}}
                     />
                   </div>
-                  <div className="ms-3" style={{ marginTop: '130px' }}>
+                  <div className="ms-3" style={{ marginTop: '130px', height:"100px",}}>
                     <MDBTypography tag="h2" className="guideName">
                       {' '}
                       {guideData.firstname} {guideData.Lastname}
@@ -313,16 +325,8 @@ export default function EditButton() {
                   </div>
                 </div>
 
-                <div
-                  className="p-4 text-black"
-                  style={{ backgroundColor: '#f8f9fa' }}
-                >
-                  <div className="d-flex justify-content-end text-center py-1">
-                    <div></div>
-                    <div className="px-3"></div>
-                  </div>
-                </div>
-                <div className="font-medium text-3xl text-900 mb-3">
+             
+                <div className="font-medium text-3xl text-900 mb-3   information" style={{paddingTop:"40px", paddingLeft:'15px'}}>
                   More Information
                 </div>
                 {/* <div className="text-500 mb-5">

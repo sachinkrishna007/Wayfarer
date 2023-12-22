@@ -159,15 +159,14 @@ const GuideAddData = () => {
         guideId: guideInfo.data._id,
       }).unwrap()
       if (response) {
-         fetchData()
+        fetchData()
         toast.success('Language deleted')
       }
-     
     } catch (error) {
       if (err.data && err.data.message) {
         toast.error(err.data.message)
       } else {
-        toast.error('An error occurred. Please try again.') 
+        toast.error('An error occurred. Please try again.')
       }
     }
   }
@@ -178,7 +177,7 @@ const GuideAddData = () => {
         guideId: guideInfo.data._id,
       })
       if (response) {
-          fetchData()
+        fetchData()
         toast.success('Activity Deleted')
       }
       setGuideData((prevData) => {
@@ -239,6 +238,7 @@ const GuideAddData = () => {
                           <li
                             key={index}
                             className="d-flex justify-content-between align-items-center"
+                            style={{ padding: '3px 0px' }}
                           >
                             <span>{lang}</span>{' '}
                             <MDBBtn
@@ -292,6 +292,7 @@ const GuideAddData = () => {
                           <li
                             key={index}
                             className="d-flex justify-content-between align-items-center"
+                            style={{ padding: '3px 0px' }}
                           >
                             <span>{Activity}</span>{' '}
                             <MDBBtn

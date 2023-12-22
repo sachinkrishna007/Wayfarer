@@ -151,7 +151,7 @@ export default function GuideHome() {
         cName="hero"
         name="htext123"
         imageclass="coverProfile"
-        img="https://t3.ftcdn.net/jpg/01/91/95/30/240_F_191953033_gehQATeDoh5z6PyRDbeKyBZuS83CjMEF.jpg"
+        img={guideData.Coverpic?guideData.Coverpic:"https://t3.ftcdn.net/jpg/01/91/95/30/240_F_191953033_gehQATeDoh5z6PyRDbeKyBZuS83CjMEF.jpg"}
         title="Profile"
         text="Treat your guests as if they were your own family."
       />
@@ -468,7 +468,7 @@ export default function GuideHome() {
                     />
                   </div>
                 </li>
-                {/* <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
+                <li className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
                   <div className="text-500 w-6 md:w-2 font-medium">
                     Add Cover Photo
                   </div>
@@ -480,7 +480,7 @@ export default function GuideHome() {
                       onChange={handlecoverImage}
                     />
                   </div>
-                </li> */}
+                </li>
               </ul>
               <Button type="submit">Update Profile</Button>
             </form>
