@@ -175,7 +175,7 @@ const GuideRegister = () => {
         display: 'flex',
       }}
     >
-      <Navbar></Navbar>
+  
      
       {/* Left Side (Form and Logo) */}
       <div style={{ flex: 1 }}>
