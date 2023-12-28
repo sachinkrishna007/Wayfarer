@@ -43,7 +43,7 @@ export default function UserProfile() {
   const [updateProfile] = useUpdateProfileMutation()
   const [getProfile] = useUsergetProfileMutation()
   const [loading, setLoading] = useState(true)
-
+ const dispatch = useDispatch()
   const handleImage = (e) => {
     const file = e.target.files[0]
     setFileToBase(file)
