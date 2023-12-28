@@ -36,7 +36,7 @@ export default function Navbar() {
     if (userInfo) {
       setUserName(userInfo.firstName) // Adjust the property to match your user data structure
     }
-  }, [userInfo])
+  },[])
 
   const getNotificationImage = (notification) => {
     if (notification.type === 'following') {
@@ -125,7 +125,7 @@ export default function Navbar() {
     },
 
     {
-      label: <strong>{userInfo.firstName}</strong>, // Dynamically include the user name
+      label: <strong>{userName}</strong>, // Dynamically include the user name
       icon: 'pi pi-fw pi-user custom-icon',
       items: [
         {
@@ -158,6 +158,7 @@ export default function Navbar() {
                 border: 'none',
                 backgroundColor: 'white',
                 height: '1px',
+               
               }}
             />
           ),
