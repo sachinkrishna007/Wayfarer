@@ -125,7 +125,7 @@ export default function Navbar() {
     },
 
     {
-      label: <strong>{userName}</strong>, // Dynamically include the user name
+      label: <strong>{userInfo.firstName}</strong>, // Dynamically include the user name
       icon: 'pi pi-fw pi-user custom-icon',
       items: [
         {
@@ -158,7 +158,6 @@ export default function Navbar() {
                 border: 'none',
                 backgroundColor: 'white',
                 height: '1px',
-               
               }}
             />
           ),
