@@ -8,8 +8,7 @@ import { Button } from 'primereact/button'
 import { FileUpload } from 'primereact/fileupload'
 import { Image } from 'primereact/image'
 import { InputText } from 'primereact/inputtext'
-import { useDispatch  } from 'react-redux'
-import { setCredentials } from '../../../redux/slices/userAuthSlice'
+
 import {
   useUpdateProfileMutation,
   useUsergetProfileMutation,
@@ -43,7 +42,7 @@ export default function UserProfile() {
   const [updateProfile] = useUpdateProfileMutation()
   const [getProfile] = useUsergetProfileMutation()
   const [loading, setLoading] = useState(true)
- const dispatch = useDispatch()
+
   const handleImage = (e) => {
     const file = e.target.files[0]
     setFileToBase(file)
@@ -56,7 +55,6 @@ export default function UserProfile() {
     if (responseFromApiCall) {
       const { firstName, LastName, email, mobile, profileImageName } =
         responseFromApiCall.data.user
-
       setUserData({
         firstName,
         LastName,
@@ -97,7 +95,6 @@ export default function UserProfile() {
 
       if (response && response.data) {
         fetchUserProfile()
-         dispatch(setCredentials({ ...response }))
 
         toast.success('Successfully updated')
       } else {

@@ -515,13 +515,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save();
 
-    res.json({
+    res.status(200).json({
       _id: updatedUser._id,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.LastName,
+      name: updatedUser.name,
       email: updatedUser.email,
-      mobile: updatedUser.mobile,
-      image: updatedUser.ProfileImageName,
+      profileImageName: updatedUser.profileImageName,
     });
   } else {
     res.status(404);
