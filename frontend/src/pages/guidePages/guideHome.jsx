@@ -82,7 +82,7 @@ export default function GuideHome() {
 
        if (response) {
           console.log(response);
-          fetchData()
+          
 
          toast.success('Successfully updated')
        } else {

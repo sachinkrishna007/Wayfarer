@@ -27,10 +27,10 @@ app.use("/api/stripe", stripeRoutes);
 
 if (process.env.NODE_ENV === 'production'){
    const __dirname = path.resolve();
-   app.use(express.static(path.join(parentDir, "/frontend/dist")));
+   app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
    app.get("*", (req, res) =>
-     res.sendFile(path.resolve(parentDir, "frontend", "dist", "index.html"))
+     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
    );
 
 }else{
@@ -48,7 +48,9 @@ import { Server } from "socket.io";
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ["https://sachinkrishna.me/"],
+    origin: [
+      "https://sachinkrishna.me/"
+    ],
   },
 });
 
