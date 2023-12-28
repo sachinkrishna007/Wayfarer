@@ -36,7 +36,7 @@ export default function Navbar() {
     if (userInfo) {
       setUserName(userInfo.firstName) // Adjust the property to match your user data structure
     }
-  },[])
+  }, [userInfo])
 
   const getNotificationImage = (notification) => {
     if (notification.type === 'following') {
