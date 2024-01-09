@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
+import { Button } from 'primereact/button'
 // import NavBar from '../../../components/userComponents/navBar/NavBar'
 import {
   MDBContainer,
@@ -13,7 +14,7 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit'
 import io from 'socket.io-client'
-const ENDPOINT = 'https://sachinkrishna.me/'   
+const ENDPOINT = 'https://sachinkrishna.me'
 var socket, selectedChatCompare
 import './userchat.css'
 import { useSelector } from 'react-redux'
@@ -23,10 +24,11 @@ import {
 } from '../../../redux/slices/userApiSlice'
 import { toast } from 'react-toastify'
 import Navbar from '../../../components/Navbar/Navbar'
+import { useNavigate } from 'react-router-dom'
 export default function UserChat() {
   const [sendChat] = useSendChatMutation()
   const [getChat] = useGetMessagesMutation()
-
+  const navigate = useNavigate()
   const { userInfo } = useSelector((state) => state.auth)
 
   const [typing, SetTyping] = useState(false)
@@ -141,9 +143,13 @@ export default function UserChat() {
       }
     }, timerLength)
   }
+  const handleJoinRoom = useCallback(() => {
+    navigate(`/room/${userInfo._id}`)
+    window.location.reload()
+  }, [])
   return (
     <div>
-    <Navbar></Navbar>
+      <Navbar></Navbar>
       <div style={{ paddingTop: '60px' }}>
         <MDBContainer
           fluid
@@ -155,6 +161,11 @@ export default function UserChat() {
               <MDBCard id="chat2" style={{ borderRadius: '15px' }}>
                 <MDBCardHeader className="d-flex justify-content-between align-items-center p-3">
                   <h5 className="mb-0">Chat </h5>
+                  <Button
+                    style={{ borderRadius: '20px' }}
+                    className="pi pi-video"
+                    onClick={handleJoinRoom}
+                  ></Button>
                 </MDBCardHeader>
 
                 <MDBCardBody

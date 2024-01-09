@@ -28,9 +28,8 @@ const GuideRegister = () => {
   const [mobile, setMobile] = useState('')
   const [Location, setLocaton] = useState('')
   const [idCardNumber, setIdCardNumber] = useState('')
-  const [idCardFile, setIdCardFile] = useState(null) // New field for ID card image or PDF file
-  const [profileImage, setprofileImage] = useState(null) // New field for ID card image or PDF file
-
+  const [idCardFile, setIdCardFile] = useState(null) 
+  const [profileImage, setprofileImage] = useState(null) 
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { guideInfo } = useSelector((state) => state.auth)

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 // import NavBar from '../../../components/userComponents/navBar/NavBar'
 import { Sidebar } from 'primereact/sidebar'
-import { useSelector } from 'react-redux'
+import { useSelector ,useDispatch} from 'react-redux'
 import Heading from '../../../components/userComponents/Headings/heading'
 import { Button } from 'primereact/button'
 import { FileUpload } from 'primereact/fileupload'
@@ -30,7 +30,7 @@ import {
 import { toast } from 'react-toastify'
 import Loader from '../../../components/userComponents/loading'
 import Navbar from '../../../components/Navbar/Navbar'
-
+import { setCredentials } from '../../../redux/slices/userAuthSlice'
 export default function UserProfile() {
   const [userData, setUserData] = useState('')
   const { userInfo } = useSelector((state) => state.auth)
@@ -43,6 +43,7 @@ export default function UserProfile() {
   const [updateProfile] = useUpdateProfileMutation()
   const [getProfile] = useUsergetProfileMutation()
   const [loading, setLoading] = useState(true)
+  const dispatch = useDispatch()
 
   const handleImage = (e) => {
     const file = e.target.files[0]
@@ -56,6 +57,7 @@ export default function UserProfile() {
     if (responseFromApiCall) {
       const { firstName, LastName, email, mobile, profileImageName } =
         responseFromApiCall.data.user
+          dispatch(setCredentials({ ...responseFromApiCall.data.user }))
       setUserData({
         firstName,
         LastName,
