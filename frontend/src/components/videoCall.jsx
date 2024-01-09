@@ -3,14 +3,14 @@ import { useParams } from 'react-router-dom'
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt'
 import { useEffect, useRef } from 'react'
 
-const VideoCall = () => {
+const ClouldVideoCall = () => {
   useEffect(() => {}, [])
   const { userId } = useParams()
   console.log(userId)
   const myMeeting = async (element) => {
     const appID = 1364677669
     const serverSecret = 'ae584cca72c32e91bf243027d193274e'
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
       userId,
@@ -42,4 +42,4 @@ const VideoCall = () => {
   )
 }
 
-export default VideoCall
+export default ClouldVideoCall

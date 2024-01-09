@@ -13,9 +13,5 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    rollupOptions: {
-      external: ['@zegocloud/zego-uikit-prebuilt'],
-    },
-  },
+ 
 })
