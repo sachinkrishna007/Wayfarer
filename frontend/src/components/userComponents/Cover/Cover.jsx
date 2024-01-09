@@ -32,7 +32,7 @@ const Cover = () => {
               Explore the World
             </span>
             <div className="text-6xl  font-bold mb-3 secondText">
-              Beyond Imagination with Our Expert Guides!sdfsdfs
+              Beyond Imagination with Our Expert Guides!
             </div>
             <p className="mt-0 mb-4 text-700 line-height-3">
               Find experienced and passionate guides for every destination. From
