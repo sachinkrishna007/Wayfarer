@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import data from '@emoji-mart/data'
-
-import Picker from '@emoji-mart/react'
 import {
   MDBContainer,
   MDBRow,
@@ -12,10 +9,9 @@ import {
 } from 'mdb-react-ui-kit'
 import io from 'socket.io-client'
 
-const ENDPOINT = 'https://sachinkrishna.me'
+const ENDPOINT = 'https://sachinkrishna.me/'
 var socket, selectedChatCompare
 import NavBar from '../../../components/guideComponents/navbar/GuideNavbar'
-import { Button } from 'primereact/button'
 import './guideChat.css'
 import {
   useGuideSendChatMutation,
@@ -42,19 +38,6 @@ export default function GuideChat() {
     const options = { hour: 'numeric', minute: 'numeric' }
     return new Date(timestamp).toLocaleTimeString('en-US', options)
   }
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  const handleEmojiSelect = (emoji) => {
-    setContent((prevContent) => prevContent + emoji)
-    setShowEmojiPicker(false)
-  }
-  const addEmoji = (e) => {
-    const sym = e.unified.split('_')
-    const codeArray = []
-    sym.forEach((el) => codeArray.push('0x' + el))
-    let emoji = String.fromCodePoint(...codeArray)
-    setContent(content + emoji)
-  }
-
   useEffect(() => {
     socket = io(ENDPOINT)
     socket.emit('setup', guideInfo)
@@ -80,7 +63,6 @@ export default function GuideChat() {
         setContent('')
         setMessageSent(true)
         socket.emit('new message', responseFromApiCall.data)
-        setShowEmojiPicker(false)
       }
     } catch (error) {
       console.log(error.message)
@@ -290,10 +272,11 @@ export default function GuideChat() {
                                 : 'guideChat'
                             }`}
                           >
-                            {chat.content} <br />
+                            {chat.content}
+                          </p>
+                          <p className="small text-muted">
                             {formatTime(chat.createdAt)}
                           </p>
-                          <p className="small text-muted"></p>
                         </div>
                       </div>
                     ))
@@ -307,12 +290,7 @@ export default function GuideChat() {
                   <img
                     src={guideInfo.data.profileImage}
                     alt="avatar 3"
-                    style={{
-                      width: '40px',
-                      height: '80%',
-                      borderRadius: '10px',
-                      marginRight: '9px',
-                    }}
+                    style={{ width: '40px', height: '100%' }}
                   />
                   {isTyping ? <div>typing...</div> : <></>}
                   <input
@@ -332,59 +310,24 @@ export default function GuideChat() {
                     id="exampleFormControlInput2"
                     placeholder="Type message"
                   />
-                  <Button
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                    style={{
-                      height: '44px',
-
-                      marginLeft: '9px',
-                      borderRadius: '10px',
-                      textAlign: 'center',
-                    }}
-                  >
-                    😊
-                  </Button>
                   <div className="w-1/12">
-                    <Button
+                    <button
                       type="button"
                       onClick={sendHandler}
-                      icon="pi pi-send" // Change this to the PrimeReact icon you want
-                      className="p-button-info"
-                      style={{
-                        height: '44px',
-                        marginLeft: '5px',
-                        borderRadius: '10px',
-                      }}
-                    />
+                      className="btb btn info"
+                    >
+                      Send
+                    </button>
                   </div>
                   <a className="ms-1 text-muted" href="#!">
                     <MDBIcon fas icon="paperclip" />
                   </a>
-
-                  <div className="ms-3 position-relative">
-                    {showEmojiPicker && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          bottom: '100%',
-                          marginBottom: '40px',
-                          right: 0,
-                        }}
-                      >
-                        <Picker
-                          set="apple"
-                          onSelect={(emoji) => handleEmojiSelect(emoji.native)}
-                          onEmojiSelect={addEmoji}
-                        />
-                      </div>
-                    )}
-                  </div>
-
+                  <a className="ms-3 text-muted" href="#!">
+                    <MDBIcon fas icon="smile" />
+                  </a>
                   <a className="ms-3" href="#!">
                     <MDBIcon fas icon="paper-plane" />
                   </a>
-
-                  {/* <Picker data={data} onEmojiSelect={console.log} /> */}
                 </div>
               </div>
             )}
