@@ -10,7 +10,7 @@ const VideoCall = () => {
   const myMeeting = async (element) => {
     const appID = 1364677669
     const serverSecret = 'ae584cca72c32e91bf243027d193274e'
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForProduction(
       appID,
       serverSecret,
       userId,

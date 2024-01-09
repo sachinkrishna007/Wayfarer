@@ -27,7 +27,7 @@ import AdminHome from './pages/admin/adminHome'
 import Userlist from './pages/admin/userList'
 import GuideData from './pages/admin/guideList'
 import Category from './pages/admin/Category'
-// import VideoCall from './components/videoCall'
+import VideoCall from './components/videoCall'
 import 'react-toastify/dist/ReactToastify.css'
 import PrivateRoute from './components/userComponents/privateRoute'
 import AdminBookingData from './pages/admin/Booking'
@@ -82,7 +82,7 @@ const App = () => {
         <Route path="/blogs" element={<UserBlog />} />
         <Route path="/Following" element={<Following />} />
         <Route path="/wallet" element={<Wallet />} />
-        {/* <Route path="/room/:userId" element={<VideoCall />} /> */}
+       <Route path="/room/:userId" element={<VideoCall />} />
         <Route
           path="/guideDetailedView/:userId"
           element={<GuideDetailedView />}
