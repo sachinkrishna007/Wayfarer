@@ -122,7 +122,7 @@ const AdminBookingData = () => {
           <TabPanel header="Cancelled">
             <DataTable
               value={Data.filter((item) => item.status === 'cancelled')}
-              paginator
+              paginator    
               rows={5}
               rowsPerPageOptions={[5, 10, 25, 50]}
               tableStyle={{ minWidth: '50rem' }}

@@ -19,6 +19,7 @@
   border-radius: 1%;
   overflow-y: auto; /* Enable vertical scrollbar */
   max-height: 400px; /* Set the maximum height for the chat box */
+
 }
 
 .TextBox {
@@ -27,13 +28,23 @@
 }
 
 .userChat {
-  background-color: #3f393c; /* Set the background color for user chats */
-  color: #ffffff; /* Set the text color for user chats */
-}
+  background-color: #cc4848; /* Set the background color for user chats */
+  color: #000000; /* Set the text color for user chats */
+  border-radius: 10%;
+ 
+margin: -2px;}
 
 .guideChat {
   /* Set the background color for guide chats */
   color: #ffffff; /* Set the text color for guide chats */
-  border-radius: 10%;
-  background-color: rgb(122, 22, 126);
+;
+  background-color: rgb(15, 15, 15);
+  border-radius: 90px   ;
+margin: -2px;
+}
+.NameHeading{
+  
+  color: #000000;
+  
+   font-family: 'Poppins', sans-serif;
 }

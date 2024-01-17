@@ -141,7 +141,7 @@ export default function BookingTable() {
             <Column
               header="Guide Image"
               body={guideImageTemplate}
-              style={{ width: '10%' }}
+              style={{ width: '10%'}}
             ></Column>
             <Column
               field="guidename"

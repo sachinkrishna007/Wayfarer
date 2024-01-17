@@ -42,6 +42,7 @@ export default function GuideChat() {
     const options = { hour: 'numeric', minute: 'numeric' }
     return new Date(timestamp).toLocaleTimeString('en-US', options)
   }
+   let previousTime = null
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const handleEmojiSelect = (emoji) => {
     setContent((prevContent) => prevContent + emoji)
@@ -248,7 +249,7 @@ export default function GuideChat() {
           <MDBCol md="6" lg="7" xl="8">
             {chatId && (
               <div className="h-full d-flex flex-column justify-content-between">
-                <div className="d-flex align-items-center p-3">
+                <div className="d-flex align-items-center p-3 " style={{border:'200px'}}>
                   <img
                     src={
                       image
@@ -259,24 +260,18 @@ export default function GuideChat() {
                     className="rounded-circle me-3"
                     style={{ width: '50px', height: '50px' }}
                   />
-                  <h3
-                    className="mb-0"
-                    style={{
-                      backgroundColor: '#ededed',
-                      color: 'black',
-                      height: '50px',
-                      lineHeight: '50px',
-                      paddingLeft: '15px',
-                      borderRadius: '0 10px 10px 0',
-                    }}
+                  <h4
+                    className="mb-0 NameHeading"
+                   
                   >
                     {user}
-                  </h3>
+                  </h4>
                 </div>
                 <div className="bg-white p-5 chatBox " id="chat-box">
                   {chats && chats.length > 0 ? (
                     chats.map((chat, index) => (
                       <div
+                      
                         key={index}
                         className={`d-flex flex-row justify-content-${
                           chat.senderType === 'User' ? 'start' : 'end'
@@ -286,14 +281,22 @@ export default function GuideChat() {
                           <p
                             className={`small p-2 ${
                               chat.senderType === 'User'
-                                ? 'userChat  rounded-3'
+                                ? 'userChat rounded-3'
                                 : 'guideChat'
                             }`}
                           >
-                            {chat.content} <br />
+                            {chat.content}
+                          </p>
+                          <p
+                            style={{
+                              float: 'right',
+                              marginTop: '5px', // Adjust the margin-top for vertical positioning
+                              fontSize: '10px', // Adjust the font size as needed
+                             
+                            }}
+                          >
                             {formatTime(chat.createdAt)}
                           </p>
-                          <p className="small text-muted"></p>
                         </div>
                       </div>
                     ))
