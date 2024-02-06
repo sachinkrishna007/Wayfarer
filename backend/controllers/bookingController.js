@@ -57,7 +57,7 @@ const createBooking = asyncHandler(async (req, res) => {
     payementType,
   });
   const guideNotification = new Notification({
-    sender: userName,
+    sender: userName,   
     reciever: guideName,
     senderId: userid,
     recieverId: guideid,
