@@ -14,7 +14,7 @@ const NotFoundPage = () => {
         <div
           style={{
             borderRadius: '56px',
-            padding: '0.3rem',
+            padding: '0.3rem',    
             background:
               'linear-gradient(180deg, rgba(33, 150, 243, 0.4) 10%, rgba(33, 150, 243, 0) 30%)',
           }}
