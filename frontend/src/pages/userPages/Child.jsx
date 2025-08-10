@@ -12,3 +12,5 @@ return(
 
 
 }
+
+export default Child;
