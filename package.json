@@ -23,6 +23,7 @@
     "generate-otp": "^1.0.6",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.6.4",
+    "moongoose": "^0.0.5",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.7",
     "otpless-node-js-auth-sdk": "^1.0.7",

@@ -83,7 +83,7 @@ const Login = () => {
     e.preventDefault()
 
     if (!email || !password) {
-      toast.error('Both email and password are required.')
+      toast('Both email and password are required.')
     } else {
       try {
         const responseFromApiCall = await login({ email, password }).unwrap()

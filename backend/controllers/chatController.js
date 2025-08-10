@@ -5,11 +5,11 @@ import ChatMessage from "../models/chatMessages.js";
 const createRoom = asyncHandler(async (req, res) => {
   console.log("here");
   try {
-    const { userId, guideId } = req.body;
+    const { userId, guideId } = req.body;     
 
     let chatRoom = await ChatRoom.findOne({
       user: userId,
-      guide: guideId,
+      guide: guideId, 
     });
 
     if (!chatRoom) {

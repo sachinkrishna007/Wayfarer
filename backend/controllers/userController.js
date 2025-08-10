@@ -11,7 +11,7 @@ import OTP from "../models/OtpModel.js";
 import mongoose from "mongoose";
 import cloudinary from "cloudinary";
 import Notification from "../models/notifications.js";
-
+    
 dotenv.config();
 
 cloudinary.config({
@@ -24,6 +24,8 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+  console.log(user);
+  
   if (!user) {
     res.status(400);
     throw new Error("email doest exist");
@@ -100,6 +102,7 @@ const otp = otpGenerator.generate(6, {
   upperCase: false,
   specialChars: false,
 });
+console.log(process.env.GMAIL_USER,'');
 
 const transporter = nodeMailer.createTransport({
   service: "gmail",
