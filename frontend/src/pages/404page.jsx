@@ -20,7 +20,7 @@ const NotFoundPage = () => {
             <span className="text-blue-500 font-bold text-3xl">404</span>
             <h1 className="text-900 font-bold text-5xl mb-2">Page Not Found</h1>
             <div className="text-600 mb-5">
-              Sorry, the page you are looking for does not exist.
+              Sorry, the page you are looking for does not exist   .
             </div>
             <Link
               to="/"
