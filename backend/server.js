@@ -19,7 +19,16 @@ app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
 app.use(express.static("backend/public"));
-app.use(cors());
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map((url) => url.trim())
+  : ['https://wayfarer-delta.vercel.app'];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 app.use("/api/users", userRoutes);
 app.use("/api/guide", guideRoutes);
 app.use("/api/admin", AdminRoutes);
@@ -48,7 +57,8 @@ import { Server } from "socket.io";
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ["https://sachinkrishna.me/"],
+    origin: allowedOrigins,
+    credentials: true,
   },
 });
 
