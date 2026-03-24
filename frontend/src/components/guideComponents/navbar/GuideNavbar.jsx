@@ -14,7 +14,7 @@ import { Button } from 'primereact/button'
 import { Link } from 'react-router-dom'
 import { Card } from 'primereact/card'
 import io from 'socket.io-client'
-const ENDPOINT = 'https://sachinkrishna.me/'
+const ENDPOINT = import.meta.env.VITE_SOCKET_ENDPOINT || 'https://sachinkrishna.me'
 var socket
 export default function NavBar() {
   const menubarStyle = {
