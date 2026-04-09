@@ -1,7 +1,7 @@
 // import NavBar from '../../../components/userComponents/navBar/NavBar'
 import './guideDetailed.css'
 import io from 'socket.io-client'
-const ENDPOINT = 'https://sachinkrishna.me/'
+const ENDPOINT = import.meta.env.VITE_SOCKET_ENDPOINT || 'https://sachinkrishna.me'
 var socket
 import Footer from '../../../components/userComponents/footer/footer'
 import DatePicker from 'react-datepicker'
