@@ -20,7 +20,7 @@ cloudinary.config({
   api_secret: process.env.APISECERET,
 });
 const authUser = asyncHandler(async (req, res) => {
-  console.log('here');
+  console.log('here dsfsdfds'); 
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });

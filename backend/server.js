@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static("backend/public"));
 const allowedOrigins = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(',').map((url) => url.trim())
-  : ['https://wayfarer-delta.vercel.app'];
+  : ['http://localhost:3000'];
 
 app.use(
   cors({
